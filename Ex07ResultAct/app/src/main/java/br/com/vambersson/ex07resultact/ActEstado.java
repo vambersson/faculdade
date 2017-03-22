@@ -21,21 +21,8 @@ public class ActEstado extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String[] estados = getResources().getStringArray(R.array.estados);
-
-        setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_single_choice,estados));
-
-        String estado = getIntent().getStringExtra(EXTRA_ESTADO);
-
-        if(estado != null){
-            int position = Arrays.asList(estados).indexOf(estado);
-            getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-            getListView().setItemChecked(position,true);
-        }
-
-
+        criarLista();
     }
-
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -54,4 +41,21 @@ public class ActEstado extends ListActivity {
 
 
     }
+
+    protected void criarLista(){
+
+        String[] estados = getResources().getStringArray(R.array.estados);
+
+        setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_single_choice,estados));
+
+        String estado = getIntent().getStringExtra(EXTRA_ESTADO);
+
+        if(estado != null){
+            int position = Arrays.asList(estados).indexOf(estado);
+            getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+            getListView().setItemChecked(position,true);
+        }
+
+    }
+
 }
