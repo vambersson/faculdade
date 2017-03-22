@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Ex07ResultAct</string>
+    <string name="selecionar_estado">selecionar um estado</string>
+
+    <string-array name="estados">
+        <item>Pernambuco</item>
+        <item>São Paulo</item>
+        <item>Rio de Janeiro</item>
+        <item>Ceara</item>
+    </string-array>
+
+</resources>
