@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="br.com.vambersson.ex02layouts.MainActivity">
+
+
+
+
+      <Button
+          android:id="@+id/btnPri"
+          android:text="Primeiro"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+      <Button
+          android:id="@+id/btnSeg"
+          android:text="Segundo Button"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+      <Button
+          android:id="@+id/btnTer"
+
+          android:text="Terceiro"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+      <Button
+          android:id="@+id/btnQua"
+          android:textAppearance="?android:attr/textAppearanceLarge"
+          android:background="@color/colorPrimary"
+          android:text="Quarto"
+          android:layout_width="@dimen/teste"
+          android:layout_height="match_parent" />
+
+
+
+
+
+
+</android.support.v7.widget.LinearLayoutCompat>

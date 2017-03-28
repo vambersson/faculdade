@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:stretchColumns="1,2">
+
+    <TableRow>
+        <TextView
+            android:text="Nome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/edtNome"
+            android:layout_width="wrap_content"
+            android:layout_heitght="wrap_content"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:text="Avisos por:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_heitght="wrap_content"
+            android:text="Telefone"
+            android:checked="true"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_heitght="wrap_content"
+            android:text="Email"/>
+
+
+    </TableRow>
+
+
+
+</TableLayout>
