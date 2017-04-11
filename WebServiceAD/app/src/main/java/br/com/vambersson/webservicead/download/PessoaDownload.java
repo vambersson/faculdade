@@ -2,6 +2,8 @@ package br.com.vambersson.webservicead.download;
 
 
 
+import android.os.AsyncTask;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,32 +19,9 @@ import br.com.vambersson.webservicead.util.NetworkUtil;
  * Created by Vambersson on 06/04/2017.
  */
 
-public class PessoaDownload{
+public class PessoaDownload  extends AsyncTask<String,Void,List<Pessoa>> {
 
-    private final String URlLocal = "http://localhost:8080/WSAndroid/rest/servicos";
-
-    public  List<Pessoa> listaPessoas()throws Exception{
-
-        HttpURLConnection conexao = NetworkUtil.conectar(URlLocal,"GET");
-
-        InputStream is;
-
-        try {
-
-            if (conexao.getResponseCode() == HttpURLConnection.HTTP_OK) {
-
-                is = conexao.getInputStream();
-                JSONObject jsonlista  = new JSONObject(NetworkUtil.converterInputStreamToString(is));
-
-                return lerJSON(jsonlista);
-            }
-
-        }catch(Exception e){
-
-        }
-        return null;
-    }
-
+    private final String URlLocal = "http://10.0.0.57:8080/WSAndroid/rest/servicos";
 
 
     private List<Pessoa> lerJSON(JSONObject json) throws Exception{
@@ -70,4 +49,25 @@ public class PessoaDownload{
     }
 
 
+    @Override
+    protected List<Pessoa> doInBackground(String... params) {
+        try {
+
+            HttpURLConnection conexao = NetworkUtil.conectar(URlLocal,"GET");
+            InputStream is;
+
+            if (conexao.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
+                is = conexao.getInputStream();
+                JSONObject jsonlista  = new JSONObject(NetworkUtil.converterInputStreamToString(is));
+
+                return lerJSON(jsonlista);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

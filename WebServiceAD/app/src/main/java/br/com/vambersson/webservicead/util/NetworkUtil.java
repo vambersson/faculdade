@@ -3,6 +3,7 @@ package br.com.vambersson.webservicead.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import br.com.vambersson.webservicead.base.Pessoa;
  * Created by Vambersson on 06/04/2017.
  */
 
-public class NetworkUtil {
+public class NetworkUtil   {
 
     public static HttpURLConnection conectar(String endereco,String requestMethhod) throws  Exception {
 
