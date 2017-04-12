@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,8 +20,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import br.com.vambersson.webservicead.adapter.PessoaAdapter;
 import br.com.vambersson.webservicead.base.Pessoa;
 import br.com.vambersson.webservicead.download.PessoaDownload;
 import br.com.vambersson.webservicead.util.NetworkUtil;
@@ -29,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private ArrayAdapter<Pessoa> adapter;
+    private PessoaAdapter adapter;
     private Button btnlista;
     private ListView listaV;
 
-    private List lista;
+    private List<Pessoa> lista;
     private PessoaDownload download;
 
 
@@ -65,48 +69,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public class PessoaTask extends AsyncTask<String , Void, String>{
+    public class PessoaTask extends AsyncTask<String , Void, List<Pessoa>>{
 
-        private String endereco = "http://10.0.0.57:8080/WSAndroid/rest/servicos";
+        private String endereco = "http://192.168.43.123:8080/WSAndroid/rest/servicos";
 
         @Override
-        protected String doInBackground(String... params) {
+        protected List<Pessoa> doInBackground(String... params) {
 
+            List<Pessoa> lista = new ArrayList<Pessoa>();
             HttpURLConnection conexao = null;
 
             if(NetworkUtil.virificaConexao(MainActivity.this)){
 
                 try {
 
-                    /*
-                    URL url = new URL(endereco);
-                    conexao = (HttpURLConnection) url.openConnection();
-                    conexao.setRequestMethod("GET");
-                    conexao.connect();
-                    */
-
                   conexao = NetworkUtil.conectar(endereco,"GET");
-
-
-
 
                     if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                         InputStream is = conexao.getInputStream();
-                        JSONObject jsonlista  = new JSONObject(NetworkUtil.converterInputStreamToString(is));
 
-                       return jsonlista.toString();
+                        String jsonlista  = NetworkUtil.converterInputStreamToString(is);
 
+                        Gson gson = new Gson();
+
+                        Pessoa[] lista2 = gson.fromJson(jsonlista, Pessoa[].class);
+                        lista = Arrays.asList(lista2);
+
+                        return lista;
 
                     }
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }finally {
                     conexao.disconnect();
                 }
 
-
-            }else{
 
             }
 
@@ -114,17 +112,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String txt) {
-            super.onPostExecute(txt);
+        protected void onPostExecute(List<Pessoa> lista) {
+            try {
+                super.onPostExecute(lista);
 
-            Toast.makeText(MainActivity.this, "Aqui :" + txt, Toast.LENGTH_SHORT).show();
+                adapter = new PessoaAdapter(lista, MainActivity.this);
+                listaV.setAdapter(adapter);
 
-            //adapter = new ArrayAdapter<Pessoa>(MainActivity.this,android.R.layout.simple_list_item_2);
-           // listaV.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+                //Toast.makeText(MainActivity.this, "Aqui :" + lista.get(0).getNome() + " e " + lista.get(1).getNome(), Toast.LENGTH_SHORT).show();
+            } catch (Exception ex){
+                Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
         }
 
 
-
+/*
         private List<Pessoa> lerJSON(JSONObject json) throws Exception{
             List<Pessoa> lista = new ArrayList<>();
             Pessoa pessoa;
@@ -149,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return lista;
         }
-
+*/
 
     }
 
