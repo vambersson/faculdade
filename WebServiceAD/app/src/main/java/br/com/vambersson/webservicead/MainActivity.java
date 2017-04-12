@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnlista;
     private ListView listaV;
 
-    private List<Pessoa> lista;
+    private List<Pessoa> Pessoalist;
     private PessoaDownload download;
 
 
@@ -48,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
         listaV = (ListView) findViewById(R.id.litaV);
 
-
+        Pessoalist = new ArrayList<Pessoa>();
+        adapter = new PessoaAdapter(Pessoalist,MainActivity.this);
+        listaV.setAdapter(adapter);
 
         btnlista = (Button) findViewById(R.id.btnlista);
         btnlista.setOnClickListener(new View.OnClickListener() {
@@ -61,17 +63,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
     }
 
 
     public class PessoaTask extends AsyncTask<String , Void, List<Pessoa>>{
 
-        private String endereco = "http://192.168.43.123:8080/WSAndroid/rest/servicos";
+        private String endereco = "http://10.0.0.57:8080/WSAndroid/rest/servicos";
 
         @Override
         protected List<Pessoa> doInBackground(String... params) {
@@ -116,45 +113,19 @@ public class MainActivity extends AppCompatActivity {
             try {
                 super.onPostExecute(lista);
 
-                adapter = new PessoaAdapter(lista, MainActivity.this);
-                listaV.setAdapter(adapter);
+
+
+
+
 
                 adapter.notifyDataSetChanged();
+                Toast.makeText(MainActivity.this,lista.get(1).getNome(), Toast.LENGTH_SHORT).show();
 
-                //Toast.makeText(MainActivity.this, "Aqui :" + lista.get(0).getNome() + " e " + lista.get(1).getNome(), Toast.LENGTH_SHORT).show();
             } catch (Exception ex){
-                Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, ex, Toast.LENGTH_LONG).show();
             }
 
         }
-
-
-/*
-        private List<Pessoa> lerJSON(JSONObject json) throws Exception{
-            List<Pessoa> lista = new ArrayList<>();
-            Pessoa pessoa;
-
-            JSONArray jsonArray = new JSONArray(json);
-
-            for(int i=0;i < jsonArray.length();i++){
-
-                JSONObject pessoaAtual  =  jsonArray.getJSONObject(i);
-
-                for(int p = 0; p < pessoaAtual.length();p++){
-                    pessoa = new Pessoa();
-
-                    pessoa.setId(pessoaAtual.getInt("id"));
-                    pessoa.setNome(pessoaAtual.getString("nome"));
-
-
-                    lista.add(pessoa);
-
-                }
-
-            }
-            return lista;
-        }
-*/
 
     }
 

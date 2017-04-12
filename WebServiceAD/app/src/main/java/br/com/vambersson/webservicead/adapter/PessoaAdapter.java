@@ -1,5 +1,6 @@
 package br.com.vambersson.webservicead.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -24,7 +25,7 @@ public class PessoaAdapter extends BaseAdapter {
     private List<Pessoa> pessoas;
     private Context ctx;
 
-    public PessoaAdapter(List<Pessoa> pessoas, Context ctx) {
+    public PessoaAdapter(List<Pessoa> pessoas,Context ctx) {
         this.pessoas = pessoas;
         this.ctx = ctx;
     }
@@ -41,32 +42,27 @@ public class PessoaAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return (long)pessoas.get(position).getId();
+
+        return (long) pessoas.get(position).getId();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Pessoa p = pessoas.get(position);
+        View linha = LayoutInflater.from(ctx).inflate(R.layout.pessoa_item_list,null);
 
-        View linha = LayoutInflater.from(ctx).inflate(R.layout.pessoa_item_list , null);
+        Pessoa p = pessoas.get(position);
 
         ImageView img = (ImageView) linha.findViewById(R.id.imgFoto);
         TextView nome = (TextView) linha.findViewById(R.id.txtNome);
-
         TextView codigo = (TextView) linha.findViewById(R.id.txtCodigo);
 
-        Resources res = ctx.getResources();
+        //Resources res = ctx.getResources();
 
-        //TypedArray foto = res.obtainTypedArray(R.ar)
-
-
-        img.setImageResource (R.mipmap.ic_launcher_round);
-
-
+        img.setImageResource(R.mipmap.ic_launcher);
         nome.setText(p.getNome());
         codigo.setText(p.getId());
 
-        return convertView;
+        return linha;
     }
 }
