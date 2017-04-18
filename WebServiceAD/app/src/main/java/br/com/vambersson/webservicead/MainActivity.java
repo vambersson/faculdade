@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnlista;
     private ListView listaV;
 
-    private List<Pessoa> Pessoalist;
-    private PessoaDownload download;
+    private ArrayList<Pessoa> Pessoalist;
 
 
     @Override
@@ -48,8 +48,24 @@ public class MainActivity extends AppCompatActivity {
 
         listaV = (ListView) findViewById(R.id.litaV);
 
+
         Pessoalist = new ArrayList<Pessoa>();
-        adapter = new PessoaAdapter(Pessoalist,MainActivity.this);
+
+/*
+        Pessoa pe,pe1;
+
+        pe = new Pessoa();
+        pe.setId(10);
+        pe.setNome("porra");
+        Pessoalist.add(pe);
+
+        pe1 = new Pessoa();
+        pe1.setId(10);
+        pe1.setNome("porra");
+        Pessoalist.add(pe1);
+*/
+
+        adapter = new PessoaAdapter(this,Pessoalist);
         listaV.setAdapter(adapter);
 
         btnlista = (Button) findViewById(R.id.btnlista);
@@ -65,15 +81,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public class PessoaTask extends AsyncTask<String , Void, ArrayList<Pessoa>>{
 
-    public class PessoaTask extends AsyncTask<String , Void, List<Pessoa>>{
-
-        private String endereco = "http://10.0.0.57:8080/WSAndroid/rest/servicos";
+        private String endereco = "http://192.168.43.123:8080/WSAndroid/rest/servicos";
 
         @Override
-        protected List<Pessoa> doInBackground(String... params) {
+        protected ArrayList<Pessoa> doInBackground(String... params) {
 
-            List<Pessoa> lista = new ArrayList<Pessoa>();
+            ArrayList<Pessoa> lista;
             HttpURLConnection conexao = null;
 
             if(NetworkUtil.virificaConexao(MainActivity.this)){
@@ -90,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         Gson gson = new Gson();
 
                         Pessoa[] lista2 = gson.fromJson(jsonlista, Pessoa[].class);
-                        lista = Arrays.asList(lista2);
+                        lista = new ArrayList<Pessoa>(Arrays.asList(lista2) );
 
                         return lista;
 
@@ -109,17 +124,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(List<Pessoa> lista) {
+        protected void onPostExecute(ArrayList<Pessoa> lista) {
+            super.onPostExecute(lista);
+
             try {
-                super.onPostExecute(lista);
 
-
-
-
-
+                Pessoalist.clear();
+                Pessoalist.addAll(lista);
 
                 adapter.notifyDataSetChanged();
-                Toast.makeText(MainActivity.this,lista.get(1).getNome(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,lista.get(1).getNome(), Toast.LENGTH_SHORT).show();
 
             } catch (Exception ex){
                 //Toast.makeText(MainActivity.this, ex, Toast.LENGTH_LONG).show();

@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.vambersson.webservicead.R;
@@ -22,12 +23,22 @@ import br.com.vambersson.webservicead.base.Pessoa;
 
 public class PessoaAdapter extends BaseAdapter {
 
-    private List<Pessoa> pessoas;
-    private Context ctx;
+    private ArrayList<Pessoa> pessoas;
+    private Activity activity;
 
-    public PessoaAdapter(List<Pessoa> pessoas,Context ctx) {
+    public PessoaAdapter(Activity activity,ArrayList<Pessoa> pessoas) {
+        this.activity = activity;
         this.pessoas = pessoas;
-        this.ctx = ctx;
+    }
+
+    public void addall(ArrayList<Pessoa> lista){
+        for (int i=0;i< lista.size();i++){
+            pessoas.add(lista.get(i));
+        }
+    }
+
+    public void clear(){
+        pessoas.clear();
     }
 
     @Override
@@ -43,26 +54,31 @@ public class PessoaAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
 
-        return (long) pessoas.get(position).getId();
+        return position;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View view, ViewGroup parent) {
 
-        View linha = LayoutInflater.from(ctx).inflate(R.layout.pessoa_item_list,null);
+        View v = view;
+
+        if(view == null){
+            LayoutInflater inf = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = inf.inflate(R.layout.pessoa_item_list,null);
+        }
 
         Pessoa p = pessoas.get(position);
 
-        ImageView img = (ImageView) linha.findViewById(R.id.imgFoto);
-        TextView nome = (TextView) linha.findViewById(R.id.txtNome);
-        TextView codigo = (TextView) linha.findViewById(R.id.txtCodigo);
+        //ImageView img = ((ImageView) view.findViewById(R.id.imgFoto));
+        //img.setImageResource(R.mipmap.ic_launcher);
 
-        //Resources res = ctx.getResources();
-
-        img.setImageResource(R.mipmap.ic_launcher);
+        TextView nome = ((TextView) v.findViewById(R.id.txtNome));
         nome.setText(p.getNome());
-        codigo.setText(p.getId());
 
-        return linha;
+        TextView codigo = ((TextView) v.findViewById(R.id.txtCodigo));
+        codigo.setText(Integer.toString(p.getId()));
+
+
+        return v;
     }
 }

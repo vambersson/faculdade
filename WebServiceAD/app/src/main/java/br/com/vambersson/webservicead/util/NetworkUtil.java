@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.vambersson.webservicead.base.Pessoa;
+import br.com.vambersson.webservicead.erro.ConexaoException;
 
 /**
  * Created by Vambersson on 06/04/2017.
@@ -23,17 +24,25 @@ import br.com.vambersson.webservicead.base.Pessoa;
 
 public class NetworkUtil   {
 
-    public static HttpURLConnection conectar(String endereco,String requestMethhod) throws  Exception {
+    public static HttpURLConnection conectar(String endereco,String requestMethhod) throws ConexaoException {
 
-        URL url = new URL(endereco);
-        HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
-        conexao.setRequestMethod(requestMethhod);
-        conexao.setReadTimeout(15000);
-        conexao.setConnectTimeout(15000);
-        conexao.setDoInput(true);
-        conexao.connect();
 
-        return conexao;
+        try{
+            URL url = new URL(endereco);
+            HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
+            conexao.setRequestMethod(requestMethhod);
+            conexao.setReadTimeout(15000);
+            conexao.setConnectTimeout(15000);
+            conexao.setDoInput(true);
+            conexao.connect();
+
+            return conexao;
+
+        }catch (IOException e){
+            throw new ConexaoException(e);
+        }
+
+
     }
 
     public static boolean virificaConexao(Context ctx){

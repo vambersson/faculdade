@@ -2,7 +2,10 @@ package br.com.vambersson.webservicead.download;
 
 
 
+import android.content.Context;
 import android.os.AsyncTask;
+
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,9 +13,12 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import br.com.vambersson.webservicead.MainActivity;
 import br.com.vambersson.webservicead.base.Pessoa;
+import br.com.vambersson.webservicead.erro.DownloadException;
 import br.com.vambersson.webservicead.util.NetworkUtil;
 
 /**
@@ -21,53 +27,70 @@ import br.com.vambersson.webservicead.util.NetworkUtil;
 
 public class PessoaDownload  extends AsyncTask<String,Void,List<Pessoa>> {
 
-    private final String URlLocal = "http://10.0.0.57:8080/WSAndroid/rest/servicos";
+    public String endereco = "http://192.168.0.150:8080/WSAndroid/rest/servicos";
 
+    private Context ctx;
+    private String metodo;
 
-    private List<Pessoa> lerJSON(JSONObject json) throws Exception{
-        List<Pessoa> lista = new ArrayList<>();
-        Pessoa pessoa;
+    private HttpURLConnection conexao = null;
 
-        JSONArray jsonArray = new JSONArray(json);
+    public PessoaDownload(Context ctx,String metodo){
+        this.ctx = ctx;
+        this.metodo = metodo;
 
-        for(int i=0;i < jsonArray.length();i++){
+    }
 
-        JSONObject pessoaAtual  =  jsonArray.getJSONObject(i);
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
 
-            for(int p = 0; p < pessoaAtual.length();p++){
-                pessoa = new Pessoa();
+    @Override
+    protected List<Pessoa> doInBackground(String... params){
+        List<Pessoa> lista = new ArrayList<Pessoa>();
 
-                pessoa.setId(pessoaAtual.getInt("id"));
-                pessoa.setNome(pessoaAtual.getString("nome"));
+        if(NetworkUtil.virificaConexao(ctx)){
 
-                lista.add(pessoa);
+            try {
 
+                this.conexao = NetworkUtil.conectar(endereco,metodo);
+
+                if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
+                    InputStream is = conexao.getInputStream();
+
+                    String jsonlista  = NetworkUtil.converterInputStreamToString(is);
+
+                    Gson gson = new Gson();
+
+                    Pessoa[] lista2 = gson.fromJson(jsonlista, Pessoa[].class);
+                    lista = Arrays.asList(lista2);
+
+                    return lista;
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }finally {
+                conexao.disconnect();
             }
 
+
         }
-        return lista;
+
+        return null;
+
     }
 
 
     @Override
-    protected List<Pessoa> doInBackground(String... params) {
-        try {
-
-            HttpURLConnection conexao = NetworkUtil.conectar(URlLocal,"GET");
-            InputStream is;
-
-            if (conexao.getResponseCode() == HttpURLConnection.HTTP_OK) {
-
-                is = conexao.getInputStream();
-                JSONObject jsonlista  = new JSONObject(NetworkUtil.converterInputStreamToString(is));
-
-                return lerJSON(jsonlista);
-            }
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
-        return null;
+    protected void onPostExecute(List<Pessoa> pessoas) {
+        super.onPostExecute(pessoas);
     }
+
+
+
+
+
+
 }
