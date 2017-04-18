@@ -31,14 +31,10 @@ import br.com.vambersson.webservicead.util.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
-
     private PessoaAdapter adapter;
     private Button btnlista;
     private ListView listaV;
-
-    private ArrayList<Pessoa> Pessoalist;
+    private List<Pessoa> Pessoalist = new ArrayList<Pessoa>();
 
 
     @Override
@@ -49,21 +45,7 @@ public class MainActivity extends AppCompatActivity {
         listaV = (ListView) findViewById(R.id.litaV);
 
 
-        Pessoalist = new ArrayList<Pessoa>();
 
-/*
-        Pessoa pe,pe1;
-
-        pe = new Pessoa();
-        pe.setId(10);
-        pe.setNome("porra");
-        Pessoalist.add(pe);
-
-        pe1 = new Pessoa();
-        pe1.setId(10);
-        pe1.setNome("porra");
-        Pessoalist.add(pe1);
-*/
 
         adapter = new PessoaAdapter(this,Pessoalist);
         listaV.setAdapter(adapter);
@@ -83,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class PessoaTask extends AsyncTask<String , Void, ArrayList<Pessoa>>{
 
-        private String endereco = "http://192.168.43.123:8080/WSAndroid/rest/servicos";
+        private String endereco = "http://10.0.0.57:8080/WSAndroid/rest/servicos";
 
         @Override
         protected ArrayList<Pessoa> doInBackground(String... params) {

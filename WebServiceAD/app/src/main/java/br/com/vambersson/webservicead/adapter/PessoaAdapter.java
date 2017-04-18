@@ -23,15 +23,15 @@ import br.com.vambersson.webservicead.base.Pessoa;
 
 public class PessoaAdapter extends BaseAdapter {
 
-    private ArrayList<Pessoa> pessoas;
+    private List<Pessoa> pessoas;
     private Activity activity;
 
-    public PessoaAdapter(Activity activity,ArrayList<Pessoa> pessoas) {
+    public PessoaAdapter(Activity activity,List<Pessoa> pessoas) {
         this.activity = activity;
         this.pessoas = pessoas;
     }
 
-    public void addall(ArrayList<Pessoa> lista){
+    public void addall(List<Pessoa> lista){
         for (int i=0;i< lista.size();i++){
             pessoas.add(lista.get(i));
         }
@@ -68,9 +68,6 @@ public class PessoaAdapter extends BaseAdapter {
         }
 
         Pessoa p = pessoas.get(position);
-
-        //ImageView img = ((ImageView) view.findViewById(R.id.imgFoto));
-        //img.setImageResource(R.mipmap.ic_launcher);
 
         TextView nome = ((TextView) v.findViewById(R.id.txtNome));
         nome.setText(p.getNome());
