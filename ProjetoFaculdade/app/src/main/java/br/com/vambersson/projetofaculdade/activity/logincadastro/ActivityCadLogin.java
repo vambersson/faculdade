@@ -15,7 +15,7 @@ import br.com.vambersson.projetofaculdade.R;
 
 public class ActivityCadLogin extends AppCompatActivity {
 
-    private static final int TIRAR_FOTO = 102030;
+    private static final int TIRAR_FOTO = 100;
 
 
     private ImageView login_cad_IdimageView;
@@ -41,9 +41,11 @@ public class ActivityCadLogin extends AppCompatActivity {
 
     private void chamarCamera(){
         Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(it.resolveActivity(getPackageManager()) != null){
-            startActivityForResult(it,TIRAR_FOTO);
+
+        if (it.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(it, TIRAR_FOTO);
         }
+
 
     }
 

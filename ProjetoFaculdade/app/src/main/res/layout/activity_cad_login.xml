@@ -16,14 +16,17 @@
 
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/login_cad_IdimageView"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:src="@mipmap/ic_launcher" />
+                android:layout_width="110dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center_horizontal"
+                android:rotation="-90"
+                android:src="@mipmap/ic_launcher"/>
+
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/login_Cad_IdCamera"
@@ -41,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Matricular"
+            android:text="Matrícula"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>
@@ -105,6 +108,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+
+
 
 
 
