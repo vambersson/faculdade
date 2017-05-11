@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">ProjetoFaculdade</string>
+
+
+    <string name="login_tv_matricula">Registration</string>
+    <string name="login_tv_pass">Password</string>
+    <string name="login_btn_login">Login</string>
+    <string name="login_btn_primeiro">First Access</string>
+
+    <string name="login_cad_tela_name">Cadastro Aluno</string>
+    <string name="login_cad_tv_nome">Name</string>
+    <string name="login_cad_tv_senha">Password</string>
+    <string name="login_cad_btn_cadastrar">Save</string>
+    <string name="login_cad_btn_cancelar">Cancel</string>
+
+
 </resources>
