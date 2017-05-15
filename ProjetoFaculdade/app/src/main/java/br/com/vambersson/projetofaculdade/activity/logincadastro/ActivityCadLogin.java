@@ -1,6 +1,6 @@
 package br.com.vambersson.projetofaculdade.activity.logincadastro;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;

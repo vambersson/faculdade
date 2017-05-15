@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import br.com.vambersson.projetofaculdade.activity.ActivityPrincipal;
 import br.com.vambersson.projetofaculdade.activity.logincadastro.ActivityCadLogin;
 
 /**
@@ -24,12 +25,18 @@ public class ActivityMain extends Activity {
 
 
         login_btn_login = (Button) findViewById(R.id.login_btn_login);
+        login_btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //chamarTelaPrincipal();
+            }
+        });
 
         login_btn_pri = (Button) findViewById(R.id.login_btn_pri);
         login_btn_pri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chamaTelaCadastroLogin();
+                //chamaTelaCadastroLogin();
             }
         });
 
@@ -41,6 +48,11 @@ public class ActivityMain extends Activity {
 
 
 
+    }
+
+    public void chamarTelaPrincipal(){
+        Intent it = new Intent(this, ActivityPrincipal.class);
+        startActivity(it);
     }
 
 

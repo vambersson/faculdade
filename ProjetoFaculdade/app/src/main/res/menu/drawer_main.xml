@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/drawer_Id_Perfil"
+            android:title="@string/drawer_menu_perfil"/>
+        <item
+            android:id="@+id/drawer_Id_Maps"
+            android:title="@string/drawer_menu_maps"/>
+    </group>
+
+</menu>

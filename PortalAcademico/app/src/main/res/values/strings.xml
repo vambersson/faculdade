@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">ProjetoFaculdade</string>
+    <string name="app_name">PortalAcademico</string>
 
-    <string name="menu_main_settings">Settings</string>
-    <string name="drawer_menu_perfil">Perfil</string>
-    <string name="drawer_menu_maps">Maps</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 
 
     <string name="login_tv_matricula">Registration</string>
@@ -16,6 +17,7 @@
     <string name="login_cad_tv_senha">Password</string>
     <string name="login_cad_btn_cadastrar">Save</string>
     <string name="login_cad_btn_cancelar">Cancel</string>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>
