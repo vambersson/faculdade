@@ -66,6 +66,16 @@ public class MainActivity extends AppCompatActivity {
     public class PessoaTask extends AsyncTask<String , Void, ArrayList<Pessoa>>{
 
         private String endereco = "http://10.0.0.57:8080/WSAndroid/rest/servicos";
+        private String teste;
+
+        public PessoaTask(){
+
+        }
+
+        public PessoaTask(String teste){
+            this.teste = teste;
+        }
+
 
         @Override
         protected ArrayList<Pessoa> doInBackground(String... params) {
