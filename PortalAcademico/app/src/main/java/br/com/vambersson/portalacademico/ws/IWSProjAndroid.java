@@ -26,8 +26,18 @@ public interface IWSProjAndroid {
     @GET("pesquisaAluno={matricula}")
     Call<Aluno> pesquisaAluno(@Path("matricula") String matricula);
 
+    @POST("cadastrarLogin={login}")
+    Call<String> cadastrarLogin(@Path("login") String login);
+
+
+
+
+
+
+
+
     public static final Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://10.0.0.78:8080/WSProjAndroid/servicos/")
+            .baseUrl("http://192.168.43.123:8080/WSProjAndroid/servicos/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 

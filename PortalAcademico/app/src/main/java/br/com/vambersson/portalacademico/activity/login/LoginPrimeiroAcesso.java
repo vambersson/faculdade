@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,8 +17,10 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
+import br.com.vambersson.portalacademico.MainActivity;
 import br.com.vambersson.portalacademico.R;
 import br.com.vambersson.portalacademico.base.Aluno;
+import br.com.vambersson.portalacademico.base.Login;
 import br.com.vambersson.portalacademico.ws.IWSProjAndroid;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,10 +33,15 @@ public class LoginPrimeiroAcesso extends AppCompatActivity {
 
     Aluno aluno = new Aluno();
 
+    Login login = new Login();
+
 
     private ImageView login_cad_IdimageView;
     private FloatingActionButton login_cad_IdCamera;
     private TextView login_Id_Cad_Matricula;
+    private EditText login_Id_Cad_Nome;
+    private EditText login_cad_tv_senha;
+    private EditText login_cad_tv_senha_confirma;
 
 
     private Button login_cad_IdSave;
@@ -49,11 +57,15 @@ public class LoginPrimeiroAcesso extends AppCompatActivity {
 
         login_cad_IdimageView = (ImageView) findViewById(R.id.login_cad_IdimageView);
 
+        login_Id_Cad_Nome = (EditText) findViewById(R.id.login_Id_Cad_Nome);
+        login_cad_tv_senha = (EditText) findViewById(R.id.login_Id_Cad_Senha);
+        login_cad_tv_senha_confirma = (EditText) findViewById(R.id.login_Id_Cad_Senha_Confirma);
+
         login_cad_IdSave = (Button) findViewById(R.id.login_cad_IdSave);
         login_cad_IdSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cadastraAluno();
+                atualizaAluno();
             }
         });
 
@@ -110,11 +122,48 @@ public class LoginPrimeiroAcesso extends AppCompatActivity {
 
     }
 
+    private void chamaTelaMainActivity(){
+        Intent it = new Intent(LoginPrimeiroAcesso.this,MainActivity.class);
+        startActivity(it);
+        finish();
 
-    private void cadastraAluno(){
+    }
 
-        aluno.setNome("vambersson luiz valentin");
-        aluno.setStatus("S");
+    private void cadastrarLogin(){
+
+        if (login_cad_tv_senha.getText().toString().equals(login_cad_tv_senha_confirma.getText().toString())){
+
+            login.setMatricula(aluno.getMatricula());
+            login.setLogin(Integer.toString(aluno.getMatricula()));
+            login.setSenha(login_cad_tv_senha.getText().toString());
+            login.setStatusLogado("S");
+
+        }
+
+
+        Gson gson = new Gson();
+
+        Call<String> call = WS.cadastrarLogin( gson.toJson(login));
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.body().equals("1")){
+                    Toast.makeText(LoginPrimeiroAcesso.this, "Salvo com sucesso!", Toast.LENGTH_SHORT).show();
+                    chamaTelaMainActivity();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(LoginPrimeiroAcesso.this, "Deu ruim!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void atualizaAluno(){
+
+        aluno.setNome(login_Id_Cad_Nome.getText().toString());
 
 
         Gson gson = new Gson();
@@ -127,6 +176,7 @@ public class LoginPrimeiroAcesso extends AppCompatActivity {
 
                 if(response.body().equals("1")){
                     Toast.makeText(LoginPrimeiroAcesso.this, "Total:   " + response.body(), Toast.LENGTH_SHORT).show();
+                    cadastrarLogin();
                 }else{
                     Toast.makeText(LoginPrimeiroAcesso.this, "não 0  " + response.body(), Toast.LENGTH_SHORT).show();
                 }
