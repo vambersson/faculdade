@@ -47,7 +47,6 @@ public class NetworkUtil   {
 
     public static boolean virificaConexao(Context ctx){
         ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-
         NetworkInfo info = cm.getActiveNetworkInfo();
         return (info != null && info.isConnected());
     }

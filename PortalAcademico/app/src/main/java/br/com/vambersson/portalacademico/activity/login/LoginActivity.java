@@ -5,17 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
-
 import br.com.vambersson.portalacademico.MainActivity;
 import br.com.vambersson.portalacademico.R;
-import br.com.vambersson.portalacademico.base.Aluno;
 import br.com.vambersson.portalacademico.base.Usuario;
 import br.com.vambersson.portalacademico.ws.IWSProjAndroid;
 import retrofit2.Call;

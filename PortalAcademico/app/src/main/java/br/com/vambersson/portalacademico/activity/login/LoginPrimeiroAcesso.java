@@ -13,19 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
-import java.io.IOException;
 
 import br.com.vambersson.portalacademico.MainActivity;
 import br.com.vambersson.portalacademico.R;
-import br.com.vambersson.portalacademico.base.Aluno;
-import br.com.vambersson.portalacademico.base.Login;
 import br.com.vambersson.portalacademico.base.Usuario;
 import br.com.vambersson.portalacademico.ws.IWSProjAndroid;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginPrimeiroAcesso extends AppCompatActivity {
     private final IWSProjAndroid WS = IWSProjAndroid.retrofit.create(IWSProjAndroid.class);
