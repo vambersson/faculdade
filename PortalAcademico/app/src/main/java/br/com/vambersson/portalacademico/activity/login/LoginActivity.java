@@ -9,11 +9,14 @@ import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 
 import br.com.vambersson.portalacademico.MainActivity;
 import br.com.vambersson.portalacademico.R;
 import br.com.vambersson.portalacademico.base.Aluno;
+import br.com.vambersson.portalacademico.base.Usuario;
 import br.com.vambersson.portalacademico.ws.IWSProjAndroid;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private final  IWSProjAndroid WS = IWSProjAndroid.retrofit.create(IWSProjAndroid.class);
 
-    Aluno aluno = new Aluno();
+    Usuario usuario = new Usuario();
 
     private Button login_btn_login;
     private Button login_btn_pri;
@@ -43,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         login_btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                logar();
             }
         });
 
@@ -64,8 +67,9 @@ public class LoginActivity extends AppCompatActivity {
     private void chamaTelaCadastroLogin(){
 
         Intent it = new Intent(LoginActivity.this,LoginPrimeiroAcesso.class);
-        it.putExtra("aluno",aluno);
+        it.putExtra("usuario",usuario);
         startActivity(it);
+        usuario = null;
 
     }
 
@@ -80,25 +84,53 @@ public class LoginActivity extends AppCompatActivity {
 
     private void primeiroAcesso(){
 
-        pesquisaAluno();
+        if (validarPrimeiroAcesso()==true){
+            dadosUsuarioPrimeiroAcesso();
+            Gson gson = new Gson();
+            Call<Usuario> call = WS.verificarPrimeiroAcesso(gson.toJson(usuario));
+            call.enqueue(new Callback<Usuario>() {
+                @Override
+                public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                    if(response.code()==200){
+                        chamaTelaCadastroLogin();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Usuario> call, Throwable t) {
+                    Toast.makeText(LoginActivity.this, "Aluno não encontrado", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
     }
 
-    private boolean validaMatricula(){
+    private boolean validarPrimeiroAcesso(){
 
         boolean resultado = true;
-        Toast.makeText(this, "Matrícula não Informada1111", Toast.LENGTH_LONG).show();
-        if(login_Id_Edttxt_Matricula.getText().toString().trim() == null){
+
+        if(login_Id_Edttxt_Matricula.getText().toString().trim().equals("")){
+
+            Toast.makeText(this, "Matrícula não Informada", Toast.LENGTH_LONG).show();
+            return resultado = false;
+
+        }
+
+        return resultado;
+    }
+
+    private boolean validaLogin(){
+
+        boolean resultado = true;
+
+        if(login_Id_Edttxt_Matricula.getText().toString().trim().equals("")){
 
             Toast.makeText(this, "Matrícula não Informada", Toast.LENGTH_LONG).show();
             return  resultado = false;
-        }else if(login_Id_Edttxt_Matricula.getText().toString() != ""){
 
-            try{
-                Integer.getInteger(login_Id_Edttxt_Matricula.getText().toString());
-            }catch (Exception e){
-                Toast.makeText(this, "Matrícula Inválida", Toast.LENGTH_LONG).show();
-            }
+        }else if(login_Id_EdtTxt_Pass.getText().toString().trim().equals("")){
+
+            Toast.makeText(this, "Senha não Informada", Toast.LENGTH_LONG).show();
             return  resultado = false;
         }
 
@@ -106,31 +138,44 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void dadosUsuario(){
 
-    private void pesquisaAluno(){
+        usuario.setLogin(Integer.parseInt(login_Id_Edttxt_Matricula.getText().toString()));
+        usuario.setSenha(login_Id_EdtTxt_Pass.getText().toString());
 
-        Call<Aluno> call = WS.pesquisaAluno(login_Id_Edttxt_Matricula.getText().toString().trim());
-
-        call.enqueue(new Callback<Aluno>() {
-            @Override
-            public void onResponse(Call<Aluno> call, Response<Aluno> response) {
-
-                if(response.code() == 200){
-                    aluno = response.body();
-                    chamaTelaCadastroLogin();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<Aluno> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Aluno não Encontrado", Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
 
+    private void dadosUsuarioPrimeiroAcesso(){
 
+        usuario.setMatricula(Integer.parseInt(login_Id_Edttxt_Matricula.getText().toString()));
+        usuario.setSenha(null);
+    }
+
+
+    private void logar(){
+
+        if (validaLogin() == true){
+            Gson gson = new Gson();
+            dadosUsuario();
+            Call<Usuario> call = WS.logar(gson.toJson(usuario));
+            call.enqueue(new Callback<Usuario>() {
+                @Override
+                public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                    if (response.code()==200){
+                        chamaTelaMainActivity();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Usuario> call, Throwable t) {
+                    Toast.makeText(LoginActivity.this, "Deu merda", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+
+    }
 
 
 

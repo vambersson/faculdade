@@ -1,6 +1,7 @@
 package br.com.vambersson.portalacademico.ws;
 
 import br.com.vambersson.portalacademico.base.Aluno;
+import br.com.vambersson.portalacademico.base.Usuario;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -16,28 +17,18 @@ import retrofit2.http.Path;
 
 public interface IWSProjAndroid {
 
+    @GET("logar={usuario}")
+    Call<Usuario> logar(@Path("usuario") String usuario);
 
-    @POST("cadastraAluno={aluno}")
-    Call<String> cadastraAluno(@Path("aluno") String aluno);
-
-    @PUT("atualizarAluno={aluno}")
-    Call<String> atualizarAluno(@Path("aluno") String aluno);
-
-    @GET("pesquisaAluno={matricula}")
-    Call<Aluno> pesquisaAluno(@Path("matricula") String matricula);
-
-    @POST("cadastrarLogin={login}")
-    Call<String> cadastrarLogin(@Path("login") String login);
-
-
-
+    @GET("verificarPrimeiroAcesso={usuario}")
+    Call<Usuario> verificarPrimeiroAcesso(@Path("usuario") String usuario);
 
 
 
 
 
     public static final Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://192.168.43.123:8080/WSProjAndroid/servicos/")
+            .baseUrl("http://192.168.43.123:8080/PortalAcademico/servicos/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 

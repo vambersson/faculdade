@@ -21,6 +21,7 @@ import br.com.vambersson.portalacademico.MainActivity;
 import br.com.vambersson.portalacademico.R;
 import br.com.vambersson.portalacademico.base.Aluno;
 import br.com.vambersson.portalacademico.base.Login;
+import br.com.vambersson.portalacademico.base.Usuario;
 import br.com.vambersson.portalacademico.ws.IWSProjAndroid;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,9 +32,7 @@ public class LoginPrimeiroAcesso extends AppCompatActivity {
 
     private static final int TIRAR_FOTO = 100;
 
-    Aluno aluno = new Aluno();
-
-    Login login = new Login();
+    Usuario usuario = new Usuario();
 
 
     private ImageView login_cad_IdimageView;
@@ -65,7 +64,7 @@ public class LoginPrimeiroAcesso extends AppCompatActivity {
         login_cad_IdSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                atualizaAluno();
+
             }
         });
 
@@ -82,9 +81,9 @@ public class LoginPrimeiroAcesso extends AppCompatActivity {
 
 //      Mostra a matrícula do Aluno
 
-        aluno = (Aluno) getIntent().getSerializableExtra("aluno");
-        if(aluno != null){
-            login_Id_Cad_Matricula.setText(Integer.toString(aluno.getMatricula()));
+        usuario = (Usuario) getIntent().getSerializableExtra("usuario");
+        if(usuario != null){
+            login_Id_Cad_Matricula.setText(Integer.toString(usuario.getMatricula()));
         }
 
     }
@@ -126,70 +125,6 @@ public class LoginPrimeiroAcesso extends AppCompatActivity {
         Intent it = new Intent(LoginPrimeiroAcesso.this,MainActivity.class);
         startActivity(it);
         finish();
-
-    }
-
-    private void cadastrarLogin(){
-
-        if (login_cad_tv_senha.getText().toString().equals(login_cad_tv_senha_confirma.getText().toString())){
-
-            login.setMatricula(aluno.getMatricula());
-            login.setLogin(Integer.toString(aluno.getMatricula()));
-            login.setSenha(login_cad_tv_senha.getText().toString());
-            login.setStatusLogado("S");
-
-        }
-
-
-        Gson gson = new Gson();
-
-        Call<String> call = WS.cadastrarLogin( gson.toJson(login));
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.body().equals("1")){
-                    Toast.makeText(LoginPrimeiroAcesso.this, "Salvo com sucesso!", Toast.LENGTH_SHORT).show();
-                    chamaTelaMainActivity();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(LoginPrimeiroAcesso.this, "Deu ruim!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    private void atualizaAluno(){
-
-        aluno.setNome(login_Id_Cad_Nome.getText().toString());
-
-
-        Gson gson = new Gson();
-
-        Call<String> call = WS.atualizarAluno( gson.toJson(aluno));
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-
-
-                if(response.body().equals("1")){
-                    Toast.makeText(LoginPrimeiroAcesso.this, "Total:   " + response.body(), Toast.LENGTH_SHORT).show();
-                    cadastrarLogin();
-                }else{
-                    Toast.makeText(LoginPrimeiroAcesso.this, "não 0  " + response.body(), Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(LoginPrimeiroAcesso.this, "Erro", Toast.LENGTH_SHORT).show();
-            }
-        });
-
 
     }
 
