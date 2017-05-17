@@ -26,6 +26,7 @@ import java.util.List;
 
 import br.com.vambersson.webservicead.adapter.PessoaAdapter;
 import br.com.vambersson.webservicead.base.Pessoa;
+import br.com.vambersson.webservicead.base.Usuario;
 import br.com.vambersson.webservicead.download.PessoaDownload;
 import br.com.vambersson.webservicead.download.UsuarioDownload;
 import br.com.vambersson.webservicead.util.NetworkUtil;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                new PessoaTask().execute();
+//                new PessoaTask().execute();
 
             }
         });
@@ -140,8 +141,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void teste(){
-        UsuarioDownload ud = new UsuarioDownload();
-                ud.
+
+        Usuario usuario = new Usuario();
+        usuario.setMatricula(2010);
+
+        UsuarioDownload ud = new UsuarioDownload(usuario);
+
+
+        ud.chamar();
 
 
 

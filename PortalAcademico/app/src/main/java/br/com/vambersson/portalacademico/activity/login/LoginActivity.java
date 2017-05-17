@@ -1,6 +1,7 @@
 package br.com.vambersson.portalacademico.activity.login;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,17 +11,19 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+
 import br.com.vambersson.portalacademico.MainActivity;
 import br.com.vambersson.portalacademico.R;
 import br.com.vambersson.portalacademico.base.Usuario;
-import br.com.vambersson.portalacademico.ws.IWSProjAndroid;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
+import br.com.vambersson.portalacademico.util.NetworkUtil;
+
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final  IWSProjAndroid WS = IWSProjAndroid.retrofit.create(IWSProjAndroid.class);
+    String enderecoBase = "http://10.0.0.40:8080/PortalAcademico/servicos/";
 
     Usuario usuario = new Usuario();
 
@@ -50,9 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         login_btn_pri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 primeiroAcesso();
-
             }
         });
 
@@ -60,43 +61,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void chamaTelaCadastroLogin(){
-
-        Intent it = new Intent(LoginActivity.this,LoginPrimeiroAcesso.class);
-        it.putExtra("usuario",usuario);
-        startActivity(it);
-        usuario = null;
-
-    }
-
-    private void chamaTelaMainActivity(){
-        Intent it = new Intent(LoginActivity.this,MainActivity.class);
-        startActivity(it);
-        finish();
-
-    }
-
-
-
     private void primeiroAcesso(){
 
         if (validarPrimeiroAcesso()==true){
             dadosUsuarioPrimeiroAcesso();
-            Gson gson = new Gson();
-            Call<Usuario> call = WS.verificarPrimeiroAcesso(gson.toJson(usuario));
-            call.enqueue(new Callback<Usuario>() {
-                @Override
-                public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                    if(response.code()==200){
-                        chamaTelaCadastroLogin();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Usuario> call, Throwable t) {
-                    Toast.makeText(LoginActivity.this, "Aluno não encontrado", Toast.LENGTH_SHORT).show();
-                }
-            });
+            new ClassePrimeiroAcesso().execute();
         }
 
     }
@@ -113,6 +82,80 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return resultado;
+    }
+
+    private void dadosUsuarioPrimeiroAcesso(){
+
+        usuario.setMatricula(Integer.parseInt(login_Id_Edttxt_Matricula.getText().toString()));
+        usuario.setSenha(null);
+    }
+
+    class ClassePrimeiroAcesso extends AsyncTask<Usuario, Void,String> {
+
+        @Override
+        protected String doInBackground(Usuario... params) {
+
+            Gson gson = new Gson();
+
+            String objJson = gson.toJson(usuario);
+
+            HttpURLConnection conexao = null;
+            String obj = "";
+
+            try {
+
+                conexao = NetworkUtil.conectar(enderecoBase+"verificarPrimeiroAcesso="+objJson,"GET");
+
+                if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
+                    InputStream is = conexao.getInputStream();
+                    obj = NetworkUtil.converterInputStreamToString(is);
+                }
+
+                return obj;
+
+            } catch (Exception e) {
+                return e.getMessage();
+            }finally {
+                conexao.disconnect();
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            if("null".equals(result)){
+                Toast.makeText(LoginActivity.this, "Usuário não encontrado", Toast.LENGTH_LONG).show();
+
+            }else if(!"".equals(result)){
+                Gson gson = new Gson();
+                usuario = gson.fromJson(result,Usuario.class);
+                chamaTelaPrimeiroAcesso();
+            }
+
+        }
+    }
+
+    private void chamaTelaPrimeiroAcesso(){
+
+        Intent it = new Intent(LoginActivity.this,LoginPrimeiroAcesso.class);
+        it.putExtra("usuario",usuario);
+        startActivity(it);
+        usuario = null;
+
+    }
+
+
+
+     private void logar(){
+
+        if (validaLogin() == true){
+            dadosLogarUsuario();
+            new ClasseLogar().execute();
+        }
+
+
     }
 
     private boolean validaLogin(){
@@ -134,42 +177,64 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void dadosUsuario(){
+    private void dadosLogarUsuario(){
 
         usuario.setLogin(Integer.parseInt(login_Id_Edttxt_Matricula.getText().toString()));
         usuario.setSenha(login_Id_EdtTxt_Pass.getText().toString());
 
-
     }
 
-    private void dadosUsuarioPrimeiroAcesso(){
+    class ClasseLogar extends AsyncTask<Usuario, Void,String> {
 
-        usuario.setMatricula(Integer.parseInt(login_Id_Edttxt_Matricula.getText().toString()));
-        usuario.setSenha(null);
-    }
+        @Override
+        protected String doInBackground(Usuario... params) {
 
-
-    private void logar(){
-
-        if (validaLogin() == true){
             Gson gson = new Gson();
-            dadosUsuario();
-            Call<Usuario> call = WS.logar(gson.toJson(usuario));
-            call.enqueue(new Callback<Usuario>() {
-                @Override
-                public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                    if (response.code()==200){
-                        chamaTelaMainActivity();
-                    }
+
+            String objJson = gson.toJson(usuario);
+
+            HttpURLConnection conexao = null;
+            String obj = "";
+
+            try {
+
+                conexao = NetworkUtil.conectar(enderecoBase+"logar="+objJson,"GET");
+
+                if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
+                    InputStream is = conexao.getInputStream();
+                    obj = NetworkUtil.converterInputStreamToString(is);
                 }
 
-                @Override
-                public void onFailure(Call<Usuario> call, Throwable t) {
-                    Toast.makeText(LoginActivity.this, "Deu merda", Toast.LENGTH_LONG).show();
-                }
-            });
+                return obj;
+
+            } catch (Exception e) {
+                return e.getMessage();
+            }finally {
+                conexao.disconnect();
+            }
+
         }
 
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            if("null".equals(result)){
+                Toast.makeText(LoginActivity.this, "Usuário não encontrado", Toast.LENGTH_LONG).show();
+
+            }else if(!"".equals(result)){
+                Gson gson = new Gson();
+                usuario = gson.fromJson(result,Usuario.class);
+                chamaTelaMainActivity();
+            }
+
+        }
+    }
+
+    private void chamaTelaMainActivity(){
+        Intent it = new Intent(LoginActivity.this,MainActivity.class);
+        startActivity(it);
+        finish();
 
     }
 

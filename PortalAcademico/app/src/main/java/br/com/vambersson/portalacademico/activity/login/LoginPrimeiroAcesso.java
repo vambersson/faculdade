@@ -17,10 +17,10 @@ import android.widget.Toast;
 import br.com.vambersson.portalacademico.MainActivity;
 import br.com.vambersson.portalacademico.R;
 import br.com.vambersson.portalacademico.base.Usuario;
-import br.com.vambersson.portalacademico.ws.IWSProjAndroid;
+
 
 public class LoginPrimeiroAcesso extends AppCompatActivity {
-    private final IWSProjAndroid WS = IWSProjAndroid.retrofit.create(IWSProjAndroid.class);
+
 
     private static final int TIRAR_FOTO = 100;
 

@@ -28,7 +28,7 @@ public class Usuario implements Serializable {
 
     public Usuario(){
 
-        setCursos(new ArrayList<Curso>());
+        cursos = new ArrayList<Curso>();
 
     }
 

@@ -1,19 +1,17 @@
-package br.com.vambersson.webservicead.download;
+package br.com.vambersson.portalacademico.download;
+
+
 
 import android.os.AsyncTask;
-
 import com.google.gson.Gson;
-
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import br.com.vambersson.webservicead.MainActivity;
-import br.com.vambersson.webservicead.base.Pessoa;
-import br.com.vambersson.webservicead.base.Usuario;
-import br.com.vambersson.webservicead.util.NetworkUtil;
+import br.com.vambersson.portalacademico.base.Usuario;
+import br.com.vambersson.portalacademico.util.NetworkUtil;
+
 
 /**
  * Created by Vambersson on 16/05/2017.
@@ -21,24 +19,27 @@ import br.com.vambersson.webservicead.util.NetworkUtil;
 
 public class UsuarioDownload {
 
-    Usuario usuario;
-    String enderecoBase = "";
+    private Usuario usuario;
+    private String enderecoBase = "http://10.0.0.40:8080/PortalAcademico/servicos/";
 
-    public UsuarioDownload(Usuario usuario){
-            this.usuario = usuario;
+    public UsuarioDownload(){
+        teste();
     }
 
-    public Usuario chamar(){
 
-        new verificarPrimeiroAcesso().execute();
-
-
+    public Usuario getUsuario() {
         return usuario;
     }
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
+    public void teste(){
+        new ClassePrimeiroAcesso().execute();
+    }
 
-    class verificarPrimeiroAcesso extends AsyncTask<Usuario, Void,String>{
+    class ClassePrimeiroAcesso extends AsyncTask<Usuario, Void,String> {
 
         @Override
         protected String doInBackground(Usuario... params) {
@@ -48,18 +49,19 @@ public class UsuarioDownload {
             String objJson = gson.toJson(usuario);
 
             HttpURLConnection conexao = null;
-            String jsonlista = "";
+            String obj = "";
 
             try {
 
-                conexao = NetworkUtil.conectar(enderecoBase + "verificarPrimeiroAcesso=" + objJson ,"GET");
+                conexao = NetworkUtil.conectar(enderecoBase+"verificarPrimeiroAcesso="+objJson,"GET");
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
-                    jsonlista  = NetworkUtil.converterInputStreamToString(is);
+                    obj = NetworkUtil.converterInputStreamToString(is);
+
                 }
 
-                return jsonlista;
+                return obj;
 
             } catch (Exception e) {
                 return e.getMessage();
@@ -72,13 +74,11 @@ public class UsuarioDownload {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
             Gson gson = new Gson();
             usuario = gson.fromJson(result,Usuario.class);
 
+
         }
-
-
     }
 
 

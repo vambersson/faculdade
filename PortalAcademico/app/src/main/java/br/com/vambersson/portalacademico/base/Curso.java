@@ -18,7 +18,7 @@ public class Curso implements Serializable {
 
     public Curso(){
 
-        setDisciplinas(new ArrayList<Disciplina>());
+        disciplinas = new ArrayList<Disciplina>();
     }
 
     public Integer getCodigo() {
