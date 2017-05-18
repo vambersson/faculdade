@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -23,7 +24,7 @@ import br.com.vambersson.portalacademico.util.NetworkUtil;
 
 public class LoginActivity extends AppCompatActivity {
 
-   private String enderecoBase = "http://192.168.0.115:8080/PortalAcademico/servicos/";
+
 
     private Usuario usuario;
     private Gson gson;
@@ -33,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText login_Id_Edttxt_Matricula;
     private EditText login_Id_EdtTxt_Pass;
+    private ProgressBar progressBar;
+    private int contador = 0;
 
 
     public LoginActivity(){
@@ -47,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
         login_Id_Edttxt_Matricula = (EditText) findViewById(R.id.login_Id_EdtTxt_Matricula);
         login_Id_EdtTxt_Pass = (EditText) findViewById(R.id.login_Id_EdtTxt_Pass);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         login_btn_login = (Button) findViewById(R.id.login_btn_login);
         login_btn_login.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
 
-                conexao = NetworkUtil.conectar(enderecoBase+"verificarPrimeiroAcesso="+objJson,"GET");
+                conexao = NetworkUtil.conectar("verificarPrimeiroAcesso="+objJson);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
@@ -189,9 +193,34 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     class ClasseLogar extends AsyncTask<Usuario, Void,String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setMax(100);
+
+            Thread t = new Thread(){
+                public void run(){
+                        while(contador < progressBar.getMax()){
+                            try {
+                                sleep(50);
+                                contador  += 2;
+                                progressBar.setProgress(contador);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                }
+            };  t.start();
+
+        }
 
         @Override
         protected String doInBackground(Usuario... params) {
+
+
 
             String objJson = gson.toJson(usuario);
 
@@ -200,7 +229,7 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
 
-                conexao = NetworkUtil.conectar(enderecoBase+"logar="+objJson,"GET");
+                conexao = NetworkUtil.conectar("logar="+objJson);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
@@ -220,14 +249,31 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            progressBar.setVisibility(View.GONE);
 
             if("null".equals(result)){
 
                 Toast.makeText(LoginActivity.this, "Usuário não encontrado", Toast.LENGTH_LONG).show();
 
             }else if(!"".equals(result)){
-                usuario = gson.fromJson(result,Usuario.class);
-                chamaTelaMainActivity();
+                Usuario user = new Usuario();
+                user = gson.fromJson(result,Usuario.class);
+
+                if(user.getSenha() == null){
+
+                    Toast.makeText(LoginActivity.this, "Usuário não possui senha", Toast.LENGTH_SHORT).show();
+                    chamaTelaPrimeiroAcesso();
+
+                }else if(!user.getSenha().equals(usuario.getSenha())){
+
+                    Toast.makeText(LoginActivity.this, "Senha não conferi", Toast.LENGTH_SHORT).show();
+
+                }else if(user.getSenha().equals(usuario.getSenha())){
+                    usuario = user;
+                    chamaTelaMainActivity();
+                }
+
+
             }
 
         }
@@ -235,6 +281,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void chamaTelaMainActivity(){
         Intent it = new Intent(LoginActivity.this,MainActivity.class);
+        it.putExtra("usuario",usuario);
         startActivity(it);
         finish();
 

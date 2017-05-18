@@ -53,7 +53,7 @@ public class UsuarioDownload {
 
             try {
 
-                conexao = NetworkUtil.conectar(enderecoBase+"verificarPrimeiroAcesso="+objJson,"GET");
+                conexao = NetworkUtil.conectar("verificarPrimeiroAcesso="+objJson);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();

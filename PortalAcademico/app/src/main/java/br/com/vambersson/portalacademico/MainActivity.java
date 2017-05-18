@@ -12,14 +12,45 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import br.com.vambersson.portalacademico.base.Usuario;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Usuario usuario;
+
+    private ImageView nav_Id_img_usuraio;
+    private TextView nav_header_tv_nome;
+    private TextView nav_header_tv_curso;
+
+
+
+    public MainActivity(){
+        usuario = new Usuario();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        nav_Id_img_usuraio = (ImageView) findViewById(R.id.nav_Id_img_usuraio);
+        nav_header_tv_nome = (TextView) findViewById(R.id.nav_header_tv_nome);
+        nav_header_tv_curso = (TextView) findViewById(R.id.nav_header_tv_curso);
+
+        usuario = (Usuario) getIntent().getSerializableExtra("usuario");
+        if(usuario != null){
+            //nav_header_tv_nome.setText("aqui okoko");
+            //nav_header_tv_curso.setText(usuario.getCursos().get(1).getNome());
+        }
+
+
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

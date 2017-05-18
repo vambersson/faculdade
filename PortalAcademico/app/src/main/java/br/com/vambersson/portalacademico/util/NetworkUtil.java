@@ -22,16 +22,21 @@ import br.com.vambersson.portalacademico.erro.ConexaoException;
 
 public class NetworkUtil {
 
-    public static HttpURLConnection conectar(String endereco,String requestMethhod) throws ConexaoException {
+//    private static String enderecoBase = "http://10.0.0.40:8080/PortalAcademico/servicos/";
+    private static String enderecoBase = "http://192.168.43.123:8080/PortalAcademico/servicos/";
+
+
+    public static HttpURLConnection conectar(String complemento) throws ConexaoException {
 
 
         try{
-            URL url = new URL(endereco);
+            URL url = new URL(enderecoBase+complemento);
             HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
-            conexao.setRequestMethod(requestMethhod);
+            conexao.setRequestMethod("GET");
             conexao.setReadTimeout(15000);
             conexao.setConnectTimeout(15000);
             conexao.setDoInput(true);
+            conexao.setDoOutput(false);
             conexao.connect();
 
             return conexao;
