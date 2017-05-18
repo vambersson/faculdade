@@ -23,15 +23,22 @@ import br.com.vambersson.portalacademico.util.NetworkUtil;
 
 public class LoginActivity extends AppCompatActivity {
 
-    String enderecoBase = "http://10.0.0.40:8080/PortalAcademico/servicos/";
+   private String enderecoBase = "http://192.168.0.115:8080/PortalAcademico/servicos/";
 
-    Usuario usuario = new Usuario();
+    private Usuario usuario;
+    private Gson gson;
 
     private Button login_btn_login;
     private Button login_btn_pri;
 
     private EditText login_Id_Edttxt_Matricula;
     private EditText login_Id_EdtTxt_Pass;
+
+
+    public LoginActivity(){
+        usuario = new Usuario();
+        gson = new Gson();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
 
     private void primeiroAcesso(){
 
@@ -95,8 +103,6 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Usuario... params) {
 
-            Gson gson = new Gson();
-
             String objJson = gson.toJson(usuario);
 
             HttpURLConnection conexao = null;
@@ -129,7 +135,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Usuário não encontrado", Toast.LENGTH_LONG).show();
 
             }else if(!"".equals(result)){
-                Gson gson = new Gson();
                 usuario = gson.fromJson(result,Usuario.class);
                 chamaTelaPrimeiroAcesso();
             }
@@ -142,7 +147,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent it = new Intent(LoginActivity.this,LoginPrimeiroAcesso.class);
         it.putExtra("usuario",usuario);
         startActivity(it);
-        usuario = null;
 
     }
 
@@ -178,9 +182,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void dadosLogarUsuario(){
-
+        usuario.setMatricula(Integer.parseInt(login_Id_Edttxt_Matricula.getText().toString()));
         usuario.setLogin(Integer.parseInt(login_Id_Edttxt_Matricula.getText().toString()));
-        usuario.setSenha(login_Id_EdtTxt_Pass.getText().toString());
+        usuario.setSenha(login_Id_EdtTxt_Pass.getText().toString().trim());
 
     }
 
@@ -188,8 +192,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Usuario... params) {
-
-            Gson gson = new Gson();
 
             String objJson = gson.toJson(usuario);
 
@@ -220,10 +222,10 @@ public class LoginActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             if("null".equals(result)){
+
                 Toast.makeText(LoginActivity.this, "Usuário não encontrado", Toast.LENGTH_LONG).show();
 
             }else if(!"".equals(result)){
-                Gson gson = new Gson();
                 usuario = gson.fromJson(result,Usuario.class);
                 chamaTelaMainActivity();
             }

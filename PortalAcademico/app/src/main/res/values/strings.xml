@@ -14,8 +14,9 @@
 
     <string name="login_cad_tela_name">Cadastro Aluno</string>
     <string name="login_cad_tv_nome">Name</string>
+    <string name="login_cad_tv_Email">E-Mail</string>
     <string name="login_cad_tv_senha">Password</string>
-    <string name="login_cad_tv_senha_confirma">Confirma Senha</string>
+    <string name="login_cad_tv_senha_confirma">Repeat Password</string>
     <string name="login_cad_btn_cadastrar">Save</string>
     <string name="login_cad_btn_cancelar">Cancel</string>
     <string name="title_activity_maps">Map</string>
