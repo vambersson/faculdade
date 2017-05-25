@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">PortalParaTodos</string>
+
+    <string-array name="tabs_cad_professor">
+        <item>Professor</item>
+        <item>Cursos</item>
+        <item>Disciplinas</item>
+    </string-array>
+
+
+    <string name="curso_tv_nome_curso">Name Course</string>
+
+
+    <string name="action_settings">Settings</string>
+    <string name="action_sign_out">Sign Out</string>
+
+
+
+    <string name="nav_header_tv_nome">Name</string>
+    <string name="nav_header_tv_curso">Curso</string>
+
+
+    <string name="login_tv_matricula">Registration</string>
+    <string name="login_tv_pass">Password</string>
+    <string name="login_btn_login">Login</string>
+    <string name="login_btn_primeiro">First Access</string>
+
+    <string name="login_cad_tela_name">Cadastro Aluno</string>
+    <string name="login_cad_tv_nome">First Name</string>
+    <string name="login_cad_tv_Email">E-Mail</string>
+    <string name="login_cad_tv_Curso">Curso</string>
+    <string name="login_cad_tv_senha">Password</string>
+    <string name="login_cad_tv_senha_confirma">Repeat Password</string>
+    <string name="login_cad_btn_cadastrar">Save</string>
+    <string name="login_cad_btn_cancelar">Cancel</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
