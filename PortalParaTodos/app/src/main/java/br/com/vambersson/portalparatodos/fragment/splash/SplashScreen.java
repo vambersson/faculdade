@@ -46,7 +46,6 @@ public class SplashScreen extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Nullable

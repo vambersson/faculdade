@@ -63,6 +63,7 @@ public class FragmentLogin extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
 
@@ -71,7 +72,7 @@ public class FragmentLogin extends Fragment {
 
         View view = inflater.inflate(R.layout.login_fragment,container,false);
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
 
 
@@ -154,17 +155,15 @@ public class FragmentLogin extends Fragment {
         @Override
         protected String doInBackground(Usuario... params) {
 
-            HttpURLConnection conexao = null;
             String obj = "";
 
             try {
-
-                conexao = NetworkUtil.conectar("GET","logar="+ usuario.getLogin() + "=" + usuario.getSenha());
+                HttpURLConnection conexao = NetworkUtil.abrirConexaao("logar="+ usuario.getLogin() + "=" + usuario.getSenha(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
 
                     InputStream is = conexao.getInputStream();
-                    obj = NetworkUtil.converterInputStreamToString(is);
+                    obj = NetworkUtil.streamToString(is);
                     conexao.disconnect();
                 }
 
@@ -205,9 +204,15 @@ public class FragmentLogin extends Fragment {
 
                     }else if(user.getSenha() == null){
 
+                        if(user.getTipo().equals("A")){
+                            usuario =  user;
+                            startFragment("FragmentCadastroAluno"); // Fragment  =  usuario_cadastro_aluno_fragment
+                        }else if(user.getTipo().equals("P")){
+                            usuario =  user;
+                            startFragment("GerenciadorPages"); // Fragment  =  usuario_cadastro_professor_fragment
+                        }
+
                         Toast.makeText(getActivity(), "Usuário não possui senha", Toast.LENGTH_SHORT).show();
-                        usuario = user;
-                        startFragment("FragmentCadastroUsuario");
 
                     }else if(!user.getSenha().equals(usuario.getSenha())){
 
@@ -287,16 +292,14 @@ public class FragmentLogin extends Fragment {
         @Override
         protected String doInBackground(Usuario... params) {
 
-            HttpURLConnection conexao = null;
             String obj = "";
 
             try {
-
-                conexao = NetworkUtil.conectar("GET","logar="+ usuario.getLogin() + "=" + 1);
+                HttpURLConnection conexao = NetworkUtil.abrirConexaao("logar="+usuario.getLogin() + "=" + 1,"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
-                    obj = NetworkUtil.converterInputStreamToString(is);
+                    obj = NetworkUtil.streamToString(is);
                     conexao.disconnect();
                 }
 
@@ -322,30 +325,40 @@ public class FragmentLogin extends Fragment {
                 Toast.makeText(getActivity(),"Usuário não encontrado", Toast.LENGTH_LONG).show();
 
             }else if(!"".equals(result)){
-                Usuario user = new Usuario();
-                user = gson.fromJson(result,Usuario.class);
 
-                if(user.getStatus().equals("N")){
+                try{
 
-                    Toast.makeText(getActivity(), "Usuário inativo", Toast.LENGTH_SHORT).show();
 
-                }else if(user.getSenha() != null){
+                    Usuario user = new Usuario();
+                    user = gson.fromJson(result,Usuario.class);
 
-                    Toast.makeText(getActivity(), "Usuário já possui senha", Toast.LENGTH_SHORT).show();
-                    // Recuperação de Senha
+                    if(user.getStatus().equals("N")){
 
-                }else  if(user.getSenha() == null){
+                        Toast.makeText(getActivity(), "Usuário inativo", Toast.LENGTH_SHORT).show();
 
-                    if(user.getTipo().equals("A")){
-                        usuario =  user;
-                        startFragment("FragmentCadastroUsuario"); // Fragment  =  usuario_cadastro_aluno_fragment
-                    }else if(user.getTipo().equals("P")){
-                        usuario =  user;
-                        startFragment("GerenciadorPages"); // Fragment  =  usuario_cadastro_professor_fragment
+                    }else if(user.getSenha() != null){
+
+                        Toast.makeText(getActivity(), "Usuário já possui senha", Toast.LENGTH_SHORT).show();
+                        // Recuperação de Senha
+
+                    }else  if(user.getSenha() == null){
+
+                        if(user.getTipo().equals("A")){
+                            usuario =  user;
+                            startFragment("FragmentCadastroAluno"); // Fragment  =  usuario_cadastro_aluno_fragment
+                        }else if(user.getTipo().equals("P")){
+                            usuario =  user;
+                            startFragment("GerenciadorPages"); // Fragment  =  usuario_cadastro_professor_fragment
+                        }
+
+
                     }
 
-
+                }catch (Exception e){
+                    Toast.makeText(getActivity(), "Web Service indisponível", Toast.LENGTH_SHORT).show();
                 }
+
+
 
 
             }

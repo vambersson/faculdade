@@ -18,8 +18,8 @@
             android:id="@+id/btn_add_Curso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            app:backgroundTint="@color/colorBlack"
+            android:layout_gravity="end|bottom|"
+            app:backgroundTint="@color/accent"
             app:fabSize="normal"
             app:srcCompat="@drawable/ic_add_white_24dp" />
 

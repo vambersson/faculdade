@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            app:backgroundTint="@color/colorBlack"
+            app:backgroundTint="@color/colorAccent"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_add_white_24dp" />
 
@@ -149,7 +149,7 @@
             <Button
                 android:id="@+id/btn_Idcancel"
                 android:text="@string/login_cad_btn_cancelar"
-                android:background="@color/colorRead"
+                android:background="@color/colorPrimaryDark"
                 android:textColor="@color/colorWhite"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"

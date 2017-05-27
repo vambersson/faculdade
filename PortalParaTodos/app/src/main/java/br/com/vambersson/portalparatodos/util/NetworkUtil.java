@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,32 +21,10 @@ import br.com.vambersson.portalparatodos.erro.ConexaoException;
 
 public class NetworkUtil {
 
-    //private static String enderecoBase = "http://177.105.72.150:8888/PortalAcademico/servicos/";
-      private static String enderecoBase = "http://192.168.1.7:8080/PortalAcademico/servicos/";
+      //private static String urlBase = "http://177.105.72.150:8888/PortalAcademico/servicos/";
+      private static String urlBase = "http://192.168.1.8:8080/PortalAcademico/servicos/";
 
 
-    public static HttpURLConnection conectar(String requestMethod,String complemento) throws ConexaoException {
-
-        HttpURLConnection  conexao;
-        try{
-            URL url = new URL(enderecoBase+complemento);
-            conexao = (HttpURLConnection) url.openConnection();
-            conexao.setReadTimeout(15000);
-            conexao.setConnectTimeout(15000);
-            conexao.setRequestMethod(requestMethod);
-            conexao.setDoInput(true);
-            conexao.setDoOutput(false);
-            conexao.connect();
-
-
-            return conexao;
-
-        }catch (IOException e){
-            throw new ConexaoException(e);
-        }
-
-
-    }
 
     public static boolean virificaConexao(Context ctx){
         ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -53,23 +32,47 @@ public class NetworkUtil {
         return (info != null && info.isConnected());
     }
 
-    public static String converterInputStreamToString(InputStream is){
-        StringBuffer buffer = new StringBuffer();
-        try{
-            BufferedReader br;
-            String linha;
 
-            br = new BufferedReader(new InputStreamReader(is));
-            while((linha = br.readLine())!= null){
-                buffer.append(linha);
+    public static String streamToString(InputStream is){
+
+        byte[] buffer = new byte[1024];
+
+        ByteArrayOutputStream bufferzao = new ByteArrayOutputStream();
+
+        int bytesLidos;
+
+        try {
+
+            while((bytesLidos = is.read(buffer)) != -1  ){
+                bufferzao.write(buffer,0,bytesLidos);
             }
 
-            br.close();
-        }catch(IOException e){
+            return new String(bufferzao.toByteArray(),"UTF-8");
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
 
-        return buffer.toString();
+    public static HttpURLConnection abrirConexaao(String metodoURL,String requestMethod ,boolean doOutPut) throws Exception{
+
+        URL url = new URL(urlBase+metodoURL);
+        HttpURLConnection  conexao = (HttpURLConnection) url.openConnection();
+        conexao.setReadTimeout(15000);
+        conexao.setConnectTimeout(15000);
+        conexao.setRequestMethod(requestMethod);
+        conexao.setDoInput(true);
+        conexao.setDoOutput(doOutPut);
+
+        if(doOutPut){
+            conexao.addRequestProperty("Content-Type","APPLICATION/JSON");
+        }
+
+        conexao.connect();
+
+        return conexao;
+
     }
 
 

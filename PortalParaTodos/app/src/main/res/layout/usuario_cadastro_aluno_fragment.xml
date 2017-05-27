@@ -8,29 +8,29 @@
 
 
 
-        <FrameLayout
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:id="@+id/frameLayout">
+    <FrameLayout
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/frameLayout">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ImgV_Idusuario"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:src="@color/colorWhite"
-                android:rotation="-90"/>
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/login_cad_IdCamera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                app:backgroundTint="@color/colorBlack"
-                app:fabSize="mini"
-                app:srcCompat="@drawable/ic_add_white_24dp" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ImgV_Idusuario"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@color/colorWhite" />
 
-        </FrameLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/login_cad_IdCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            app:backgroundTint="@color/accent"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_add_white_24dp" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,9 +76,6 @@
         android:layout_below="@+id/frameLayout">
 
 
-
-
-
         <LinearLayout
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -107,10 +104,11 @@
                 android:layout_height="wrap_content" />
 
             <Spinner
+                android:textAlignment="center"
                 android:id="@+id/perfil_Sp_IdCurso"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorPrimaryDark"/>
 
             <TextView
                 android:text="@string/login_cad_tv_Email"
@@ -162,28 +160,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_IdCancel"
-                android:text="@string/login_cad_btn_cancelar"
-                android:background="@color/colorRead"
-                android:textColor="@color/colorWhite"
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:text="@string/login_cad_btn_cancelar"
+                android:textColor="@color/colorWhite" />
+
             <Button
                 android:id="@+id/btn_IdSave"
-                android:text="@string/login_cad_btn_cadastrar"
-                android:background="@color/colorBlack"
-                android:textColor="@color/colorWhite"
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorBlack"
+                android:text="@string/login_cad_btn_cadastrar"
+                android:textColor="@color/colorWhite" />
         </LinearLayout>
-
 
 
     </LinearLayout>

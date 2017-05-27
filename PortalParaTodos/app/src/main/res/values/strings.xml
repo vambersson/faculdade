@@ -9,6 +9,7 @@
 
 
     <string name="curso_tv_nome_curso">Name Course</string>
+    <string name="curso_spinner_select">Select Course</string>
 
 
     <string name="action_settings">Settings</string>

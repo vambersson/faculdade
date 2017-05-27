@@ -2,6 +2,7 @@ package br.com.vambersson.portalparatodos.fragment.cadastros;
 
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,10 +12,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +29,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +38,8 @@ import java.util.List;
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Curso;
 import br.com.vambersson.portalparatodos.base.Usuario;
+import br.com.vambersson.portalparatodos.dao.UsuarioDao;
+import br.com.vambersson.portalparatodos.main.MainActivity;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -43,14 +49,13 @@ import static android.app.Activity.RESULT_OK;
  * Created by Vambersson on 19/05/2017.
  */
 
-public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
+public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
     // CodigoFragment = 001
 
 
     private static final int TIRAR_FOTO = 100;
 
     private Usuario usuario;
-    private  List<String> stlistaCursos;
     private  Gson gson;
 
     private ImageView ImgV_Idusuario;
@@ -62,7 +67,7 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
 
     private EditText perfil_Edt_IdNome;
 
-    private Spinner perfil_Sp_IdCurso;
+    private Spinner spinner;
     private ArrayAdapter<String> adp_spinner;
 
 
@@ -75,16 +80,14 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
     private Button btn_IdSave;
 
 
-    public FragmentCadastroUsuario(){
-        usuario = new Usuario();
-        stlistaCursos = new ArrayList<String>();
+    public FragmentCadastroAluno(){
         gson = new Gson();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Nullable
@@ -103,13 +106,13 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
         perfil_Edt_IdNome = (EditText) view.findViewById(R.id.perfil_Edt_IdNome);
 
 
-
-        listaCursos();
-
-        perfil_Sp_IdCurso = (Spinner) view.findViewById(R.id.perfil_Sp_IdCurso);
-        adp_spinner = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,stlistaCursos);
+        spinner = (Spinner) view.findViewById(R.id.perfil_Sp_IdCurso);
+        adp_spinner = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item);
         adp_spinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        perfil_Sp_IdCurso.setAdapter(adp_spinner);
+        spinner.setAdapter(adp_spinner);
+        adp_spinner.add(getResources().getString(R.string.curso_spinner_select));
+        spinner.setOnTouchListener(Spinner_OnTouch);
+
 
         perfil_Edt_IdEmail = (EditText) view.findViewById(R.id.perfil_Edt_IdEmail);
         perfil_Edt_IdSenha = (EditText) view.findViewById(R.id.perfil_Edt_IdSenha);
@@ -142,6 +145,19 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
         if(usuario != null){
             perfil_tv_IdNone_faculdade.setText(usuario.getFaculdade().getNome());
         }
+        perfil_Edt_IdNome.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+//                if (event.getAction() == KeyEvent. ){
+//                    Toast.makeText(getActivity(), "okok", Toast.LENGTH_SHORT).show();
+//
+//                }
+
+                return false;
+
+            }
+        });
 
         perfil_Edt_IdNome.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -149,6 +165,7 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
                 if(actionId ==  EditorInfo.IME_ACTION_NEXT){
                     perfil_tv_IdNome.setText(perfil_Edt_IdNome.getText().toString().trim());
                     perfil_tv_IdNome.setVisibility(View.VISIBLE);
+
                 }
                 return false;
             }
@@ -158,23 +175,23 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
         return view;
     }
 
-    private void listaCursos(){
 
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new ClasseListaCursos().execute();
+    private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                new ClasseListaCursos().execute(usuario);
             }
-        });
-
-        t.start();
-    }
+            return false;
+        }
+    };
 
 
     private void save(){
 
         if(validarSave() == true){
-
+            dadosSave();
+            new ClasseSave().execute(usuario);
         }
 
     }
@@ -182,36 +199,112 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
     private boolean validarSave(){
         boolean resultado = true;
 
-        if(perfil_Edt_IdNome.getText().toString().trim().equals(null)){
+        if(perfil_Edt_IdNome.getText().toString().trim().equals("")){
             Toast.makeText(getActivity(), "Nome inválido", Toast.LENGTH_SHORT).show();
+            return resultado = false;
+        }else if(perfil_Edt_IdEmail.getText().toString().trim().equals("")){
+            Toast.makeText(getActivity(), "E-Mail inválido", Toast.LENGTH_SHORT).show();
+            return resultado = false;
+        }else if(!perfil_Edt_IdSenha.getText().toString().trim().equals(perfil_Edt_IdSenhaConfirma.getText().toString().trim())  ){
+            Toast.makeText(getActivity(), "Senha inválido", Toast.LENGTH_SHORT).show();
             return resultado = false;
         }
 
             return  resultado;
     }
 
-    class ClasseListaCursos extends AsyncTask<Usuario, Void,String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+    private void dadosSave(){
 
+        usuario.setNome(perfil_Edt_IdNome.getText().toString().trim());
+        usuario.setEmail(perfil_Edt_IdEmail.getText().toString().trim());
+        usuario.setSenha(perfil_Edt_IdSenha.getText().toString().trim());
+
+    }
+
+
+    class ClasseSave extends AsyncTask<Usuario, Void,String> {
+
+        @Override
+        protected String doInBackground(Usuario... params) {
+            String obj ="";
+
+            try {
+                HttpURLConnection conexao = NetworkUtil.abrirConexaao("atualizaUsuario","POST",true);
+
+                OutputStream out = conexao.getOutputStream();
+
+                out.write(gson.toJson(params[0]).getBytes());
+                out.flush();
+                out.close();
+
+                if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
+                    InputStream is = conexao.getInputStream();
+                    obj = NetworkUtil.streamToString(is);
+                    conexao.disconnect();
+                }
+
+                return obj;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            removerUsuarioLocal();
+            inserirUsuarioLocal();
+            startActivityMain(); // Activity = Principal
 
 
         }
+    }
+
+    private void startActivityMain(){
+        Intent it = new Intent(getActivity(), MainActivity.class);
+        it.putExtra("usuario",usuario);
+        startActivity(it);
+        getActivity().finish();
+    }
+
+    private void removerUsuarioLocal(){
+        UsuarioDao dao = new UsuarioDao(getActivity());
+        dao.deletar();
+    }
+
+    private void inserirUsuarioLocal(){
+        UsuarioDao dao = new UsuarioDao(getActivity());
+        dao.inserir(usuario,"S");
+
+    }
+
+
+
+
+
+
+
+
+
+
+    class ClasseListaCursos extends AsyncTask<Usuario, Void,String> {
 
         @Override
         protected String doInBackground(Usuario... params) {
 
-            HttpURLConnection conexao = null;
             String obj = "";
 
             try {
-
-                conexao = NetworkUtil.conectar("GET","listaCursos="+usuario.getFaculdade().getCodigo());
+                HttpURLConnection conexao = NetworkUtil.abrirConexaao("listaCursos="+params[0].getFaculdade().getCodigo(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
-                    obj = NetworkUtil.converterInputStreamToString(is);
+                    obj = NetworkUtil.streamToString(is);
                     conexao.disconnect();
                 }
 
@@ -227,15 +320,40 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            List<Curso> temp = new ArrayList<Curso>();
-            Curso[] lista =  gson.fromJson(result, Curso[].class);
+            if(result == ""){
 
-            temp = new ArrayList<Curso>(Arrays.asList(lista) );
+                //Toast.makeText(getActivity(),"Dados invalídos", Toast.LENGTH_LONG).show();
 
-            for (int i = 0;i < temp.size();i++){
-                stlistaCursos.add(temp.get(i).getNome());
+            }else if("null".equals(result)){
+
+                //Toast.makeText(getActivity(),"Usuário não encontrado", Toast.LENGTH_LONG).show();
+
+            }else if(!"".equals(result)){
+
+                try{
+
+                    Curso[] lista =  gson.fromJson(result, Curso[].class);
+
+                    List<Curso>  temp = new ArrayList<Curso>(Arrays.asList(lista) );
+                    adp_spinner.clear();
+                    for (int i = 0;i < temp.size();i++){
+                        adp_spinner.add(temp.get(i).getNome());
+                    }
+                    adp_spinner.setNotifyOnChange(true);
+
+                }catch(Exception e){
+                    Toast.makeText(getActivity(), "Erro de comunicação", Toast.LENGTH_SHORT).show();
+                }
+
             }
-            adp_spinner.setNotifyOnChange(true);
+
+
+
+
+
+
+
+
 
         }
 

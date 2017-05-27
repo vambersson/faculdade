@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 
 import br.com.vambersson.portalparatodos.R;
-import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCadastroUsuario;
+import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCadastroAluno;
 import br.com.vambersson.portalparatodos.fragment.login.FragmentLogin;
 import br.com.vambersson.portalparatodos.fragment.splash.SplashScreen;
 
@@ -50,9 +50,9 @@ public class GerenciadorFragment extends AppCompatActivity {
                SplashScreen fragment = new SplashScreen();
                ft.replace(R.id.activity_main, fragment);
 
-           }else if(CodigoFragment.equals("FragmentCadastroUsuario") ){
+           }else if(CodigoFragment.equals("FragmentCadastroAluno") ){
 
-               FragmentCadastroUsuario fragment = new FragmentCadastroUsuario();
+               FragmentCadastroAluno fragment = new FragmentCadastroAluno();
                ft.replace(R.id.activity_main, fragment);
 
            }else if(CodigoFragment.equals("GerenciadorPages") ){
