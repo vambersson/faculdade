@@ -108,7 +108,6 @@ public class SplashScreen extends Fragment {
     private void startFragment(String CodigoFragment){
         Intent it = new Intent(getActivity(), GerenciadorFragment.class);
         it.putExtra("CodigoFragment",CodigoFragment);
-        it.putExtra("usuario",usuario);
         startActivity(it);
         getActivity().finish();
 

@@ -159,5 +159,4 @@ public class FragmentCursoCadastro extends DialogFragment {
         show(fm,DIALOG_TAG);
     }
 
-
 }

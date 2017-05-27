@@ -1,6 +1,7 @@
 package br.com.vambersson.portalparatodos.fragment.cadastros;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v4.app.Fragment;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,8 @@ import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.fragment.adapter.CursoAdapter;
 import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Created by Vambersson on 21/05/2017.
@@ -62,9 +66,8 @@ public class FragmentCursoLista extends Fragment {
 
         usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
         if(usuario != null){
-            listaCursos();
+            listaCursos(true);
         }
-
 
     }
 
@@ -75,6 +78,7 @@ public class FragmentCursoLista extends Fragment {
         View view = inflater.inflate(R.layout.curso_lista_fragment,container,false);
 
         lv_Cursos = (ListView) view.findViewById(R.id.lv_Cursos);
+
         btn_add_Curso = (FloatingActionButton) view.findViewById(R.id.btn_add_Curso);
         btn_add_Curso.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,19 +100,34 @@ public class FragmentCursoLista extends Fragment {
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
+    public void listaCursos(boolean executa) {
 
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
 
+                while (true){
 
+                    try {
+                        new ClasseListaCursos().execute();
+                        sleep(1500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        if (executa == true){
+            thread.start();
+        }else {
+            try {
+                thread.wait();
+            } catch (InterruptedException e) {
+
+            }
+        }
     }
-
-    public void listaCursos(){
-        new ClasseListaCursos().execute();
-    }
-
 
     class ClasseListaCursos extends AsyncTask<Usuario, Void,String> {
         @Override
@@ -157,10 +176,6 @@ public class FragmentCursoLista extends Fragment {
         }
 
     }
-
-
-
-
 
 
 }
