@@ -55,10 +55,10 @@ public class ListaDisciplina extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new ClasseListaDisciplinas().execute();
-
         codigo_curso = getIntent().getStringExtra(EXTRA_ID_CURSO);
         codigo_faculdade = getIntent().getStringExtra(EXTRA_ID_FACULDADE);
+
+
 
         adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked);
 
@@ -66,6 +66,17 @@ public class ListaDisciplina extends ListActivity {
         listView.setAdapter(adapter);
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        new ClasseListaDisciplinas().execute();
+
+
+
+
+
+
+
+
+
 
     }
 
@@ -91,7 +102,7 @@ public class ListaDisciplina extends ListActivity {
                 if(keyCode == KeyEvent.KEYCODE_BACK){
 
                     Intent it = new Intent();
-
+                    it.putExtra("codigoCursoSelecionado",codigo_curso);
                     it.putExtra(EXTRA_RESULTADO,disciplinas_selecionadas);
                     setResult(RESULT_OK,it);
 
@@ -103,6 +114,8 @@ public class ListaDisciplina extends ListActivity {
         });
 
     }
+
+
 
     protected void criarLista(){
 
@@ -171,6 +184,26 @@ public class ListaDisciplina extends ListActivity {
                         adapter.add(temp.get(i).getPeriodo() +" "+ temp.get(i).getNome());
                     }
                     adapter.notifyDataSetChanged();
+
+                    String selecionadas = getIntent().getStringExtra(EXTRA_DISCIPLINA);
+
+                    if(selecionadas != ""){
+
+                        String[] idcodigos = selecionadas.split(" ");
+
+                        for(int i=0; i < listView.getCount(); i++){
+
+                            for(int b= 0;b < idcodigos.length; b++ ){
+
+                                if(listaDisciplinas.get(i).getCodigo() == Integer.parseInt(idcodigos[b])){
+                                    listView.setItemChecked(i,true);
+                                }
+
+                            }
+
+                        }
+
+                    }
 
                 }catch(Exception e){
                     Toast.makeText(ListaDisciplina.this, "Erro de comunicação", Toast.LENGTH_SHORT).show();

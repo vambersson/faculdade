@@ -38,7 +38,7 @@
         android:orientation="vertical">
         <TextView
             android:id="@+id/perfil_tv_IdNone_faculdade"
-            android:text="Faculdade"
+            android:text="@string/cad_tv_aluno_nome_faculdade"
             android:textColor="@color/colorBlack"
             android:layout_marginTop="16dp"
             android:layout_marginLeft="130dp"
@@ -47,8 +47,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
         <TextView
             android:id="@+id/perfil_tv_IdNome"
-            android:text="Nome"
-            android:visibility="gone"
+            android:text="@string/cad_tv_aluno_nome_aluno"
             android:textColor="@color/colorBlack"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="130dp"
@@ -57,8 +56,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
         <TextView
             android:id="@+id/perfil_tv_IdCurso"
-            android:text="Curso"
-            android:visibility="gone"
+            android:text="@string/cad_tv_aluno_nome_curso"
             android:textColor="@color/colorRead"
             android:layout_marginLeft="130dp"
             android:layout_width="wrap_content"
@@ -84,7 +82,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:text="@string/login_cad_tv_nome"
+                android:text="@string/cad_tv_aluno_primeiro_nome"
                 android:textColor="@color/colorWhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -98,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
-                android:text="@string/login_cad_tv_Curso"
+                android:text="@string/cad_tv_aluno_seleciona_Curso"
                 android:textColor="@color/colorWhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -110,19 +108,19 @@
                 android:layout_height="50dp"
                 android:background="@color/colorPrimaryDark"/>
             <TextView
-                android:text="@string/login_cad_tv_Discipina"
+                android:text="@string/cad_tv_aluno_seleciona_Discipina"
                 android:textColor="@color/colorWhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <Button
                 android:id="@+id/perfil_btn_Idlista_disciplina"
-                android:text="@string/login_cad_btn_Discipina"
+                android:text="@string/cad_btn_aluno_Discipinas"
                 android:background="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:text="@string/login_cad_tv_Email"
+                android:text="@string/cad_tv_aluno_Email"
                 android:textColor="@color/colorWhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -137,7 +135,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:text="@string/login_cad_tv_senha"
+                android:text="@string/cad_tv_aluno_senha"
                 android:textColor="@color/colorWhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -151,7 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
-                android:text="@string/login_cad_tv_senha_confirma"
+                android:text="@string/cad_tv_aluno_senha_confirma"
                 android:textColor="@color/colorWhite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -182,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
-                android:text="@string/login_cad_btn_cancelar"
+                android:text="@string/cad_btn_aluno_Cancel"
                 android:textColor="@color/colorWhite" />
 
             <Button
@@ -191,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBlack"
-                android:text="@string/login_cad_btn_cadastrar"
+                android:text="@string/cad_btn_aluno_save"
                 android:textColor="@color/colorWhite" />
         </LinearLayout>
 

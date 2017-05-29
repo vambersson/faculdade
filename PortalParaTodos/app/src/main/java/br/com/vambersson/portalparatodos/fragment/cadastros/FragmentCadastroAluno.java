@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,8 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,6 +57,7 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
     private static final String STATE_DISCIPLINA = "disciplina";
 
     private String disciplinas_selecionadas;
+    private  String result_curso;
 
     private Usuario usuario;
     private  Gson gson;
@@ -134,7 +132,7 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
         adp_spinner = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item);
         adp_spinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adp_spinner);
-        adp_spinner.add(getResources().getString(R.string.curso_spinner_select));
+        adp_spinner.add(getResources().getString(R.string.cad_spinner_seleciona_Cursos));
         spinner.setOnTouchListener(Spinner_OnTouch);
 
         perfil_btn_Idlista_disciplina = (Button) view.findViewById(R.id.perfil_btn_Idlista_disciplina);
@@ -239,10 +237,10 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
         }else if(!perfil_Edt_IdSenha.getText().toString().trim().equals(perfil_Edt_IdSenhaConfirma.getText().toString().trim())  ){
             Toast.makeText(getActivity(), "Senha inválido", Toast.LENGTH_SHORT).show();
             return resultado = false;
-        }else if(spinner.getSelectedItem().toString().equals(getResources().getString(R.string.curso_spinner_select))){
+        }else if(spinner.getSelectedItem().toString().equals(getResources().getString(R.string.cad_spinner_seleciona_Cursos))){
             Toast.makeText(getActivity(), getResources().getString(R.string.message_valida_curso), Toast.LENGTH_SHORT).show();
             return resultado = false;
-        }else if(perfil_btn_Idlista_disciplina.getText().toString().equals(getResources().getString(R.string.login_cad_btn_Discipina))){
+        }else if(perfil_btn_Idlista_disciplina.getText().toString().equals(getResources().getString(R.string.cad_btn_aluno_Discipinas))){
             Toast.makeText(getActivity(), "Disciplina Inválido", Toast.LENGTH_SHORT).show();
             return resultado = false;
         }
@@ -323,10 +321,14 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
 
     private void listaDisciplina(){
 
-        if(spinner.getSelectedItem().toString().equals(getResources().getString(R.string.curso_spinner_select))){
+        if(spinner.getSelectedItem().toString().equals(getResources().getString(R.string.cad_spinner_seleciona_Cursos))){
             Toast.makeText(getActivity(),getResources().getString(R.string.message_seleciona_disciplina) , Toast.LENGTH_SHORT).show();
 
         }else{
+
+            if(!listaCursos.get(spinner.getSelectedItemPosition()).getCodigo().toString().equals(result_curso )){
+                disciplinas_selecionadas = "";
+            }
 
             Intent it = new Intent(getActivity(), ListaDisciplina.class);
             it.putExtra(ListaDisciplina.EXTRA_DISCIPLINA,disciplinas_selecionadas);
@@ -428,10 +430,19 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if(requestCode == REQUEST_DICIPLINA && resultCode == RESULT_OK){
+
+            result_curso = data.getStringExtra("codigoCursoSelecionado");
             disciplinas_selecionadas = data.getStringExtra(ListaDisciplina.EXTRA_RESULTADO);
+
             if(disciplinas_selecionadas != null){
                 perfil_btn_Idlista_disciplina.setText(disciplinas_selecionadas);
             }
+
+
+
+
+
+
         }
 
 

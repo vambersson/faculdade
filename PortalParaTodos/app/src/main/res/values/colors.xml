@@ -21,13 +21,9 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
 
-
-
-
     <color name="mcolorPrimary">#3F51B5</color>
     <color name="mcolorPrimaryDark">#303F9F</color>
     <color name="mcolorAccent">#FF4081</color>
-
 
     <color name="mcolorWhite">#FFFFFF</color>
     <color name="mcolorBlack">#212121</color>
