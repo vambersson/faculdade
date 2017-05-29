@@ -4,15 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
-
-
-    <ImageView
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:id="@+id/imageView"
-        android:background="@drawable/logo"/>
-
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"

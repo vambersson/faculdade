@@ -80,7 +80,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -107,8 +107,19 @@
                 android:textAlignment="center"
                 android:id="@+id/perfil_Sp_IdCurso"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="50dp"
                 android:background="@color/colorPrimaryDark"/>
+            <TextView
+                android:text="@string/login_cad_tv_Discipina"
+                android:textColor="@color/colorWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/perfil_btn_Idlista_disciplina"
+                android:text="@string/login_cad_btn_Discipina"
+                android:background="@color/colorPrimaryDark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:text="@string/login_cad_tv_Email"

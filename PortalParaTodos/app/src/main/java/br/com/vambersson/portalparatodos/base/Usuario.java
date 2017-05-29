@@ -28,12 +28,18 @@ public class Usuario implements Serializable {
 
     private String senha;
 
+    private String disciplinaSelecionadas;
+
     private Faculdade faculdade;
+
+    private Curso curso;
 
 
     public Usuario(){
 
         faculdade = new Faculdade();
+
+        curso = new Curso();
     }
 
     public Integer getCodigo() {
@@ -114,5 +120,22 @@ public class Usuario implements Serializable {
 
     public void setStatuslogin(String statuslogin) {
         this.statuslogin = statuslogin;
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
+
+    public String getDisciplinaSelecionadas() {
+        return disciplinaSelecionadas;
+    }
+
+    public void setDisciplinaSelecionadas(String disciplinaSelecionadas) {
+        this.disciplinaSelecionadas = disciplinaSelecionadas;
     }
 }

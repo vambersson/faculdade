@@ -1,38 +1,70 @@
 <resources>
-    <string name="app_name">PortalParaTodos</string>
+    <string name="app_name">Portal</string>
+    <string name="app_name_bem_vindo">Portal Acadêmico</string>
+
+    <string name="login_sp_faculdade">Select your college</string>
+    <string name="login_tv_matricula">Registration</string>
+    <string name="login_tv_pass">Password</string>
+    <string name="login_btn_login">Login</string>
+    <string name="login_btn_primeiro">First Access</string>
+
 
     <string-array name="tabs_cad_professor">
-        <item>Professor</item>
-        <item>Cursos</item>
-        <item>Disciplinas</item>
+        <item>Teacher</item>
+        <item>Course</item>
+        <item>Discipline</item>
     </string-array>
 
 
+
+
     <string name="curso_tv_nome_curso">Name Course</string>
-    <string name="curso_spinner_select">Select Course</string>
+    <string name="curso_spinner_select">Select your course</string>
 
 
     <string name="action_settings">Settings</string>
     <string name="action_sign_out">Sign Out</string>
 
 
-
     <string name="nav_header_tv_nome">Name</string>
-    <string name="nav_header_tv_curso">Curso</string>
+    <string name="nav_header_tv_curso">Course</string>
 
 
-    <string name="login_tv_matricula">Registration</string>
-    <string name="login_tv_pass">Password</string>
-    <string name="login_btn_login">Login</string>
-    <string name="login_btn_primeiro">First Access</string>
+
 
     <string name="login_cad_tela_name">Cadastro Aluno</string>
     <string name="login_cad_tv_nome">First Name</string>
     <string name="login_cad_tv_Email">E-Mail</string>
-    <string name="login_cad_tv_Curso">Curso</string>
+    <string name="login_cad_tv_Curso">Course</string>
+    <string name="login_cad_tv_Discipina">Discipline</string>
+    <string name="login_cad_btn_Discipina">Select your discipline</string>
+
     <string name="login_cad_tv_senha">Password</string>
     <string name="login_cad_tv_senha_confirma">Repeat Password</string>
     <string name="login_cad_btn_cadastrar">Save</string>
     <string name="login_cad_btn_cancelar">Cancel</string>
     <string name="title_activity_maps">Map</string>
+
+
+
+
+    <!-- Erros -->
+    <string name="message_seleciona_disciplina">Course not selected</string>
+    <string name="message_valida_nome">Invalid name</string>
+    <string name="message_valida_curso">Invalid course</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </resources>

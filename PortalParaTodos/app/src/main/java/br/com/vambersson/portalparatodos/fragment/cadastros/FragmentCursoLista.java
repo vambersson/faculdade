@@ -78,6 +78,16 @@ public class FragmentCursoLista extends Fragment {
         View view = inflater.inflate(R.layout.curso_lista_fragment,container,false);
 
         lv_Cursos = (ListView) view.findViewById(R.id.lv_Cursos);
+        lv_Cursos.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_BACK){
+                    //getActivity().finishAffinity();
+                }
+
+                return false;
+            }
+        });
 
         btn_add_Curso = (FloatingActionButton) view.findViewById(R.id.btn_add_Curso);
         btn_add_Curso.setOnClickListener(new View.OnClickListener() {

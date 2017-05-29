@@ -8,11 +8,14 @@ import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ import java.util.List;
 
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Curso;
+import br.com.vambersson.portalparatodos.base.Faculdade;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
 import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
@@ -41,7 +45,7 @@ public class FragmentLogin extends Fragment {
 
     private Gson gson;
     private Usuario usuario;
-    private List<Curso> listaCursos;
+    private List<Faculdade> listaFaculdade;
 
     private ProgressBar progressBar;
     private int contador = 0;
@@ -50,13 +54,15 @@ public class FragmentLogin extends Fragment {
     private Button login_btn_primeiroAcesso;
     private Button login_btn_login;
 
+    private ArrayAdapter<String> adapter;
+    private Spinner spinner;
     private EditText login_Id_EdtTxt_Matricula;
     private EditText login_Id_EdtTxt_Senha;
 
 
 
     public FragmentLogin(){
-
+        listaFaculdade = new ArrayList<Faculdade>();
         gson = new Gson();
     }
 
@@ -75,12 +81,21 @@ public class FragmentLogin extends Fragment {
 
 
 
-
+        spinner = (Spinner) view.findViewById(R.id.login_spinner_faculdade);
         login_Id_EdtTxt_Matricula = (EditText) view.findViewById(R.id.login_Id_EdtTxt_Matricula);
         login_Id_EdtTxt_Senha = (EditText) view.findViewById(R.id.login_Id_EdtTxt_Senha);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
         login_btn_login = (Button) view.findViewById(R.id.login_btn_login);
+        login_btn_primeiroAcesso = (Button) view.findViewById(R.id.login_btn_primeiroAcesso);
+
+
+        adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        adapter.add(getResources().getString(R.string.login_sp_faculdade));
+        spinner.setOnTouchListener(Spinner_OnTouch);
+
+
         login_btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +103,7 @@ public class FragmentLogin extends Fragment {
             }
         });
 
-        login_btn_primeiroAcesso = (Button) view.findViewById(R.id.login_btn_primeiroAcesso);
+
         login_btn_primeiroAcesso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +112,83 @@ public class FragmentLogin extends Fragment {
         });
 
         return view;
+    }
+
+    private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                new ClasseListaFaculdades().execute();
+            }
+            return false;
+        }
+    };
+    class ClasseListaFaculdades extends AsyncTask<Faculdade, Void,String> {
+
+        @Override
+        protected String doInBackground(Faculdade... params) {
+
+            String obj = "";
+
+            try {
+                HttpURLConnection conexao = NetworkUtil.abrirConexaao("listaFaculdades","GET",false);
+
+                if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
+                    InputStream is = conexao.getInputStream();
+                    obj = NetworkUtil.streamToString(is);
+                    conexao.disconnect();
+                }
+
+                return obj;
+
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            if(result == ""){
+
+                //Toast.makeText(getActivity(),"Dados invalídos", Toast.LENGTH_LONG).show();
+
+            }else if("null".equals(result)){
+
+                //Toast.makeText(getActivity(),"Usuário não encontrado", Toast.LENGTH_LONG).show();
+
+            }else if(!"".equals(result)){
+
+                try{
+
+                    Faculdade[] lista =  gson.fromJson(result, Faculdade[].class);
+
+                    List<Faculdade>  temp = new ArrayList<Faculdade>(Arrays.asList(lista) );
+                    listaFaculdade.clear();
+                    listaFaculdade = temp;
+                    adapter.clear();
+                    for (int i = 0;i < temp.size();i++){
+                        adapter.add(temp.get(i).getNome());
+                    }
+                    adapter.setNotifyOnChange(true);
+
+                }catch(Exception e){
+                    Toast.makeText(getActivity(), "Erro de comunicação", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+
+
+
+
+
+
+
+
+        }
+
     }
 
 
@@ -116,6 +208,9 @@ public class FragmentLogin extends Fragment {
         }else if(login_Id_EdtTxt_Senha.getText().toString().trim().equals("")){
             Toast.makeText(getActivity(), "Senha não informada", Toast.LENGTH_SHORT).show();
             resultado = false;
+        }else if(spinner.getSelectedItem().toString().equals("Select faculdade")){
+            Toast.makeText(getActivity(), "Faculdade inválida", Toast.LENGTH_SHORT).show();
+            resultado = false;
         }
 
         return resultado;
@@ -123,6 +218,7 @@ public class FragmentLogin extends Fragment {
 
     private void dadosLogar(){
         usuario = new Usuario();
+        usuario.getFaculdade().setCodigo(listaFaculdade.get(spinner.getSelectedItemPosition()).getCodigo());
         usuario.setLogin(Integer.parseInt(login_Id_EdtTxt_Matricula.getText().toString().trim()));
         usuario.setSenha(login_Id_EdtTxt_Senha.getText().toString().trim());
     }
@@ -158,7 +254,7 @@ public class FragmentLogin extends Fragment {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("logar="+ usuario.getLogin() + "=" + usuario.getSenha(),"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexaao("logar="+ usuario.getLogin() + "=" + usuario.getSenha() +"="+usuario.getFaculdade().getCodigo(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
 
@@ -234,6 +330,7 @@ public class FragmentLogin extends Fragment {
             }
 
         }
+
     }
 
 
@@ -254,6 +351,9 @@ public class FragmentLogin extends Fragment {
         if(login_Id_EdtTxt_Matricula.getText().toString().trim().equals("")){
             Toast.makeText(getActivity(), "Matricula não informada", Toast.LENGTH_SHORT).show();
             resultado = false;
+        }else if(spinner.getSelectedItem().toString().equals("Select faculdade")){
+            Toast.makeText(getActivity(), "Faculdade inválida", Toast.LENGTH_SHORT).show();
+            resultado = false;
         }
 
         return resultado;
@@ -261,6 +361,7 @@ public class FragmentLogin extends Fragment {
 
     private void dadosPrimeiroAcesso(){
         usuario = new Usuario();
+        usuario.getFaculdade().setCodigo(listaFaculdade.get(spinner.getSelectedItemPosition()).getCodigo());
         usuario.setLogin(Integer.parseInt(login_Id_EdtTxt_Matricula.getText().toString().trim()));
     }
 
@@ -295,7 +396,7 @@ public class FragmentLogin extends Fragment {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("logar="+usuario.getLogin() + "=" + 1,"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexaao("logar="+usuario.getLogin() + "=" + 1+"="+ usuario.getFaculdade().getCodigo(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
