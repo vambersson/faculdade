@@ -1,11 +1,17 @@
 package br.com.vambersson.portalparatodos.main;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Usuario;
@@ -18,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView texto;
 
+    private ImageView img_teste;
+
 
 
     @Override
@@ -26,14 +34,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        img_teste = (ImageView) findViewById(R.id.img_teste);
         texto = (TextView) findViewById(R.id.act_main_nome_usuario);
 
         usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         if(usuario != null){
            texto.setText(usuario.getNome());
+            byteToBitmap();
         }
 
 
+
+    }
+
+    private void byteToBitmap(){
+
+        UsuarioDao dao = new UsuarioDao(this);
+
+        byte[] outImage =  dao.getUsuario().getFoto();
+        ByteArrayInputStream imageStream= new ByteArrayInputStream(outImage);
+        Bitmap imageBitmap= BitmapFactory.decodeStream(imageStream);
+        img_teste.setImageBitmap(imageBitmap);
 
     }
 
@@ -60,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     private void removerUsuarioLocal(){
         UsuarioDao dao = new UsuarioDao(this);

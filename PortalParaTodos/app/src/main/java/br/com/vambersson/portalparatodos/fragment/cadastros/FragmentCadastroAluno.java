@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -60,6 +61,7 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
     private  String result_curso;
 
     private Usuario usuario;
+    private  byte fotoBytes[];
     private  Gson gson;
 
     private ImageView ImgV_Idusuario;
@@ -210,6 +212,7 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
             if (event.getAction() == MotionEvent.ACTION_UP) {
 
                 new ClasseListaCursos().execute(usuario);
+                perfil_btn_Idlista_disciplina.setText(getResources().getString(R.string.cad_btn_aluno_Discipinas));
             }
             return false;
         }
@@ -250,6 +253,7 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
 
     private void dadosSave(){
 
+        usuario.setFoto(fotoBytes);
         usuario.setNome(perfil_Edt_IdNome.getText().toString().trim());
         usuario.setEmail(perfil_Edt_IdEmail.getText().toString().trim());
         usuario.setSenha(perfil_Edt_IdSenha.getText().toString().trim());
@@ -299,6 +303,14 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
 
 
         }
+    }
+
+    private void bitmapToByte(Bitmap bitmap){
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        fotoBytes = stream.toByteArray();
+
     }
 
     private void startActivityMain(){
@@ -438,11 +450,6 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
                 perfil_btn_Idlista_disciplina.setText(disciplinas_selecionadas);
             }
 
-
-
-
-
-
         }
 
 
@@ -452,6 +459,8 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
                     Bundle bundle = data.getExtras();
                     Bitmap bitmap = (Bitmap) bundle.get("data");
                     ImgV_Idusuario.setImageBitmap(bitmap);
+
+                    bitmapToByte(bitmap);
 
                 } else if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(getActivity().getBaseContext(), "A captura foi cancelada",

@@ -116,22 +116,6 @@ public class ListaDisciplina extends ListActivity {
     }
 
 
-
-    protected void criarLista(){
-
-
-        //String disciplina = getIntent().getStringExtra(EXTRA_DISCIPLINA);
-
-       // if(disciplina != null){
-           // int position = Arrays.asList(disciplinas).indexOf(disciplina);
-           // listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-           // listView.setItemChecked(position,true);
-       // }
-
-    }
-
-
-
     class ClasseListaDisciplinas extends AsyncTask<Disciplina, Void,String> {
 
 
@@ -163,11 +147,11 @@ public class ListaDisciplina extends ListActivity {
 
             if(result == ""){
 
-                //Toast.makeText(getActivity(),"Dados invalídos", Toast.LENGTH_LONG).show();
+                //Toast.makeText(ListaDisciplina.this,"ok1", Toast.LENGTH_LONG).show();
 
-            }else if("null".equals(result)){
+            }else if("[]".equals(result)){
 
-                //Toast.makeText(getActivity(),"Usuário não encontrado", Toast.LENGTH_LONG).show();
+                Toast.makeText(ListaDisciplina.this,getResources().getString(R.string.message_alerta_disciplina_cadastrada), Toast.LENGTH_LONG).show();
 
             }else if(!"".equals(result)){
                 Gson gson = new Gson();
@@ -206,7 +190,7 @@ public class ListaDisciplina extends ListActivity {
                     }
 
                 }catch(Exception e){
-                    Toast.makeText(ListaDisciplina.this, "Erro de comunicação", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(ListaDisciplina.this, "Erro de comunicação"+ e, Toast.LENGTH_LONG).show();
                 }
 
             }

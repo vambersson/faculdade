@@ -12,6 +12,8 @@ public class Usuario implements Serializable {
 
     private Integer codigo;
 
+    private byte[] foto;
+
     private Integer matricula;
 
     private String nome;
@@ -137,5 +139,13 @@ public class Usuario implements Serializable {
 
     public void setDisciplinaSelecionadas(String disciplinaSelecionadas) {
         this.disciplinaSelecionadas = disciplinaSelecionadas;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
     }
 }

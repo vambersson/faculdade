@@ -6,7 +6,10 @@
     android:layout_height="match_parent"
     tools:context="br.com.vambersson.portalparatodos.main.MainActivity">
 
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/act_main_nome_usuario"
@@ -16,5 +19,16 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteY="201dp"
         tools:layout_editor_absoluteX="122dp" />
+    <ImageView
+        android:id="@+id/img_teste"
+        android:layout_width="300dp"
+        android:layout_height="300dp" />
+
+
+</LinearLayout>
+
+
+
+
 
 </android.support.constraint.ConstraintLayout>

@@ -29,6 +29,7 @@ public class UsuarioDao {
 
         ContentValues cv = new ContentValues();
         cv.put("idcodigo",usuario.getCodigo());
+        cv.put("foto",usuario.getFoto());
         cv.put("matricula",usuario.getMatricula());
         cv.put("idfaculdade",usuario.getFaculdade().getCodigo());
         cv.put("nomefaculdade",usuario.getFaculdade().getNome());
@@ -69,7 +70,7 @@ public class UsuarioDao {
         SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
         Usuario usuario = null;
 
-        String[] colunas = new String[]{"idfaculdade","nomefaculdade","matricula","nome","email","tipo","statuslogin","login","senha"};
+        String[] colunas = new String[]{"idfaculdade","nomefaculdade","matricula","nome","email","tipo","statuslogin","login","senha","foto"};
          Cursor cursor = db.query("usuario",colunas,null,null,null,null,null);
 
         if(cursor.moveToNext()){
@@ -84,6 +85,8 @@ public class UsuarioDao {
             usuario.setStatuslogin(cursor.getString(6));
             usuario.setLogin(cursor.getInt(7));
             usuario.setSenha(cursor.getString(8));
+            usuario.setFoto(cursor.getBlob(9));
+
 
         }
 

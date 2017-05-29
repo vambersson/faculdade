@@ -22,6 +22,7 @@ public class UsuarioSQLite extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
          db.execSQL(" create table usuario (\n" +
                  " idcodigo integer primary key not null,\n" +
+                 " foto Blob null, \n"+
                  " matricula integer not null,\n" +
                  " idfaculdade integer not null, \n" +
                  " nomefaculdade text not null, \n" +

@@ -54,20 +54,11 @@
 
 
 
-
-
-
-
-
-    <string name="title_activity_maps">Map</string>
-
-
-
-
     <!-- Erros -->
     <string name="message_seleciona_disciplina">Course not selected</string>
     <string name="message_valida_nome">Invalid name</string>
     <string name="message_valida_curso">Invalid course</string>
+    <string name="message_alerta_disciplina_cadastrada">Course has no discipline</string>
 
 
 
