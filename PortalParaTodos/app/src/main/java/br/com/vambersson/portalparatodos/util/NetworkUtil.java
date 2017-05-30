@@ -21,12 +21,12 @@ import br.com.vambersson.portalparatodos.erro.ConexaoException;
 
 public class NetworkUtil {
 
-      private static String urlBase = "http://177.105.72.150:8888/PortalAcademico/servicos/";
-      //private static String urlBase = "http://10.0.0.40:8080/PortalAcademico/servicos/";
+      //private static String urlBase = "http://177.105.72.150:8888/PortalAcademico/servicos/";
+      private static String urlBase = "http://192.168.43.123:8080/PortalAcademico/servicos/";
 
 
 
-    public static boolean virificaConexao(Context ctx){
+    public static boolean verificaConexao(Context ctx){
         ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
         return (info != null && info.isConnected());

@@ -31,7 +31,7 @@
 
     <!-- Tela cadastro Professor                                     -->
     <string name="cad_tv_profesor_nome_faculdade">College</string>
-    <string name="cad_tv_profesor_nome">Student</string>
+    <string name="cad_tv_profesor_nome">Teacher</string>
     <string name="cad_tv_professor_primeiro_nome">First Name</string>
     <string name="cad_tv_professor_Email">E-Mail</string>
     <string name="cad_tv_professor_senha">Password</string>
@@ -39,6 +39,8 @@
 
     <string name="cad_btn_professor_save">Save</string>
     <string name="cad_btn_professor_Cancel">Cancel</string>
+
+    <string name="cad_tv_professor_nome_curso">Name Course</string>
 
 
     <string-array name="tabs_cad_professor">
@@ -65,8 +67,10 @@
     <!-- Erros -->
     <string name="message_seleciona_disciplina">Course not selected</string>
     <string name="message_valida_nome">Invalid name</string>
+    <string name="message_valida_email">Invalid email</string>
     <string name="message_valida_curso">Invalid course</string>
     <string name="message_alerta_disciplina_cadastrada">Course has no discipline</string>
+    <string name="message_valida_password">Invalid Password</string>
 
 
 

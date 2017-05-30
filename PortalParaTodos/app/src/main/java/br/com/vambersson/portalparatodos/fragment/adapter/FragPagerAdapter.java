@@ -48,6 +48,10 @@ public class FragPagerAdapter extends FragmentPagerAdapter {
         return    this.tabsNome[position];
     }
 
+    @Override
+    public int getItemPosition(Object object) {
 
+        return POSITION_NONE;
 
+    }
 }
