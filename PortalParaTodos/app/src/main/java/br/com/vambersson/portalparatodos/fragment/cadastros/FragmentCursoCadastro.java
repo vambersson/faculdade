@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,20 +14,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Curso;
 import br.com.vambersson.portalparatodos.base.Usuario;
-import br.com.vambersson.portalparatodos.erro.ConexaoException;
-import br.com.vambersson.portalparatodos.fragment.adapter.CursoAdapter;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 /**
@@ -122,7 +114,7 @@ public class FragmentCursoCadastro extends DialogFragment {
             String obj ="";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("cadastroCurso","POST",true);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("cadastroCurso","POST",true);
 
                 OutputStream out = conexao.getOutputStream();
 

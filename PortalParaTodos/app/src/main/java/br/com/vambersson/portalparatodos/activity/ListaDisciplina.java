@@ -6,9 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,9 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.vambersson.portalparatodos.R;
-import br.com.vambersson.portalparatodos.base.Curso;
 import br.com.vambersson.portalparatodos.base.Disciplina;
-import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 public class ListaDisciplina extends ListActivity {
@@ -85,14 +81,7 @@ public class ListaDisciplina extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        if(listView.isItemChecked(position) == true){
-            if(disciplinas_selecionadas.equals("")){
-                disciplinas_selecionadas =""+ listaDisciplinas.get(position).getCodigo();
-            }else{
-                disciplinas_selecionadas +=" "+ listaDisciplinas.get(position).getCodigo();
-            }
 
-        }
 
 
         listView.setOnKeyListener(new View.OnKeyListener() {
@@ -100,6 +89,20 @@ public class ListaDisciplina extends ListActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
                 if(keyCode == KeyEvent.KEYCODE_BACK){
+
+                    for(int i =0; i < listView.getCount();i++){
+
+                        if(listView.isItemChecked(i) == true){
+                            if(disciplinas_selecionadas.equals("")){
+                                disciplinas_selecionadas =""+ listaDisciplinas.get(i).getCodigo();
+                            }else{
+                                disciplinas_selecionadas +=" "+ listaDisciplinas.get(i).getCodigo();
+                            }
+
+                        }
+
+                    }
+
 
                     Intent it = new Intent();
                     it.putExtra("codigoCursoSelecionado",codigo_curso);
@@ -125,7 +128,7 @@ public class ListaDisciplina extends ListActivity {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("listaDisciplinas="+Integer.parseInt(codigo_faculdade)+"="+Integer.parseInt(codigo_curso),"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("listaDisciplinas="+Integer.parseInt(codigo_faculdade)+"="+Integer.parseInt(codigo_curso),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();

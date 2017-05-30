@@ -50,8 +50,6 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
-    // CodigoFragment = 001
-
 
     private static final int REQUEST_FOTO = 100;
     private static final int REQUEST_DICIPLINA = 101;
@@ -269,7 +267,7 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
             String obj ="";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("atualizaUsuario","POST",true);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("atualizaUsuario","POST",true);
 
                 OutputStream out = conexao.getOutputStream();
 
@@ -364,7 +362,7 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("listaCursos="+params[0].getFaculdade().getCodigo(),"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("listaCursos="+params[0].getFaculdade().getCodigo(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();

@@ -22,7 +22,7 @@ public class GerenciadorPages extends Fragment {
 
 
     private TabLayout tabs_layout;
-    private ViewPager container_pages;
+    private ViewPager container_ViewPager;
 
 
     @Override
@@ -32,6 +32,7 @@ public class GerenciadorPages extends Fragment {
 
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,10 +40,10 @@ public class GerenciadorPages extends Fragment {
 
 
         tabs_layout = (TabLayout) view.findViewById(R.id.tabs_layout);
-        container_pages = (ViewPager) view.findViewById(R.id.container_pages);
+        container_ViewPager = (ViewPager) view.findViewById(R.id.container_ViewPager);
 
-        container_pages.setAdapter(new FragPagerAdapter(getFragmentManager(),  getResources().getStringArray(R.array.tabs_cad_professor)));
-        tabs_layout.setupWithViewPager(container_pages);
+        container_ViewPager.setAdapter(new FragPagerAdapter(getFragmentManager(),  getResources().getStringArray(R.array.tabs_cad_professor)));
+        tabs_layout.setupWithViewPager(container_ViewPager);
 
         return view;
     }

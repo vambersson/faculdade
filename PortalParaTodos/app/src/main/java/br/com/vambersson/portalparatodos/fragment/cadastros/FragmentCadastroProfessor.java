@@ -2,6 +2,7 @@ package br.com.vambersson.portalparatodos.fragment.cadastros;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -71,7 +73,21 @@ public class FragmentCadastroProfessor extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
+
+
+        if(savedInstanceState != null){
+            usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
+            //byteToBitmap(usuario.getFoto());
+        }else{
+            usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("StateUsuario",usuario);
     }
 
     @Nullable
@@ -176,7 +192,7 @@ public class FragmentCadastroProfessor extends Fragment {
             String obj ="";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("atualizaUsuario","POST",true);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("atualizaUsuario","POST",true);
 
                 OutputStream out = conexao.getOutputStream();
 
@@ -248,6 +264,14 @@ public class FragmentCadastroProfessor extends Fragment {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         fotoBytes = stream.toByteArray();
+
+    }
+
+    private void byteToBitmap( byte[] outImage){
+
+        ByteArrayInputStream imageStream= new ByteArrayInputStream(outImage);
+        Bitmap imageBitmap= BitmapFactory.decodeStream(imageStream);
+        ImgV_Idusuario.setImageBitmap(imageBitmap);
 
     }
 

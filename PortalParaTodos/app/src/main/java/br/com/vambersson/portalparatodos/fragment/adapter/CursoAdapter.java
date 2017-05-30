@@ -14,13 +14,11 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.List;
 
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Curso;
-import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 /**
@@ -69,7 +67,7 @@ public class CursoAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-                teste();
+
                 Curso c = new Curso();
                 c.setCodigo(lista.get(position).getCodigo());
                 new ClasseDeleta().execute(c);
@@ -81,11 +79,6 @@ public class CursoAdapter extends BaseAdapter {
         return v;
     }
 
-    private void teste(){
-
-        Toast.makeText(act, "Entrou", Toast.LENGTH_SHORT).show();
-    }
-
     class ClasseDeleta extends AsyncTask<Curso, Void,String> {
 
         @Override
@@ -94,7 +87,7 @@ public class CursoAdapter extends BaseAdapter {
             Gson gson = new Gson();
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("deleteCurso="+ params[0].getCodigo(),"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("deleteCurso="+ params[0].getCodigo(),"GET",false);
 
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
@@ -113,6 +106,20 @@ public class CursoAdapter extends BaseAdapter {
             return null;
         }
 
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if(result.equals("1") ){
+                Toast.makeText(act,act.getResources().getString(R.string.message_alerta_curso_exclui)  , Toast.LENGTH_SHORT).show();
+
+            }
+        }
     }
+
+
+
+
+
+
 
 }

@@ -1,28 +1,20 @@
 package br.com.vambersson.portalparatodos.fragment.cadastros;
 
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -33,7 +25,6 @@ import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Curso;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.fragment.adapter.CursoAdapter;
-import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 import static java.lang.Thread.sleep;
@@ -48,27 +39,33 @@ public class FragmentCursoLista extends Fragment {
     private  List<Curso> listaCursos;
     private Gson gson;
     private Usuario usuario;
+    private  Thread thread;
 
     private ListView lv_Cursos;
     private FloatingActionButton btn_add_Curso;
 
 
-    public FragmentCursoLista(){
-        gson = new Gson();
-        listaCursos = new ArrayList<Curso>();
-        usuario = new Usuario();
-
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
-        if(usuario != null){
-            listaCursos(true);
+        gson = new Gson();
+        listaCursos = new ArrayList<Curso>();
+
+        if(savedInstanceState != null){
+            usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
+        }else{
+            usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
         }
 
+        listaCursos(true);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("StateUsuario",usuario);
     }
 
     @Nullable
@@ -82,7 +79,9 @@ public class FragmentCursoLista extends Fragment {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(keyCode == KeyEvent.KEYCODE_BACK){
-                    //getActivity().finishAffinity();
+
+                       // thread.interrupt();
+
                 }
 
                 return false;
@@ -105,7 +104,7 @@ public class FragmentCursoLista extends Fragment {
     private void abrirAddCurso(){
 
         FragmentCursoCadastro dialog = FragmentCursoCadastro.newInstancia();
-        dialog.setTargetFragment(this,1);
+        //dialog.setTargetFragment(this,1);
         dialog.abrir(getFragmentManager());
 
     }
@@ -113,40 +112,26 @@ public class FragmentCursoLista extends Fragment {
 
     public void listaCursos(boolean executa) {
 
-        Thread thread = new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
 
                 while (true){
 
                     try {
-                        new ClasseListaCursos().execute();
-                        sleep(1500);
+                        new ClasseListaCursos().execute(usuario);
+                        sleep(2500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
-        if (executa == true){
-            thread.start();
-        }else {
-            try {
-                thread.wait();
-            } catch (InterruptedException e) {
+        thread.start();
 
-            }
-        }
     }
 
     class ClasseListaCursos extends AsyncTask<Usuario, Void,String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-
-
-        }
 
         @Override
         protected String doInBackground(Usuario... params) {
@@ -154,7 +139,7 @@ public class FragmentCursoLista extends Fragment {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("listaCursos="+usuario.getFaculdade().getCodigo(),"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("listaCursos="+params[0].getFaculdade().getCodigo(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
@@ -175,13 +160,17 @@ public class FragmentCursoLista extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            //List<Curso> temp = new ArrayList<Curso>();
-            Curso[] lista =  gson.fromJson(result, Curso[].class);
+            if(!result.equals("[]")){
 
-            listaCursos = new ArrayList<Curso>(Arrays.asList(lista) );
-            adapter = new CursoAdapter(getActivity(),listaCursos);
-            lv_Cursos.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+                Curso[] lista =  gson.fromJson(result, Curso[].class);
+
+                listaCursos = new ArrayList<Curso>(Arrays.asList(lista) );
+                adapter = new CursoAdapter(getActivity(),listaCursos);
+                lv_Cursos.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+            }
+
 
         }
 

@@ -16,20 +16,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import br.com.vambersson.portalparatodos.R;
-import br.com.vambersson.portalparatodos.base.Curso;
 import br.com.vambersson.portalparatodos.base.Faculdade;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
@@ -130,7 +127,7 @@ public class FragmentLogin extends Fragment {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("listaFaculdades","GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("listaFaculdades","GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
@@ -254,7 +251,7 @@ public class FragmentLogin extends Fragment {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("logar="+ usuario.getLogin() + "=" + usuario.getSenha() +"="+usuario.getFaculdade().getCodigo(),"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("logar="+ usuario.getLogin() + "=" + usuario.getSenha() +"="+usuario.getFaculdade().getCodigo(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
 
@@ -396,7 +393,7 @@ public class FragmentLogin extends Fragment {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexaao("logar="+usuario.getLogin() + "=" + 1+"="+ usuario.getFaculdade().getCodigo(),"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("logar="+usuario.getLogin() + "=" + 1+"="+ usuario.getFaculdade().getCodigo(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();

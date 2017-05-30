@@ -38,7 +38,12 @@ public class GerenciadorFragment extends AppCompatActivity {
 
     }
 
-       private void managerLayout(String CodigoFragment){
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    private void managerLayout(String CodigoFragment){
 
           FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -48,23 +53,23 @@ public class GerenciadorFragment extends AppCompatActivity {
            if(CodigoFragment == null){
 
                SplashScreen fragment = new SplashScreen();
-               ft.replace(R.id.activity_main, fragment);
+               ft.replace(R.id.activity_content_fragment, fragment);
 
            }else if(CodigoFragment.equals("FragmentCadastroAluno") ){
 
                FragmentCadastroAluno fragment = new FragmentCadastroAluno();
-               ft.replace(R.id.activity_main, fragment);
+               ft.replace(R.id.activity_content_fragment, fragment);
 
            }else if(CodigoFragment.equals("GerenciadorPages") ){
 
                GerenciadorPages fragment = new GerenciadorPages();
-               ft.replace(R.id.activity_main, fragment);
+               ft.replace(R.id.activity_content_fragment, fragment);
 
            }else  if(CodigoFragment.equals("FragmentLogin") ){
 
                FragmentLogin fragment = new FragmentLogin();
 
-               ft.replace(R.id.activity_main, fragment);
+               ft.replace(R.id.activity_content_fragment, fragment);
 
            }
 

@@ -69,6 +69,7 @@
     <string name="message_valida_nome">Invalid name</string>
     <string name="message_valida_email">Invalid email</string>
     <string name="message_valida_curso">Invalid course</string>
+    <string name="message_alerta_curso_exclui">Course excluded</string>
     <string name="message_alerta_disciplina_cadastrada">Course has no discipline</string>
     <string name="message_valida_password">Invalid Password</string>
 
