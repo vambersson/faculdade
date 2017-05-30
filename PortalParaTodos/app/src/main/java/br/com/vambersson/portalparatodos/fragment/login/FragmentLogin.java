@@ -302,7 +302,7 @@ public class FragmentLogin extends Fragment {
                             startFragment("FragmentCadastroAluno"); // Fragment  =  usuario_cadastro_aluno_fragment
                         }else if(user.getTipo().equals("P")){
                             usuario =  user;
-                            startFragment("GerenciadorPages"); // Fragment  =  usuario_cadastro_professor_fragment
+                            startFragment("ActivityPage"); // Fragment  =  usuario_cadastro_professor_fragment
                         }
 
                         Toast.makeText(getActivity(), "Usuário não possui senha", Toast.LENGTH_SHORT).show();
@@ -446,7 +446,7 @@ public class FragmentLogin extends Fragment {
                             startFragment("FragmentCadastroAluno"); // Fragment  =  usuario_cadastro_aluno_fragment
                         }else if(user.getTipo().equals("P")){
                             usuario =  user;
-                            startFragment("GerenciadorPages"); // Fragment  =  usuario_cadastro_professor_fragment
+                            startFragment("ActivityPage"); // Fragment  =  usuario_cadastro_professor_fragment
                         }
 
 

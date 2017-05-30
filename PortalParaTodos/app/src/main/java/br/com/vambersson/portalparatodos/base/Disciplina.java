@@ -14,6 +14,15 @@ public class Disciplina implements Serializable {
 
     private String periodo;
 
+    private Faculdade faculdade;
+
+    private Curso curso;
+
+    public Disciplina(){
+        faculdade = new Faculdade();
+        curso = new Curso();
+    }
+
     public Integer getCodigo() {
         return codigo;
     }
@@ -36,5 +45,21 @@ public class Disciplina implements Serializable {
 
     public void setPeriodo(String periodo) {
         this.periodo = periodo;
+    }
+
+    public Faculdade getFaculdade() {
+        return faculdade;
+    }
+
+    public void setFaculdade(Faculdade faculdade) {
+        this.faculdade = faculdade;
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
     }
 }

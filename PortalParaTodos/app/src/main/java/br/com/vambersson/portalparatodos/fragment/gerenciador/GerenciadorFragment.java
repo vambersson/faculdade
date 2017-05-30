@@ -1,13 +1,16 @@
 package br.com.vambersson.portalparatodos.fragment.gerenciador;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 
 import br.com.vambersson.portalparatodos.R;
+
+import br.com.vambersson.portalparatodos.activity.ActivityPage;
+import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCadastroAluno;
 import br.com.vambersson.portalparatodos.fragment.login.FragmentLogin;
 import br.com.vambersson.portalparatodos.fragment.splash.SplashScreen;
@@ -18,12 +21,14 @@ import br.com.vambersson.portalparatodos.fragment.splash.SplashScreen;
 
 public class GerenciadorFragment extends AppCompatActivity {
 
+    private Usuario usuario;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
+        usuario = (Usuario) getIntent().getSerializableExtra("usuario");
 
 
         String CodigoFragment = getIntent().getStringExtra("CodigoFragment");
@@ -60,10 +65,12 @@ public class GerenciadorFragment extends AppCompatActivity {
                FragmentCadastroAluno fragment = new FragmentCadastroAluno();
                ft.replace(R.id.activity_content_fragment, fragment);
 
-           }else if(CodigoFragment.equals("GerenciadorPages") ){
+           }else if(CodigoFragment.equals("ActivityPage") ){
 
-               GerenciadorPages fragment = new GerenciadorPages();
-               ft.replace(R.id.activity_content_fragment, fragment);
+               Intent it = new Intent(this,ActivityPage.class);
+               it.putExtra("usuario",usuario);
+               startActivity(it);
+               finish();
 
            }else  if(CodigoFragment.equals("FragmentLogin") ){
 

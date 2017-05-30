@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+
 import android.support.v4.app.Fragment;
 
 import android.view.KeyEvent;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -37,7 +39,7 @@ public class FragmentCursoLista extends Fragment {
 
     private CursoAdapter adapter;
     private  List<Curso> listaCursos;
-    private Gson gson;
+
     private Usuario usuario;
     private  Thread thread;
 
@@ -45,21 +47,21 @@ public class FragmentCursoLista extends Fragment {
     private FloatingActionButton btn_add_Curso;
 
 
+    public FragmentCursoLista(){
+
+        listaCursos = new ArrayList<Curso>();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        gson = new Gson();
-        listaCursos = new ArrayList<Curso>();
 
         if(savedInstanceState != null){
             usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
         }else{
             usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
         }
-
         listaCursos(true);
-
     }
 
     @Override
@@ -119,7 +121,7 @@ public class FragmentCursoLista extends Fragment {
                 while (true){
 
                     try {
-                        new ClasseListaCursos().execute(usuario);
+                        new ClasseListaCursos().execute();
                         sleep(2500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -139,7 +141,7 @@ public class FragmentCursoLista extends Fragment {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexao("listaCursos="+params[0].getFaculdade().getCodigo(),"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("listaCursos="+usuario.getFaculdade().getCodigo(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
@@ -162,12 +164,14 @@ public class FragmentCursoLista extends Fragment {
 
             if(!result.equals("[]")){
 
+                Gson gson = new Gson();
                 Curso[] lista =  gson.fromJson(result, Curso[].class);
 
                 listaCursos = new ArrayList<Curso>(Arrays.asList(lista) );
                 adapter = new CursoAdapter(getActivity(),listaCursos);
                 lv_Cursos.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+
 
             }
 
