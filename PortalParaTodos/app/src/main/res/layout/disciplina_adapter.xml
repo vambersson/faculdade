@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/colorPrimaryDark">
+
+    <CheckedTextView
+        android:id="@+id/checked_selecao"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_check_box_white_24dp"/>
+
+    <TextView
+        android:id="@+id/tv_nome"
+        android:text="Curso"
+        android:textColor="@color/colorWhite"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+
+    <Button
+        android:id="@+id/btn_remover"
+        android:layout_width="50dp"
+        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_backspace_white_24dp" />
+
+</LinearLayout>

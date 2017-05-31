@@ -3,75 +3,125 @@ package br.com.vambersson.portalparatodos.main;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
 import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private Usuario usuario;
-
-    private TextView texto;
-
-    private ImageView img_teste;
+    private UsuarioDao usuarioDao;
 
 
+    private TextView header_tv_nome;
+    private TextView header_tv_curso_fuculdade;
+    private ImageView header_img_foto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        usuarioDao = new UsuarioDao(this);
 
-        img_teste = (ImageView) findViewById(R.id.img_teste);
-        texto = (TextView) findViewById(R.id.act_main_nome_usuario);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        setSupportActionBar(toolbar);
+
+
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+
+        header_img_foto = (ImageView) headerView.findViewById(R.id.header_img_foto);
+        header_tv_nome =(TextView) headerView.findViewById(R.id.header_tv_nome);
+        header_tv_curso_fuculdade = (TextView) headerView.findViewById(R.id.header_tv_curso_fuculdade);
+
 
         usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         if(usuario != null){
-           texto.setText(usuario.getNome());
-            byteToBitmap();
+
+        }
+
+        header_img_foto.setImageBitmap(byteToBitmap());
+        header_tv_nome.setText(usuario.getNome());
+
+        if(usuario.getTipo().equals("A")){
+            header_tv_curso_fuculdade.setText(usuario.getCurso().getNome());
+        }else if(usuario.getTipo().equals("P")){
+            header_tv_curso_fuculdade.setText(usuario.getFaculdade().getNome());
         }
 
 
 
-    }
 
-    private void byteToBitmap(){
-
-        UsuarioDao dao = new UsuarioDao(this);
-
-        byte[] outImage =  dao.getUsuario().getFoto();
-        ByteArrayInputStream imageStream= new ByteArrayInputStream(outImage);
-        Bitmap imageBitmap= BitmapFactory.decodeStream(imageStream);
-        img_teste.setImageBitmap(imageBitmap);
 
     }
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == R.id.action_settings){
-
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
         }else if(id == R.id.action_sign_out){
             removerUsuarioLocal();
             startFragment(null);
@@ -82,11 +132,41 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private Bitmap byteToBitmap(){
+
+        byte[] outImage =  usuarioDao.getUsuario().getFoto();
+        ByteArrayInputStream imageStream= new ByteArrayInputStream(outImage);
+        Bitmap imageBitmap= BitmapFactory.decodeStream(imageStream);
+        return imageBitmap;
+    }
 
     private void removerUsuarioLocal(){
-        UsuarioDao dao = new UsuarioDao(this);
-        dao.deletar();
+        usuarioDao.deletar();
     }
 
     private void startFragment(String CodigoFragment){
@@ -95,6 +175,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(it);
         finish();
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

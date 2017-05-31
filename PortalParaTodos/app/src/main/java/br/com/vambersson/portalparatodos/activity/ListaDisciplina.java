@@ -66,14 +66,6 @@ public class ListaDisciplina extends ListActivity {
         new ClasseListaDisciplinas().execute();
 
 
-
-
-
-
-
-
-
-
     }
 
 

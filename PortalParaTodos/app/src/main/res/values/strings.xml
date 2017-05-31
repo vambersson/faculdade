@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Portal</string>
-    <string name="app_name_bem_vindo">Welcome to the academic portal</string>
+    <string name="app_name_bem_vindo">Welcome</string>
 
 
     <!-- Tela login                                               -->
     <string name="login_sp_faculdade">Select your college</string>
+    <string name="login_btn_senha_esqueceu">Forgot</string>
     <string name="login_tv_matricula">Registration</string>
     <string name="login_tv_pass">Password</string>
     <string name="login_btn_login">Login</string>
@@ -58,17 +59,22 @@
     <string name="action_sign_out">Sign Out</string>
 
 
-    <string name="nav_header_tv_nome">Name</string>
-    <string name="nav_header_tv_curso">Course</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 
 
 
 
     <!-- Erros -->
+    <string name="message_valida_faculdade">Invalid college</string>
     <string name="message_seleciona_disciplina">Course not selected</string>
+    <string name="message_valida_matricula">Not informed registration</string>
     <string name="message_valida_nome">Invalid name</string>
     <string name="message_valida_email">Invalid email</string>
     <string name="message_valida_curso">Invalid course</string>
+    <string name="message_valida_senha">Not informed password</string>
+    <string name="message_alerta_webservice">Webservice not available</string>
     <string name="message_alerta_curso_exclui">Course excluded</string>
     <string name="message_alerta_disciplina_cadastrada">Course has no discipline</string>
     <string name="message_valida_password">Invalid Password</string>

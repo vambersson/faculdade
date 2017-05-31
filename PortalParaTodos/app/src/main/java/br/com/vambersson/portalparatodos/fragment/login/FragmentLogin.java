@@ -50,6 +50,7 @@ public class FragmentLogin extends Fragment {
 
     private Button login_btn_primeiroAcesso;
     private Button login_btn_login;
+    private Button login_btn_esqueceu_senha;
 
     private ArrayAdapter<String> adapter;
     private Spinner spinner;
@@ -84,6 +85,7 @@ public class FragmentLogin extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         login_btn_login = (Button) view.findViewById(R.id.login_btn_login);
         login_btn_primeiroAcesso = (Button) view.findViewById(R.id.login_btn_primeiroAcesso);
+        login_btn_esqueceu_senha = (Button) view.findViewById(R.id.login_btn_esqueceu_senha);
 
 
         adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item);
@@ -91,6 +93,13 @@ public class FragmentLogin extends Fragment {
         spinner.setAdapter(adapter);
         adapter.add(getResources().getString(R.string.login_sp_faculdade));
         spinner.setOnTouchListener(Spinner_OnTouch);
+
+        login_btn_esqueceu_senha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Esqueceu Foi", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         login_btn_login.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +160,7 @@ public class FragmentLogin extends Fragment {
 
                 //Toast.makeText(getActivity(),"Dados invalídos", Toast.LENGTH_LONG).show();
 
-            }else if("null".equals(result)){
+            }else if("[]".equals(result)){
 
                 //Toast.makeText(getActivity(),"Usuário não encontrado", Toast.LENGTH_LONG).show();
 
@@ -171,7 +180,7 @@ public class FragmentLogin extends Fragment {
                     adapter.setNotifyOnChange(true);
 
                 }catch(Exception e){
-                    Toast.makeText(getActivity(), "Erro de comunicação", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.message_alerta_webservice), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -200,13 +209,13 @@ public class FragmentLogin extends Fragment {
         boolean resultado = true;
         
         if(login_Id_EdtTxt_Matricula.getText().toString().trim().equals("")){
-            Toast.makeText(getActivity(), "Matricula não informada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.message_valida_matricula), Toast.LENGTH_SHORT).show();
             resultado = false;
         }else if(login_Id_EdtTxt_Senha.getText().toString().trim().equals("")){
-            Toast.makeText(getActivity(), "Senha não informada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.message_valida_senha), Toast.LENGTH_SHORT).show();
             resultado = false;
-        }else if(spinner.getSelectedItem().toString().equals("Select faculdade")){
-            Toast.makeText(getActivity(), "Faculdade inválida", Toast.LENGTH_SHORT).show();
+        }else if(spinner.getSelectedItem().toString().equals(getResources().getString(R.string.login_sp_faculdade))){
+            Toast.makeText(getActivity(), getResources().getString(R.string.message_valida_faculdade), Toast.LENGTH_SHORT).show();
             resultado = false;
         }
 
@@ -320,7 +329,7 @@ public class FragmentLogin extends Fragment {
                     }
 
                 }catch(Exception e){
-                    Toast.makeText(getActivity(), "Web Service indisponível", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.message_alerta_webservice), Toast.LENGTH_LONG).show();
                 }
 
 
@@ -346,10 +355,10 @@ public class FragmentLogin extends Fragment {
         boolean resultado = true;
 
         if(login_Id_EdtTxt_Matricula.getText().toString().trim().equals("")){
-            Toast.makeText(getActivity(), "Matricula não informada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.message_valida_matricula), Toast.LENGTH_SHORT).show();
             resultado = false;
-        }else if(spinner.getSelectedItem().toString().equals("Select faculdade")){
-            Toast.makeText(getActivity(), "Faculdade inválida", Toast.LENGTH_SHORT).show();
+        }else if(spinner.getSelectedItem().toString().equals(getResources().getString(R.string.login_sp_faculdade))){
+            Toast.makeText(getActivity(), getResources().getString(R.string.message_valida_faculdade), Toast.LENGTH_SHORT).show();
             resultado = false;
         }
 
@@ -453,7 +462,7 @@ public class FragmentLogin extends Fragment {
                     }
 
                 }catch (Exception e){
-                    Toast.makeText(getActivity(), "Web Service indisponível", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.message_alerta_webservice), Toast.LENGTH_SHORT).show();
                 }
 
 
