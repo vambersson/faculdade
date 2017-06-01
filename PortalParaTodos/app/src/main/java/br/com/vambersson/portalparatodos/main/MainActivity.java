@@ -3,7 +3,10 @@ package br.com.vambersson.portalparatodos.main;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -17,19 +20,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
 import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
+import br.com.vambersson.portalparatodos.map.MapsActivity;
+import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int REQUEST_FOTO = 100;
+    private  byte fotoBytes[];
+
+
     private Usuario usuario;
     private UsuarioDao usuarioDao;
+    private Gson gson;
 
 
     private TextView header_tv_nome;
@@ -41,7 +58,14 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        if(savedInstanceState != null){
+            usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
+        }
+
+
         usuarioDao = new UsuarioDao(this);
+        gson = new Gson();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
@@ -77,10 +101,9 @@ public class MainActivity extends AppCompatActivity
 
         usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         if(usuario != null){
-
+            header_img_foto.setImageBitmap(byteToBitmap(usuario.getFoto()));
         }
 
-        header_img_foto.setImageBitmap(byteToBitmap());
         header_tv_nome.setText(usuario.getNome());
 
         if(usuario.getTipo().equals("A")){
@@ -93,6 +116,12 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putSerializable("StateUsuario",usuario);
     }
 
     @Override
@@ -125,6 +154,7 @@ public class MainActivity extends AppCompatActivity
         }else if(id == R.id.action_sign_out){
             removerUsuarioLocal();
             startFragment(null);
+            finish();
             return true;
 
         }
@@ -136,15 +166,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
+
+
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            chamarCamera();
         } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_map) {
+            Intent map = new Intent(this, MapsActivity.class);
+            startActivity(map);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_perfil) {
+
+            if(usuario.getTipo().equals("A")){
+                startFragment("FragmentCadastroAluno");
+            }else if(usuario.getTipo().equals("P")){
+                startFragment("ActivityPage");
+            }
 
         } else if (id == R.id.nav_share) {
 
@@ -157,24 +198,173 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private Bitmap byteToBitmap(){
 
-        byte[] outImage =  usuarioDao.getUsuario().getFoto();
-        ByteArrayInputStream imageStream= new ByteArrayInputStream(outImage);
-        Bitmap imageBitmap= BitmapFactory.decodeStream(imageStream);
-        return imageBitmap;
+
+    class ClasseAtualizarFotoUsuario extends AsyncTask<Usuario, Void,String> {
+
+        @Override
+        protected String doInBackground(Usuario... params) {
+            String obj ="";
+
+            try {
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("atualizarFotoUsuario","POST",true);
+
+                OutputStream out = conexao.getOutputStream();
+
+                out.write(gson.toJson(params[0]).getBytes());
+                out.flush();
+                out.close();
+
+                if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
+                    InputStream is = conexao.getInputStream();
+                    obj = NetworkUtil.streamToString(is);
+                    conexao.disconnect();
+                }
+
+                return obj;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            try{
+
+                if(result.equals("1")){
+                    atualizarFotoLocal();
+                }else if(result.equals("")){
+                    Toast.makeText(MainActivity.this, "null", Toast.LENGTH_SHORT).show();
+                }
+
+            }catch (Exception e){
+
+                Toast.makeText(MainActivity.this,R.string.message_alerta_webservice, Toast.LENGTH_SHORT).show();
+
+            }
+
+
+
+
+
+
+        }
+
+    }
+
+
+    private void perfilUsuaario(){
+
+
+    }
+
+
+
+
+
+
+    private Bitmap byteToBitmap(byte[] outImage){
+
+        try{
+
+            ByteArrayInputStream imageStream= new ByteArrayInputStream(outImage);
+            Bitmap imageBitmap = BitmapFactory.decodeStream(imageStream);
+            return imageBitmap;
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+
+    private void bitmapToByte(Bitmap bitmap){
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        fotoBytes = stream.toByteArray();
+
     }
 
     private void removerUsuarioLocal(){
         usuarioDao.deletar();
     }
 
+    private void inserirUsuarioLocal(){
+
+        usuarioDao.inserir(usuario,"S");
+
+    }
+
+    private void atualizarFoto(){
+        dadosUsuario();
+        new ClasseAtualizarFotoUsuario().execute(usuario);
+    }
+
+    private void atualizarFotoLocal(){
+
+        usuarioDao.atualizarFoto(usuario);
+        Toast.makeText(this, "Foto Atualizada", Toast.LENGTH_SHORT).show();
+    }
+
+    private void dadosUsuario(){
+        usuario.setFoto(fotoBytes);
+
+    }
+
     private void startFragment(String CodigoFragment){
         Intent it = new Intent(this, GerenciadorFragment.class);
         it.putExtra("CodigoFragment",CodigoFragment);
+        it.putExtra("usuarioAlterar",usuario);
         startActivity(it);
-        finish();
+
     }
+
+    private void chamarCamera(){
+
+        Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (it.resolveActivity(this.getPackageManager()) != null) {
+            startActivityForResult(it, REQUEST_FOTO);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_FOTO  && resultCode == RESULT_OK) {
+            if(data != null) {
+                Bundle bundle = data.getExtras();
+                Bitmap bitmap = (Bitmap) bundle.get("data");
+                header_img_foto.setImageBitmap(bitmap);
+                bitmapToByte(bitmap);
+                atualizarFoto();
+
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this.getBaseContext(), "A captura foi cancelada",
+                        Toast.LENGTH_SHORT);
+            } else {
+                Toast.makeText(this.getBaseContext(), "A câmera foi fechada",
+                        Toast.LENGTH_SHORT);
+            }
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -4,6 +4,7 @@ package br.com.vambersson.portalparatodos.fragment.cadastros;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -26,6 +27,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -54,6 +56,8 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
     private static final int REQUEST_FOTO = 100;
     private static final int REQUEST_DICIPLINA = 101;
     private static final String STATE_DISCIPLINA = "disciplina";
+
+    private boolean save_alterar;
 
     private String disciplinas_selecionadas;
     private  String result_curso;
@@ -94,7 +98,6 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
 
         if(savedInstanceState != null){
             usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
@@ -160,7 +163,14 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
         btn_IdSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save();
+
+                if(save_alterar == true ){
+                    save();
+                }else{
+                    Toast.makeText(getActivity(), "alterar", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
 
@@ -171,9 +181,6 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
             }
         });
 
-        if(usuario != null){
-            perfil_tv_IdNone_faculdade.setText(usuario.getFaculdade().getNome());
-        }
         perfil_Edt_IdNome.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -201,7 +208,44 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
         });
 
 
+        if(getActivity().getIntent().getSerializableExtra("usuario") != null){
+            usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
+            perfil_tv_IdNone_faculdade.setText(usuario.getFaculdade().getNome());
+            save_alterar = true;
+
+        }else if(getActivity().getIntent().getSerializableExtra("usuarioAlterar") != null ){
+            usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuarioAlterar");
+            save_alterar = false;
+            Alterar();
+        }
+
         return view;
+    }
+
+
+
+    private void Alterar(){
+
+        if(usuario != null){
+
+            ImgV_Idusuario.setImageBitmap(byteToBitmap(usuario.getFoto()));
+            perfil_tv_IdNone_faculdade.setText(usuario.getFaculdade().getNome());
+            perfil_tv_IdNome.setText(usuario.getNome());
+            perfil_Edt_IdNome.setText(usuario.getNome());
+
+        }
+
+    }
+
+    private Bitmap byteToBitmap(byte[] outImage){
+        try{
+            ByteArrayInputStream imageStream= new ByteArrayInputStream(outImage);
+            Bitmap imageBitmap = BitmapFactory.decodeStream(imageStream);
+            return imageBitmap;
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
 
@@ -210,7 +254,7 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
             if (event.getAction() == MotionEvent.ACTION_UP) {
 
                 new ClasseListaCursos().execute(usuario);
-                perfil_btn_Idlista_disciplina.setText(getResources().getString(R.string.cad_btn_aluno_Discipinas));
+                perfil_btn_Idlista_disciplina.setText(R.string.cad_btn_aluno_Discipinas);
             }
             return false;
         }
@@ -241,7 +285,7 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
         }else if(spinner.getSelectedItem().toString().equals(getResources().getString(R.string.cad_spinner_seleciona_Cursos))){
             Toast.makeText(getActivity(), getResources().getString(R.string.message_valida_curso), Toast.LENGTH_SHORT).show();
             return resultado = false;
-        }else if(perfil_btn_Idlista_disciplina.getText().toString().equals(getResources().getString(R.string.cad_btn_aluno_Discipinas))){
+        }else if(perfil_btn_Idlista_disciplina.getText().toString().equals(R.string.cad_btn_aluno_Discipinas)){
             Toast.makeText(getActivity(), "Disciplina Inválido", Toast.LENGTH_SHORT).show();
             return resultado = false;
         }

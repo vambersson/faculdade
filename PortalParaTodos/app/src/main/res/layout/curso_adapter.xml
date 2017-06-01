@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/tv_nome"
@@ -20,6 +20,6 @@
         android:layout_width="50dp"
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_backspace_white_24dp" />
+        android:background="@drawable/ic_backspace_red_24dp" />
 
 </LinearLayout>

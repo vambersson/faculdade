@@ -56,7 +56,17 @@ public class UsuarioDao {
         cv.put("email",usuario.getEmail());
         cv.put("senha",usuario.getSenha());
 
-        db.update("usuario",cv,"idcodigo = ?",new String[]{ String.valueOf(usuario.getMatricula() )});
+        db.update("usuario",cv,"matricula = ?",new String[]{ String.valueOf(usuario.getMatricula() )});
+    }
+    public void atualizarFoto(Usuario usuario){
+
+        SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+
+        cv.put("foto",usuario.getFoto());
+
+        db.update("usuario",cv,"matricula = ?",new String[]{ String.valueOf(usuario.getMatricula() )});
     }
 
     public void deletar(){

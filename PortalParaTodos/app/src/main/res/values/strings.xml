@@ -51,8 +51,6 @@
     </string-array>
 
 
-
-
     <!-- Tela Main                                     -->
 
     <string name="action_settings">Settings</string>
@@ -61,9 +59,6 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-
-
 
 
     <!-- Erros -->
@@ -78,19 +73,7 @@
     <string name="message_alerta_curso_exclui">Course excluded</string>
     <string name="message_alerta_disciplina_cadastrada">Course has no discipline</string>
     <string name="message_valida_password">Invalid Password</string>
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>

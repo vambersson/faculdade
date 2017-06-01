@@ -33,12 +33,15 @@ public class UsuarioSQLite extends SQLiteOpenHelper{
                  " statuslogin text not null,\n"+
                  " login integer not null,\n" +
                  " senha text not null );");
+
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("drop table if exists usuario");
+        db.execSQL("drop table if exists curso");
 
         onCreate(db);
 

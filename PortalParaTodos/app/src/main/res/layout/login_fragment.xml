@@ -94,6 +94,7 @@
                     android:id="@+id/login_btn_esqueceu_senha"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
                     android:textAlignment="textEnd"
                     android:layout_gravity="end|top"
                     android:background="?android:attr/selectableItemBackground"
