@@ -31,9 +31,7 @@ public class ListaDisciplina extends ListActivity {
 
 
     private ListView listView;
-
     private List<Disciplina> listaDisciplinas;
-
     private ArrayAdapter<String> adapter;
 
     private String disciplinas_selecionadas = "";
@@ -54,8 +52,6 @@ public class ListaDisciplina extends ListActivity {
         codigo_curso = getIntent().getStringExtra(EXTRA_ID_CURSO);
         codigo_faculdade = getIntent().getStringExtra(EXTRA_ID_FACULDADE);
 
-
-
         adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked);
 
         listView = getListView();
@@ -65,16 +61,11 @@ public class ListaDisciplina extends ListActivity {
 
         new ClasseListaDisciplinas().execute();
 
-
     }
-
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-
-
-
 
         listView.setOnKeyListener(new View.OnKeyListener() {
             @Override

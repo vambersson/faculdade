@@ -5,16 +5,9 @@
     android:orientation="horizontal"
     android:background="@color/colorPrimary">
 
-    <CheckedTextView
-        android:id="@+id/checked_selecao"
-        android:layout_gravity="center_vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_check_box_white_24dp"/>
-
     <TextView
         android:id="@+id/tv_nome"
-        android:text="Curso"
+        android:text="Disciplinas"
         android:textColor="@color/colorWhite"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"

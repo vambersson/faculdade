@@ -9,6 +9,10 @@ import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +34,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
+import br.com.vambersson.portalparatodos.aula.adapter.DiasHorarioAdapter;
+import br.com.vambersson.portalparatodos.aula.dias.Dias;
+import br.com.vambersson.portalparatodos.aula.horario.HorarioAula;
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
@@ -53,24 +60,26 @@ public class MainActivity extends AppCompatActivity
     private TextView header_tv_curso_fuculdade;
     private ImageView header_img_foto;
 
+    private TabLayout tabs_layout;
+    private ViewPager container_ViewPager;
+    private DiasHorarioAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         if(savedInstanceState != null){
             usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
+        }else{
+            usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         }
-
 
         usuarioDao = new UsuarioDao(this);
         gson = new Gson();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
-
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -87,8 +96,6 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -98,8 +105,6 @@ public class MainActivity extends AppCompatActivity
         header_tv_nome =(TextView) headerView.findViewById(R.id.header_tv_nome);
         header_tv_curso_fuculdade = (TextView) headerView.findViewById(R.id.header_tv_curso_fuculdade);
 
-
-        usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         if(usuario != null){
             header_img_foto.setImageBitmap(byteToBitmap(usuario.getFoto()));
         }
@@ -112,7 +117,7 @@ public class MainActivity extends AppCompatActivity
             header_tv_curso_fuculdade.setText(usuario.getFaculdade().getNome());
         }
 
-
+        dias_semana();
 
 
 
@@ -198,6 +203,32 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void dias_semana(){
+
+
+        container_ViewPager = (ViewPager) findViewById(R.id.container_ViewPager_main);
+
+        adapter = new DiasHorarioAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.dias_semana));
+
+        container_ViewPager.setAdapter(adapter);
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     class ClasseAtualizarFotoUsuario extends AsyncTask<Usuario, Void,String> {
@@ -259,10 +290,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void perfilUsuaario(){
 
-
-    }
 
 
 
@@ -313,7 +341,6 @@ public class MainActivity extends AppCompatActivity
 
     private void dadosUsuario(){
         usuario.setFoto(fotoBytes);
-
     }
 
     private void startFragment(String CodigoFragment){

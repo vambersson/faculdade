@@ -1,18 +1,12 @@
 package br.com.vambersson.portalparatodos.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import br.com.vambersson.portalparatodos.R;
-import br.com.vambersson.portalparatodos.fragment.adapter.CursoAdapter;
 import br.com.vambersson.portalparatodos.fragment.adapter.FragPagerAdapter;
-import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCadastroProfessor;
 
 /**
  * Created by Vambersson on 21/05/2017.
@@ -40,6 +34,7 @@ public class ActivityPage extends AppCompatActivity{
         container_ViewPager.setAdapter(adapter);
         tabs_layout.setupWithViewPager(container_ViewPager);
 
+        //tabs_layout.getTabAt(1).select();
 
     }
 

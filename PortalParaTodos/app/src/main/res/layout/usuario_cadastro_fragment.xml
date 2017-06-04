@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="120dp"
@@ -105,7 +107,7 @@
                 android:textAlignment="center"
                 android:id="@+id/perfil_Sp_IdCurso"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="30dp"
                 android:background="@color/colorPrimaryDark"/>
             <TextView
                 android:text="@string/cad_tv_aluno_seleciona_Discipina"
@@ -196,5 +198,6 @@
 
     </LinearLayout>
 
-
 </RelativeLayout>
+
+</ScrollView>

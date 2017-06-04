@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:text="@string/disciplina_periodo"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Spinner
+        android:textAlignment="center"
+        android:id="@+id/spinner_Idperiodo"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"/>
+    <TextView
+        android:text="@string/disciplina_nome_disciplina"
+        android:textColor="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/edt_nome_disciplina"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_IdCancel_disciplina"
+            android:text="@string/cad_btn_disciplina_Cancel"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorWhite"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_IdSave_disciplina"
+            android:text="@string/cad_btn_disciplina_save"
+            android:background="@color/colorBlack"
+            android:textColor="@color/colorWhite"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

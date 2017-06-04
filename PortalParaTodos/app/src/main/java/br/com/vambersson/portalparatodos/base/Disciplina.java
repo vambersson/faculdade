@@ -12,7 +12,7 @@ public class Disciplina implements Serializable {
 
     private String nome;
 
-    private String periodo;
+    private Integer periodo;
 
     private Faculdade faculdade;
 
@@ -39,11 +39,11 @@ public class Disciplina implements Serializable {
         this.nome = nome;
     }
 
-    public String getPeriodo() {
+    public Integer getPeriodo() {
         return periodo;
     }
 
-    public void setPeriodo(String periodo) {
+    public void setPeriodo(Integer periodo) {
         this.periodo = periodo;
     }
 

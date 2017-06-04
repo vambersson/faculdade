@@ -30,6 +30,7 @@ import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Faculdade;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
+import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCursoLista;
 import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
 import br.com.vambersson.portalparatodos.main.MainActivity;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
@@ -308,7 +309,7 @@ public class FragmentLogin extends Fragment {
 
                         if(user.getTipo().equals("A")){
                             usuario =  user;
-                            startFragment("FragmentCadastroAluno"); // Fragment  =  usuario_cadastro_aluno_fragment
+                            startFragment("FragmentCadastroAluno"); // Fragment  =  usuario_cadastro_fragment
                         }else if(user.getTipo().equals("P")){
                             usuario =  user;
                             startFragment("ActivityPage"); // Fragment  =  usuario_cadastro_professor_fragment
@@ -452,10 +453,11 @@ public class FragmentLogin extends Fragment {
 
                         if(user.getTipo().equals("A")){
                             usuario =  user;
-                            startFragment("FragmentCadastroAluno"); // Fragment  =  usuario_cadastro_aluno_fragment
+                            startFragment("FragmentCadastroAluno"); // Fragment  =  usuario_cadastro_fragment
                         }else if(user.getTipo().equals("P")){
                             usuario =  user;
                             startFragment("ActivityPage"); // Fragment  =  usuario_cadastro_professor_fragment
+                            FragmentCursoLista.consulta_curso = true;
                         }
 
 

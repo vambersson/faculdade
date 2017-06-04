@@ -2,6 +2,7 @@ package br.com.vambersson.portalparatodos.fragment.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,9 @@ import java.util.List;
 
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Curso;
+import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCursoLista;
+import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentDisciplinaLista;
+import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 /**
@@ -60,17 +64,27 @@ public class CursoAdapter extends BaseAdapter {
          LayoutInflater inf = (LayoutInflater) act.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
          View  v = inf.inflate(R.layout.curso_adapter,parent,false);
 
-        Curso curso = lista.get(position);
+        final Curso curso = lista.get(position);
         tv_nome = (TextView) v.findViewById(R.id.tv_nome);
+
+        tv_nome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentDisciplinaLista.consulta_disciplina = true;
+                FragmentDisciplinaLista.faculdade_selecionada = curso.getFaculdade().getCodigo();
+                FragmentDisciplinaLista.curso_selecionado = curso.getCodigo();
+
+            }
+        });
+
         btn_remover = (Button) v.findViewById(R.id.btn_remover);
         btn_remover.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                Curso c = new Curso();
-                c.setCodigo(lista.get(position).getCodigo());
-                new ClasseDeleta().execute(c);
+                new ClasseDeleta().execute(curso);
 
             }
         });
@@ -84,11 +98,9 @@ public class CursoAdapter extends BaseAdapter {
         @Override
         protected String doInBackground(Curso... params) {
             String obj ="";
-            Gson gson = new Gson();
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexao("deleteCurso="+ params[0].getCodigo(),"GET",false);
-
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("deleteCurso="+ params[0].getFaculdade().getCodigo() +"="+ params[0].getCodigo(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
@@ -111,6 +123,7 @@ public class CursoAdapter extends BaseAdapter {
             super.onPostExecute(result);
             if(result.equals("1") ){
                 Toast.makeText(act,act.getResources().getString(R.string.message_alerta_curso_exclui)  , Toast.LENGTH_SHORT).show();
+                FragmentCursoLista.consulta_curso = true;
 
             }
         }

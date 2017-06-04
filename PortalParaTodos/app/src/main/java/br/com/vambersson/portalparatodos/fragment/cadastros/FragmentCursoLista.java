@@ -37,6 +37,9 @@ import static java.lang.Thread.sleep;
 
 public class FragmentCursoLista extends Fragment {
 
+
+    public static boolean consulta_curso = false;
+
     private CursoAdapter adapter;
     private  List<Curso> listaCursos;
 
@@ -46,22 +49,30 @@ public class FragmentCursoLista extends Fragment {
     private ListView lv_Cursos;
     private FloatingActionButton btn_add_Curso;
 
+    private static FragmentCursoLista instancia;
 
-    public FragmentCursoLista(){
-
-        listaCursos = new ArrayList<Curso>();
+    public static  FragmentCursoLista getInstancia(){
+        if(instancia == null){
+            instancia = new FragmentCursoLista();
+        }
+        return instancia;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        listaCursos = new ArrayList<Curso>();
+
         if(savedInstanceState != null){
             usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
+            consulta_curso = true;
+
         }else{
             usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
         }
-        listaCursos(true);
+        listaCursos();
     }
 
     @Override
@@ -75,20 +86,7 @@ public class FragmentCursoLista extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.curso_lista_fragment,container,false);
-
         lv_Cursos = (ListView) view.findViewById(R.id.lv_Cursos);
-        lv_Cursos.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_BACK){
-
-                       // thread.interrupt();
-
-                }
-
-                return false;
-            }
-        });
 
         btn_add_Curso = (FloatingActionButton) view.findViewById(R.id.btn_add_Curso);
         btn_add_Curso.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +110,7 @@ public class FragmentCursoLista extends Fragment {
     }
 
 
-    public void listaCursos(boolean executa) {
+    public void listaCursos() {
 
         thread = new Thread(new Runnable() {
             @Override
@@ -120,9 +118,14 @@ public class FragmentCursoLista extends Fragment {
 
                 while (true){
 
-                    try {
+                    if(consulta_curso == true){
                         new ClasseListaCursos().execute();
-                        sleep(2500);
+                        consulta_curso = false;
+                    }
+
+                    try {
+
+                        sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -179,6 +182,8 @@ public class FragmentCursoLista extends Fragment {
         }
 
     }
+
+
 
 
 }

@@ -144,6 +144,8 @@ public class FragmentCursoCadastro extends DialogFragment {
 
             getDialog().dismiss();
 
+            FragmentCursoLista.consulta_curso = true;
+
         }
     }
 

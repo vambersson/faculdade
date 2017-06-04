@@ -80,11 +80,12 @@ public class UsuarioDao {
         SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
         Usuario usuario = null;
 
-        String[] colunas = new String[]{"idfaculdade","nomefaculdade","matricula","nome","email","tipo","statuslogin","login","senha","foto"};
+        String[] colunas = new String[]{"idfaculdade","nomefaculdade","matricula","nome","email","tipo","statuslogin","login","senha","foto","idcodigo"};
          Cursor cursor = db.query("usuario",colunas,null,null,null,null,null);
 
         if(cursor.moveToNext()){
             usuario = new Usuario();
+
 
             usuario.getFaculdade().setCodigo(cursor.getInt(0));
             usuario.getFaculdade().setNome(cursor.getString(1));
@@ -96,6 +97,7 @@ public class UsuarioDao {
             usuario.setLogin(cursor.getInt(7));
             usuario.setSenha(cursor.getString(8));
             usuario.setFoto(cursor.getBlob(9));
+            usuario.setCodigo(cursor.getInt(10));
 
 
         }

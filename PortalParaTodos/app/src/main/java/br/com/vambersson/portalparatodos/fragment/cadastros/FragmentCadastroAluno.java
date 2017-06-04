@@ -88,22 +88,27 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
     private Button perfil_btn_Idlista_disciplina;
 
 
-    public FragmentCadastroAluno(){
-        gson = new Gson();
-        listaCursos = new ArrayList<Curso>();
+    private static FragmentCadastroAluno instancia;
+
+    public static FragmentCadastroAluno  getInstancia(){
+       if(instancia == null){
+           instancia = new FragmentCadastroAluno();
+       }
+       return instancia;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        gson = new Gson();
+        listaCursos = new ArrayList<Curso>();
 
         if(savedInstanceState != null){
             usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
 
-            disciplinas_selecionadas = savedInstanceState.getString(STATE_DISCIPLINA);
-            perfil_btn_Idlista_disciplina.setText(disciplinas_selecionadas);
+            //disciplinas_selecionadas = savedInstanceState.getString(STATE_DISCIPLINA);
+            //perfil_btn_Idlista_disciplina.setText(disciplinas_selecionadas);
         }
     }
 
@@ -118,7 +123,7 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       View view = inflater.inflate(R.layout.usuario_cadastro_aluno_fragment,container,false);
+       View view = inflater.inflate(R.layout.usuario_cadastro_fragment,container,false);
 
         ImgV_Idusuario = (ImageView) view.findViewById(R.id.ImgV_Idusuario);
         login_cad_IdCamera =(FloatingActionButton) view.findViewById(R.id.login_cad_IdCamera);
@@ -221,8 +226,6 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
 
         return view;
     }
-
-
 
     private void Alterar(){
 

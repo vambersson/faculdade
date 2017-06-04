@@ -3,6 +3,7 @@ package br.com.vambersson.portalparatodos.fragment.cadastros;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,38 +25,50 @@ import br.com.vambersson.portalparatodos.activity.ListaDisciplina;
 import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.fragment.adapter.DisciplinaAdapter;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
+import static java.lang.Thread.sleep;
 
 /**
  * Created by Vambersson on 21/05/2017.
  */
 
-public class FragmentCadastroDisciplina extends Fragment {
+public class FragmentDisciplinaLista extends Fragment {
 
     public static final String EXTRA_DISCIPLINA = "disciplina";
-    public static final String EXTRA_RESULTADO = "selecionadas";
-    public static final String EXTRA_ID_CURSO = "codigocurso";
-    public static final String EXTRA_ID_FACULDADE = "codigofaculdade";
 
-
+    public static boolean consulta_disciplina = false;
+    public static int curso_selecionado = 0;
+    public static int faculdade_selecionada = 0;
 
     private ListView listView;
+    private FloatingActionButton btn_add_disciplina;
+
     private DisciplinaAdapter adapter;
 
     private List<Disciplina> listaDisciplinas;
-    private String disciplinas_selecionadas = "";
-    private String codigo_curso = "";
-    private String codigo_faculdade = "";
 
+    private static FragmentDisciplinaLista instancia;
+
+    public static FragmentDisciplinaLista getInstancia(){
+        if(instancia == null){
+            instancia = new FragmentDisciplinaLista();
+
+        }
+        return instancia;
+    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(savedInstanceState != null){
+            consulta_disciplina = true;
+        }
 
+    }
 
-
-
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Nullable
@@ -65,13 +78,46 @@ public class FragmentCadastroDisciplina extends Fragment {
 
         listView = (ListView) view.findViewById(R.id.lista_disciplina);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        btn_add_disciplina = (FloatingActionButton) view.findViewById(R.id.btn_add_disciplina);
+        btn_add_disciplina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adicionarDisciplina();
+            }
+        });
 
 
-        codigo_curso = "6";
-        codigo_faculdade = "2";
-        new ClasseListaDisciplinas().execute();
+        verificaCursoSelecionado();
 
         return view;
+    }
+
+    private void verificaCursoSelecionado(){
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (true){
+
+                    if(consulta_disciplina == true){
+                            new ClasseListaDisciplinas().execute();
+                        consulta_disciplina = false;
+                    }
+
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        });
+
+
+        thread.start();
     }
 
 
@@ -84,7 +130,7 @@ public class FragmentCadastroDisciplina extends Fragment {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexao("listaDisciplinas="+Integer.parseInt(codigo_faculdade)+"="+Integer.parseInt(codigo_curso),"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("listaDisciplinas="+faculdade_selecionada+"="+curso_selecionado,"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
@@ -104,13 +150,9 @@ public class FragmentCadastroDisciplina extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            if(result == ""){
+           if("[]".equals(result)){
 
-                //Toast.makeText(ListaDisciplina.this,"ok1", Toast.LENGTH_LONG).show();
-
-            }else if("[]".equals(result)){
-
-                Toast.makeText(getActivity(),getResources().getString(R.string.message_alerta_disciplina_cadastrada), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),R.string.message_alerta_disciplina_cadastrada, Toast.LENGTH_LONG).show();
 
             }else if(!"".equals(result)){
 
@@ -124,27 +166,6 @@ public class FragmentCadastroDisciplina extends Fragment {
                         adapter = new DisciplinaAdapter(getActivity(),listaDisciplinas);
                         listView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
-
-
-                    }
-
-                    String selecionadas = getActivity().getIntent().getStringExtra(EXTRA_DISCIPLINA);
-
-                    if(selecionadas != ""){
-
-                        String[] idcodigos = selecionadas.split(" ");
-
-                        for(int i=0; i < listView.getCount(); i++){
-
-                            for(int b= 0;b < idcodigos.length; b++ ){
-
-                                if(listaDisciplinas.get(i).getCodigo() == Integer.parseInt(idcodigos[b])){
-                                    listView.setItemChecked(i,true);
-                                }
-
-                            }
-
-                        }
 
                     }
 
@@ -162,7 +183,17 @@ public class FragmentCadastroDisciplina extends Fragment {
 
 
 
+
         }
+
+    }
+
+    private void adicionarDisciplina(){
+
+        FragmentDisciplinaCadastro dialog = FragmentDisciplinaCadastro.newInstancia();
+        dialog.abrir(getFragmentManager());
+        FragmentDisciplinaCadastro.curso_selecionado = curso_selecionado;
+        FragmentDisciplinaCadastro.faculdade_selecionada = faculdade_selecionada;
 
     }
 

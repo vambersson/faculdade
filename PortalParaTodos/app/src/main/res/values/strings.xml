@@ -34,10 +34,15 @@
     <string name="cad_tv_profesor_nome_faculdade">College</string>
     <string name="cad_tv_profesor_nome">Teacher</string>
     <string name="cad_tv_professor_primeiro_nome">First Name</string>
+
+    <string name="cad_tv_professor_nome_cursos">Cource</string>
+    <string name="cad_tv_professor_seleciona_Discipina">Discipline</string>
+
     <string name="cad_tv_professor_Email">E-Mail</string>
     <string name="cad_tv_professor_senha">Password</string>
     <string name="cad_tv_professor_senha_confirma">Repeat Password</string>
 
+    <string name="cad_btn_professor_Discipinas">Select your discipline</string>
     <string name="cad_btn_professor_save">Save</string>
     <string name="cad_btn_professor_Cancel">Cancel</string>
 
@@ -48,6 +53,49 @@
         <item>Teacher</item>
         <item>Course</item>
         <item>Discipline</item>
+    </string-array>
+
+    <!-- Tela HORARIOS                                     -->
+
+    <string name="horario_selecione_disciplina">Select your discipline</string>
+
+    <string-array name="dias_semana">
+        <item>Segunda</item>
+        <item>terça</item>
+        <item>Quarta</item>
+        <item>Quinta</item>
+        <item>Sexta</item>
+        <item>Sábado</item>
+        <item>domindo</item>
+    </string-array>
+
+    <!-- Tela cadastro disciplina                                     -->
+
+    <string name="disciplina_periodo">Periodo</string>
+    <string name="disciplina_nome_disciplina">Name discipline</string>
+
+    <string name="cad_btn_disciplina_save">Save</string>
+    <string name="cad_btn_disciplina_Cancel">Cancel</string>
+
+    <string-array name="periodos_disciplinas">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>19</item>
+        <item>20</item>
     </string-array>
 
 
@@ -61,7 +109,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
 
-    <!-- Erros -->
+    <!-- menssagens -->
     <string name="message_valida_faculdade">Invalid college</string>
     <string name="message_seleciona_disciplina">Course not selected</string>
     <string name="message_valida_matricula">Not informed registration</string>
@@ -71,6 +119,8 @@
     <string name="message_valida_senha">Not informed password</string>
     <string name="message_alerta_webservice">Webservice not available</string>
     <string name="message_alerta_curso_exclui">Course excluded</string>
+    <string name="message_valida_disciplina">Invalid Discipline</string>
+    <string name="message_alerta_disciplina_exclui">Discipline excluded</string>
     <string name="message_alerta_disciplina_cadastrada">Course has no discipline</string>
     <string name="message_valida_password">Invalid Password</string>
     <string name="title_activity_maps">Map</string>
