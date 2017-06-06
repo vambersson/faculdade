@@ -1,5 +1,6 @@
 package br.com.vambersson.portalparatodos.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -37,10 +38,6 @@ public class ActivityPage extends AppCompatActivity{
         //tabs_layout.getTabAt(1).select();
 
     }
-
-
-
-
 
 
 }

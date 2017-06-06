@@ -14,6 +14,12 @@ public class Disciplina implements Serializable {
 
     private Integer periodo;
 
+    private String selecionou;
+
+    private Integer numerodia;
+
+    private Integer ordem;
+
     private Faculdade faculdade;
 
     private Curso curso;
@@ -61,5 +67,29 @@ public class Disciplina implements Serializable {
 
     public void setCurso(Curso curso) {
         this.curso = curso;
+    }
+
+    public String getSelecionou() {
+        return selecionou;
+    }
+
+    public void setSelecionou(String selecionou) {
+        this.selecionou = selecionou;
+    }
+
+    public Integer getNumerodia() {
+        return numerodia;
+    }
+
+    public void setNumerodia(Integer numerodia) {
+        this.numerodia = numerodia;
+    }
+
+    public Integer getOrdem() {
+        return ordem;
+    }
+
+    public void setOrdem(Integer ordem) {
+        this.ordem = ordem;
     }
 }

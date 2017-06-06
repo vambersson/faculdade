@@ -55,19 +55,18 @@
         <item>Discipline</item>
     </string-array>
 
-    <!-- Tela HORARIOS                                     -->
+    <!-- Tela Dias da semana                                     -->
 
     <string name="horario_selecione_disciplina">Select your discipline</string>
 
-    <string-array name="dias_semana">
-        <item>Segunda</item>
-        <item>terça</item>
-        <item>Quarta</item>
-        <item>Quinta</item>
-        <item>Sexta</item>
-        <item>Sábado</item>
-        <item>domindo</item>
-    </string-array>
+    <string name="dia_tv_domingo">Sunday</string>
+    <string name="dia_tv_segunda">Monday</string>
+    <string name="dia_tv_terca">Tuesday</string>
+    <string name="dia_tv_quarta">Wednesday</string>
+    <string name="dia_tv_quinta">Thursday</string>
+    <string name="dia_tv_sexta">Friday</string>
+    <string name="dia_tv_sabado">Saturday</string>
+
 
     <!-- Tela cadastro disciplina                                     -->
 

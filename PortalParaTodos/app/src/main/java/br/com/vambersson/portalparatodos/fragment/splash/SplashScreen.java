@@ -10,14 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import br.com.vambersson.portalparatodos.R;
+
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
 import br.com.vambersson.portalparatodos.erro.ConexaoException;
@@ -99,6 +93,8 @@ public class SplashScreen extends Fragment {
     }
 
     private void startActivityMain(){
+
+
         Intent it = new Intent(getActivity(), MainActivity.class);
         it.putExtra("usuario",usuario);
         startActivity(it);

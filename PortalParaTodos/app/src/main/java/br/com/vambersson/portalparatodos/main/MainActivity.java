@@ -22,21 +22,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-
 import br.com.vambersson.portalparatodos.aula.adapter.DiasHorarioAdapter;
-import br.com.vambersson.portalparatodos.aula.dias.Dias;
-import br.com.vambersson.portalparatodos.aula.horario.HorarioAula;
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
@@ -44,8 +40,7 @@ import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragmen
 import br.com.vambersson.portalparatodos.map.MapsActivity;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int REQUEST_FOTO = 100;
     private  byte fotoBytes[];
@@ -60,9 +55,9 @@ public class MainActivity extends AppCompatActivity
     private TextView header_tv_curso_fuculdade;
     private ImageView header_img_foto;
 
-    private TabLayout tabs_layout;
     private ViewPager container_ViewPager;
     private DiasHorarioAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,9 +112,8 @@ public class MainActivity extends AppCompatActivity
             header_tv_curso_fuculdade.setText(usuario.getFaculdade().getNome());
         }
 
+
         dias_semana();
-
-
 
     }
 
@@ -205,30 +199,11 @@ public class MainActivity extends AppCompatActivity
 
     private void dias_semana(){
 
-
         container_ViewPager = (ViewPager) findViewById(R.id.container_ViewPager_main);
-
-        adapter = new DiasHorarioAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.dias_semana));
-
+        adapter = new DiasHorarioAdapter(getSupportFragmentManager());
         container_ViewPager.setAdapter(adapter);
 
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     class ClasseAtualizarFotoUsuario extends AsyncTask<Usuario, Void,String> {
@@ -363,6 +338,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
         if (requestCode == REQUEST_FOTO  && resultCode == RESULT_OK) {
             if(data != null) {
                 Bundle bundle = data.getExtras();
@@ -380,6 +357,11 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+
+
+
+
+        super.onActivityResult(requestCode, resultCode, data);
 
     }
 

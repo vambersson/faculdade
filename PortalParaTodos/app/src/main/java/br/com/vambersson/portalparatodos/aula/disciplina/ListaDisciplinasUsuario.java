@@ -1,11 +1,10 @@
 package br.com.vambersson.portalparatodos.aula.disciplina;
 
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -18,9 +17,8 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import br.com.vambersson.portalparatodos.R;
-import br.com.vambersson.portalparatodos.activity.ListaDisciplina;
+import br.com.vambersson.portalparatodos.aula.horario.HorarioAula;
 import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
@@ -41,10 +39,6 @@ public class ListaDisciplinasUsuario extends ListActivity {
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private List<Disciplina> listaDisciplinas;
-
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,10 +74,8 @@ public class ListaDisciplinasUsuario extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        disciplina_selecionada = listaDisciplinas.get(position).getNome();
-
         Intent it = new Intent();
-        it.putExtra(EXTRA_RESULTADO,disciplina_selecionada);
+        it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(position));
         setResult(RESULT_OK,it);
         finish();
 

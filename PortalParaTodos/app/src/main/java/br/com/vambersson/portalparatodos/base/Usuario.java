@@ -36,12 +36,16 @@ public class Usuario implements Serializable {
 
     private Curso curso;
 
+    private Disciplina disciplina;
+
 
     public Usuario(){
 
         faculdade = new Faculdade();
 
         curso = new Curso();
+
+        disciplina = new Disciplina();
     }
 
     public Integer getCodigo() {
@@ -147,5 +151,13 @@ public class Usuario implements Serializable {
 
     public void setFoto(byte[] foto) {
         this.foto = foto;
+    }
+
+    public Disciplina getDisciplina() {
+        return disciplina;
+    }
+
+    public void setDisciplina(Disciplina disciplina) {
+        this.disciplina = disciplina;
     }
 }

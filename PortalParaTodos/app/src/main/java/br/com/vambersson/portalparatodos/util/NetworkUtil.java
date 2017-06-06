@@ -66,7 +66,7 @@ public class NetworkUtil {
         conexao.setDoOutput(doOutPut);
 
         if(doOutPut){
-            conexao.addRequestProperty("Content-Type","APPLICATION/JSON");
+            conexao.addRequestProperty("Content-Type","application/json");
         }
 
         conexao.connect();

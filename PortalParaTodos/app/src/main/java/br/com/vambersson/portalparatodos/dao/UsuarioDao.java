@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.List;
 
+import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.sqlite.UsuarioSQLite;
 
@@ -43,6 +44,37 @@ public class UsuarioDao {
 
         db.insert("usuario",null,cv);
 
+    }
+
+
+    public void inserirDisciplina(Disciplina dis){
+
+        SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put("iddisciplina",dis.getCodigo());
+        cv.put("nome",dis.getNome());
+
+        db.insert("disciplina",null,cv);
+
+    }
+    public Disciplina getDisciplina(){
+
+        SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
+        Disciplina dis = null;
+
+        String[] colunas = new String[]{"iddisciplina","nome"};
+        Cursor cursor = db.query("disciplina",colunas,null,null,null,null,null);
+
+        if(cursor.moveToNext()){
+            dis = new Disciplina();
+
+            dis.setCodigo(cursor.getInt(0));
+            dis.setNome(cursor.getString(1));
+
+        }
+
+        return dis;
     }
 
 
