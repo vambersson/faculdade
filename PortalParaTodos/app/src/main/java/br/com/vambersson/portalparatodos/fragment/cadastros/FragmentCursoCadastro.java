@@ -33,13 +33,11 @@ public class FragmentCursoCadastro extends DialogFragment {
 
     private Gson gson = new Gson();
     private Usuario usuario;
-    Curso curso = new Curso();
-
+    private Curso curso;
 
     private EditText edt_IdNome_Curso;
     private Button btn_IdCancel_Curso;
     private Button btn_IdSave_Curso;
-
 
     public static FragmentCursoCadastro newInstancia(){
         FragmentCursoCadastro fragemnt = new FragmentCursoCadastro();
@@ -52,8 +50,10 @@ public class FragmentCursoCadastro extends DialogFragment {
 
         usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
         if(usuario != null){
+            curso = new Curso();
             curso.getFaculdade().setCodigo(usuario.getFaculdade().getCodigo());
         }
+
     }
 
     @Nullable
@@ -89,7 +89,6 @@ public class FragmentCursoCadastro extends DialogFragment {
             curso.setNome(edt_IdNome_Curso.getText().toString().trim());
 
             new ClasseCadastroCursos().execute(curso);
-
 
         }
 
@@ -139,14 +138,16 @@ public class FragmentCursoCadastro extends DialogFragment {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
 
-            getDialog().dismiss();
-
-            FragmentCursoLista.consulta_curso = true;
+            if(result.equals("1")){
+                FragmentCursoLista.consulta_curso = true;
+                getDialog().dismiss();
+            }
 
         }
+
     }
 
     public void abrir(FragmentManager fm){

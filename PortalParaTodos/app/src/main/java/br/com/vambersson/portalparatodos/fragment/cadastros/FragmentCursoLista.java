@@ -41,10 +41,10 @@ public class FragmentCursoLista extends Fragment {
     public static boolean consulta_curso = false;
 
     private CursoAdapter adapter;
-    private  List<Curso> listaCursos;
+    private  ArrayList<Curso> listaCursos;
 
     private Usuario usuario;
-    private  Thread thread;
+    private Thread thread ;
 
     private ListView lv_Cursos;
     private FloatingActionButton btn_add_Curso;
@@ -62,23 +62,6 @@ public class FragmentCursoLista extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        listaCursos = new ArrayList<Curso>();
-
-        if(savedInstanceState != null){
-            usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
-            consulta_curso = true;
-
-        }else{
-            usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
-        }
-        listaCursos();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable("StateUsuario",usuario);
     }
 
     @Nullable
@@ -98,13 +81,51 @@ public class FragmentCursoLista extends Fragment {
             }
         });
 
+        adapter = new CursoAdapter(getActivity());
+
+        if(savedInstanceState != null){
+            usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
+
+            listaCursos = (ArrayList<Curso>) savedInstanceState.getSerializable("StateListaCurso");
+
+            if(listaCursos != null){
+                carregarLista(listaCursos);
+            }else {
+                listaCursos();
+            }
+
+
+        }else{
+            usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
+            consulta_curso = true;
+        }
+
+        listaCursos();
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("StateUsuario",usuario);
+        outState.putSerializable("StateListaCurso",listaCursos);
+
+    }
+
+
+    private void carregarLista(List<Curso> lista){
+
+        adapter.setLista(lista);
+
+        lv_Cursos.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+
     }
 
     private void abrirAddCurso(){
 
         FragmentCursoCadastro dialog = FragmentCursoCadastro.newInstancia();
-        //dialog.setTargetFragment(this,1);
         dialog.abrir(getFragmentManager());
 
     }
@@ -125,7 +146,7 @@ public class FragmentCursoLista extends Fragment {
 
                     try {
 
-                        sleep(1000);
+                        sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -165,18 +186,16 @@ public class FragmentCursoLista extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            if(!result.equals("[]")){
+                if(!result.equals("[]")){
 
-                Gson gson = new Gson();
-                Curso[] lista =  gson.fromJson(result, Curso[].class);
+                    Gson gson = new Gson();
+                    Curso[] lista =  gson.fromJson(result, Curso[].class);
 
-                listaCursos = new ArrayList<Curso>(Arrays.asList(lista) );
-                adapter = new CursoAdapter(getActivity(),listaCursos);
-                lv_Cursos.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                    listaCursos = new ArrayList<Curso>(Arrays.asList(lista) );
 
+                    carregarLista(listaCursos);
 
-            }
+                }
 
 
         }

@@ -457,7 +457,6 @@ public class FragmentLogin extends Fragment {
                         }else if(user.getTipo().equals("P")){
                             usuario =  user;
                             startFragment("ActivityPage"); // Fragment  =  usuario_cadastro_professor_fragment
-                            FragmentCursoLista.consulta_curso = true;
                         }
 
 

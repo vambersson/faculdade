@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +22,7 @@ import java.util.List;
 
 import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.activity.ListaDisciplina;
+import br.com.vambersson.portalparatodos.base.Curso;
 import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.fragment.adapter.DisciplinaAdapter;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
@@ -44,8 +45,8 @@ public class FragmentDisciplinaLista extends Fragment {
 
     private DisciplinaAdapter adapter;
 
-    private List<Disciplina> listaDisciplinas;
-
+    private ArrayList<Disciplina> listaDisciplinas;
+    private Thread thread;
     private static FragmentDisciplinaLista instancia;
 
     public static FragmentDisciplinaLista getInstancia(){
@@ -59,16 +60,8 @@ public class FragmentDisciplinaLista extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        verificaCursoSelecionado();
 
-        if(savedInstanceState != null){
-            consulta_disciplina = true;
-        }
-
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @Nullable
@@ -86,36 +79,67 @@ public class FragmentDisciplinaLista extends Fragment {
             }
         });
 
+        adapter = new DisciplinaAdapter(getActivity());
 
-        verificaCursoSelecionado();
+        if(savedInstanceState != null){
+
+            faculdade_selecionada = savedInstanceState.getInt("20");
+            curso_selecionado = savedInstanceState.getInt("21");
+
+            listaDisciplinas = (ArrayList<Disciplina>) savedInstanceState.getSerializable("StateListaDisciplina");
+
+            if(listaDisciplinas != null){
+                carregarLista(listaDisciplinas);
+            }
+
+        }
 
         return view;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("20",faculdade_selecionada);
+        outState.putInt("21",curso_selecionado);
+        outState.putSerializable("StateListaDisciplina",listaDisciplinas);
+    }
+
+    private void carregarLista(List<Disciplina> lista){
+
+       adapter.setLista(lista);
+
+        listView.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+
+    }
+
     private void verificaCursoSelecionado(){
 
-        Thread thread = new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
 
                 while (true){
 
                     if(consulta_disciplina == true){
-                            new ClasseListaDisciplinas().execute();
+                        new ClasseListaDisciplinas().execute();
                         consulta_disciplina = false;
+
                     }
 
                     try {
-                        sleep(1000);
+                        sleep(2000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+
                     }
 
                 }
 
             }
         });
-
 
         thread.start();
     }
@@ -150,38 +174,35 @@ public class FragmentDisciplinaLista extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-           if("[]".equals(result)){
+            try{
 
-                Toast.makeText(getActivity(),R.string.message_alerta_disciplina_cadastrada, Toast.LENGTH_LONG).show();
+                if("[]".equals(result)){
 
-            }else if(!"".equals(result)){
+                    Toast.makeText(getActivity(),R.string.message_alerta_disciplina_cadastrada, Toast.LENGTH_LONG).show();
 
-                try{
+                }else if(!"".equals(result)){
 
-                    if(!result.equals("[]")){
-                        Gson gson = new Gson();
-                        Disciplina[] lista =  gson.fromJson(result, Disciplina[].class);
+                    try{
 
-                        listaDisciplinas = new ArrayList<Disciplina>(Arrays.asList(lista));
-                        adapter = new DisciplinaAdapter(getActivity(),listaDisciplinas);
-                        listView.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
+                        if(!result.equals("[]")){
+                            Gson gson = new Gson();
+                            Disciplina[] lista =  gson.fromJson(result, Disciplina[].class);
 
+                            listaDisciplinas = new ArrayList<Disciplina>(Arrays.asList(lista));
+
+                            carregarLista(listaDisciplinas);
+                        }
+
+                    }catch(Exception e){
+                        Toast.makeText(getActivity(), "Erro: "+ e.getMessage(), Toast.LENGTH_LONG).show();
                     }
 
-                }catch(Exception e){
-                    // Toast.makeText(ListaDisciplina.this, "Erro de comunicação"+ e, Toast.LENGTH_LONG).show();
                 }
 
+
+            }catch (Exception e){
+                Toast.makeText(getActivity(), R.string.message_alerta_webservice, Toast.LENGTH_SHORT).show();
             }
-
-
-
-
-
-
-
-
 
 
         }

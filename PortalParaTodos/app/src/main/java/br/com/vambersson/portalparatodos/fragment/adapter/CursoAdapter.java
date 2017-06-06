@@ -38,8 +38,11 @@ public class CursoAdapter extends BaseAdapter {
     private Activity act;
 
 
-    public CursoAdapter(Activity act, List<Curso> lista){
+    public CursoAdapter(Activity act){
         this.act = act;
+    }
+
+    public void setLista(List<Curso> lista) {
         this.lista = lista;
     }
 

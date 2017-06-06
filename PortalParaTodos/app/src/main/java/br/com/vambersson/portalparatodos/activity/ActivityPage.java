@@ -25,6 +25,7 @@ public class ActivityPage extends AppCompatActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.content_pages);
 
         tabs_layout = (TabLayout) findViewById(R.id.tabs_layout);
@@ -37,7 +38,11 @@ public class ActivityPage extends AppCompatActivity{
 
         //tabs_layout.getTabAt(1).select();
 
+
     }
 
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

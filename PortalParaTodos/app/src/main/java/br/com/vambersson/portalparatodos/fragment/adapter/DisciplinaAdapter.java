@@ -36,11 +36,14 @@ public class DisciplinaAdapter extends BaseAdapter {
     private List<Disciplina> lista;
     private Activity act;
 
-    public DisciplinaAdapter(Activity act, List<Disciplina> lista){
+    public DisciplinaAdapter(Activity act){
         this.act = act;
-        this.lista = lista;
+
     }
 
+    public void setLista(List<Disciplina> lista) {
+        this.lista = lista;
+    }
 
     @Override
     public int getCount() {
