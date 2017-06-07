@@ -54,6 +54,8 @@ public class DiaFragmentSegunda extends Fragment {
     private Disciplina disciplina;
     private List<Disciplina> listaDisciplina;
 
+    private Thread thread;
+
     private  int ordem_selecao = 0;
 
     @Override
@@ -132,6 +134,14 @@ public class DiaFragmentSegunda extends Fragment {
         return view;
     }
 
+    private void btn_Texto_padeao(){
+
+        btn_aula1.setText(R.string.horario_selecione_disciplina);
+        btn_aula2.setText(R.string.horario_selecione_disciplina);
+        btn_aula3.setText(R.string.horario_selecione_disciplina);
+        btn_aula4.setText(R.string.horario_selecione_disciplina);
+    }
+
 
     private void resultadoOrdemSelecao(String nome,int numero){
 
@@ -152,6 +162,8 @@ public class DiaFragmentSegunda extends Fragment {
                 break;
         }
 
+
+
     }
 
     private void salvardisciplina(Disciplina dis){
@@ -169,7 +181,7 @@ public class DiaFragmentSegunda extends Fragment {
 
     private void carregarDisciplinas(){
 
-        Thread thread = new Thread(new Runnable() {
+       thread = new Thread(new Runnable() {
             @Override
             public void run() {
 
@@ -280,10 +292,9 @@ public class DiaFragmentSegunda extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+
             if("[]".equals(result)){
-
-                //Toast.makeText(getActivity() ,getResources().getString(R.string.message_alerta_disciplina_cadastrada), Toast.LENGTH_LONG).show();
-
+                btn_Texto_padeao();
             }else if(!"".equals(result)){
                 Gson gson = new Gson();
                 try{
@@ -292,9 +303,15 @@ public class DiaFragmentSegunda extends Fragment {
 
                     List<Disciplina> temp = new ArrayList<Disciplina>(Arrays.asList(lista) );
                     listaDisciplina = temp;
+                    btn_Texto_padeao();
                     for(int i = 0; i < temp.size(); i++){
 
                         resultadoOrdemSelecao(temp.get(i).getNome(),temp.get(i).getOrdem());
+                    }
+
+//                    INTERROPE A THREAD O USUÁRIO FOR PROFESSOR
+                    if(usuario.getTipo().equals("P")){
+                        thread.isInterrupted();
                     }
 
                 }catch(Exception e){
@@ -380,7 +397,6 @@ public class DiaFragmentSegunda extends Fragment {
                 break;
             case "delete":
                 removerAula();
-                Snackbar.make(getView(), "okokok delete", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 break;
             case "update":
                 Snackbar.make(getView(), "okokok update", Snackbar.LENGTH_LONG).setAction("Action", null).show();
