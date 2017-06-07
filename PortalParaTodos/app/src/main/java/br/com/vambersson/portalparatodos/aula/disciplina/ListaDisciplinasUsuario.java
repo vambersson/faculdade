@@ -73,40 +73,102 @@ public class ListaDisciplinasUsuario extends ListActivity {
         outState.putSerializable("StateUsuario",usuario);
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    int totaldisciplinaMarcada = 0;
 
+    private void verificaSelecao(){
+        Intent it = new Intent();
+
+//      Verifica total de seleção das disciplinas
         for(int i=0;i < listView.getCount();i++){
-            if(listView.isItemChecked(i)){
-                total ++;
+            if(listView.isItemChecked(i) == true){
+                totaldisciplinaMarcada ++;
             }
         }
 
-        Intent it = new Intent();
-        if(listView.isItemChecked(position)  == true && total <= 1){
-            it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(position));
-            setResult(RESULT_OK,it);
-            total = 0;
-        }else if(total > 1){
-            setResult(RESULT_CANCELED,it);
-            Snackbar.make(getListView(), "Selecionar apenas 1 disciplina", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            total = 0;
+        if(totaldisciplinaMarcada > 1){
+            Snackbar.make(getListView(),"Selecionar apenas 1 disciplina" , Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            totaldisciplinaMarcada = 0;
+        }else if(totaldisciplinaMarcada == 0){
+            //              DELETE DISCIPLINA ou não fez nada
+
+
+            for(int i=0;i < listView.getCount();i++){
+
+                if(codigoDisciplinaTroca != null){
+                    //              DELETE DISCIPLINA
+
+                    it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(i));
+                    it.putExtra("tipo","delete");
+                    setResult(RESULT_OK,it);
+                    Snackbar.make(getListView(), "Delete", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
+                }else if(codigoDisciplinaTroca == null){
+
+                    it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(i));
+                    it.putExtra("tipo","update0");
+                    setResult(RESULT_OK,it);
+                    Snackbar.make(getListView(), "Não selecionou nada..", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
+                }
+
+            }
+
+            totaldisciplinaMarcada = 0;
+        }else if(totaldisciplinaMarcada == 1){
+
+            for(int i=0;i < listView.getCount();i++){
+
+                if(listView.isItemChecked(i) == true && codigoDisciplinaTroca == null){
+                    //              INSERT DISCIPLINA
+
+                    it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(i));
+                    it.putExtra("tipo","insert");
+                    setResult(RESULT_OK,it);
+                    totaldisciplinaMarcada = 0;
+                    Snackbar.make(getListView(), "insert", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }else  if(listView.isItemChecked(i) == true && codigoDisciplinaTroca != null && !listaDisciplinas.get(i).getCodigo().toString().equals(codigoDisciplinaTroca) ){
+                    //              UPDATE DISCIPLINA
+
+                    it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(i));
+                    it.putExtra("tipo","update");
+                    setResult(RESULT_OK,it);
+                    totaldisciplinaMarcada = 0;
+                    Snackbar.make(getListView(), "update", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }else  if(listView.isItemChecked(i) == true && codigoDisciplinaTroca != null && listaDisciplinas.get(i).getCodigo().toString().equals(codigoDisciplinaTroca) ){
+                    //             NÃO FEZ ALTERAÇÃO DISCIPLINA
+
+                    it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(i));
+                    it.putExtra("tipo","update0");
+                    setResult(RESULT_OK,it);
+                    totaldisciplinaMarcada = 0;
+                    Snackbar.make(getListView(), "Não fez alterações", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }
+
+            }
+
+            totaldisciplinaMarcada = 0;
         }
+
+
 
         listView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
                 if(keyCode == KeyEvent.KEYCODE_BACK){
-
                     finish();
-
                 }
-
                 return false;
             }
         });
+
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        verificaSelecao();
 
     }
 
@@ -166,12 +228,10 @@ public class ListaDisciplinasUsuario extends ListActivity {
 
                         }
 
-
-
                     }
 
                 }catch(Exception e){
-                    Toast.makeText(ListaDisciplinasUsuario.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ListaDisciplinasUsuario.this, R.string.message_alerta_webservice, Toast.LENGTH_SHORT).show();
                 }
 
             }

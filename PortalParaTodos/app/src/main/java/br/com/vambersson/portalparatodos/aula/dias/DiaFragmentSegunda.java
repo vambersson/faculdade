@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import br.com.vambersson.portalparatodos.main.MainActivity;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 import static android.app.Activity.RESULT_OK;
+import static java.lang.Thread.sleep;
 
 /**
  * Created by Vambersson on 05/06/2017.
@@ -83,32 +85,42 @@ public class DiaFragmentSegunda extends Fragment {
         btn_aula1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ordem_selecao = 1;
-                disciplinaUsuario();
+
+                if(usuario.getTipo().equals("P")){
+                    ordem_selecao = 1;
+                    disciplinaUsuario();
+                }
             }
         });
         btn_aula2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ordem_selecao = 2;
-                disciplinaUsuario();
+                if(usuario.getTipo().equals("P")){
+                    ordem_selecao = 2;
+                    disciplinaUsuario();
+                }
             }
         });
         btn_aula3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ordem_selecao = 3;
-                disciplinaUsuario();
+                if(usuario.getTipo().equals("P")){
+                    ordem_selecao = 3;
+                    disciplinaUsuario();
+                }
+
             }
         });
         btn_aula4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ordem_selecao = 4;
-                disciplinaUsuario();
+                if(usuario.getTipo().equals("P")){
+                    ordem_selecao = 4;
+                    disciplinaUsuario();
+                }
+
             }
         });
-
 
         if(savedInstanceState != null){
             usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
@@ -119,6 +131,7 @@ public class DiaFragmentSegunda extends Fragment {
 
         return view;
     }
+
 
     private void resultadoOrdemSelecao(String nome,int numero){
 
@@ -151,12 +164,30 @@ public class DiaFragmentSegunda extends Fragment {
 
         new ClasseSavarDisciplinaSelecionada().execute(usuario);
         Snackbar.make(getView(), "Salvando...", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-        ordem_selecao = 0;
 
     }
 
     private void carregarDisciplinas(){
-        new ClasseListaDisciplinasDasAulas().execute(usuario);
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while(true){
+                    new ClasseListaDisciplinasDasAulas().execute(usuario);
+
+                    try {
+                        sleep(50000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
+        thread.start();
+
     }
 
     class ClasseSavarDisciplinaSelecionada extends AsyncTask<Usuario, Void,String> {
@@ -215,6 +246,7 @@ public class DiaFragmentSegunda extends Fragment {
 
         }
 
+
         it.putExtra(ListaDisciplinasUsuario.EXTRA_USUARIO ,usuario);
         startActivityForResult(it,REQUEST_DISCIPLINA);
 
@@ -228,7 +260,7 @@ public class DiaFragmentSegunda extends Fragment {
             String obj = "";
 
             try {
-                HttpURLConnection conexao = NetworkUtil.abrirConexao("disciplinasDasAulas="+params[0].getFaculdade().getCodigo() +"=" +params[0].getCodigo()+"="+NUMERO_DIA,"GET",false);
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("disciplinasDasAulas="+params[0].getFaculdade().getCodigo() +"=" +params[0].getCodigo()+"="+NUMERO_DIA+"="+params[0].getTipo(),"GET",false);
 
                 if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
                     InputStream is = conexao.getInputStream();
@@ -250,7 +282,7 @@ public class DiaFragmentSegunda extends Fragment {
 
             if("[]".equals(result)){
 
-                Toast.makeText(getActivity() ,getResources().getString(R.string.message_alerta_disciplina_cadastrada), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity() ,getResources().getString(R.string.message_alerta_disciplina_cadastrada), Toast.LENGTH_LONG).show();
 
             }else if(!"".equals(result)){
                 Gson gson = new Gson();
@@ -263,11 +295,10 @@ public class DiaFragmentSegunda extends Fragment {
                     for(int i = 0; i < temp.size(); i++){
 
                         resultadoOrdemSelecao(temp.get(i).getNome(),temp.get(i).getOrdem());
-
                     }
 
                 }catch(Exception e){
-                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.message_alerta_webservice, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -284,14 +315,94 @@ public class DiaFragmentSegunda extends Fragment {
 
     }
 
+    private void removerAula(){
+
+        for(int i=0;i< listaDisciplina.size();i++){
+            if(ordem_selecao == listaDisciplina.get(i).getOrdem()){
+                usuario.setDisciplina(listaDisciplina.get(i));
+            }
+        }
+
+        new ClasseRemoverdaAula().execute(usuario);
+    }
+
+    class ClasseRemoverdaAula extends AsyncTask<Usuario, Void,String> {
+
+        @Override
+        protected String doInBackground(Usuario... params) {
+            String obj ="";
+            Gson gson = new Gson();
+            try {
+                HttpURLConnection conexao = NetworkUtil.abrirConexao("removerDisciplinaSelecionadaAula","POST",true);
+
+                OutputStream out = conexao.getOutputStream();
+
+                out.write(gson.toJson(params[0]).getBytes());
+                out.flush();
+                out.close();
+
+                if(conexao.getResponseCode() == HttpURLConnection.HTTP_OK){
+                    InputStream is = conexao.getInputStream();
+                    obj = NetworkUtil.streamToString(is);
+                    conexao.disconnect();
+                }
+
+                return obj;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            if(result.equals("1")){
+                carregarDisciplinas();
+                resultadoOrdemSelecao(getResources().getString(R.string.horario_selecione_disciplina),ordem_selecao);
+                Snackbar.make(getView(), "Disciplina removida com sucesso!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+            }
+
+        }
+
+    }
+
+    private void tiposAlteracao(String tipo,Disciplina dis){
+        switch (tipo){
+
+            case "insert":
+                dis.setSelecionou("S");
+                salvardisciplina(dis);
+                break;
+            case "delete":
+                removerAula();
+                Snackbar.make(getView(), "okokok delete", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                break;
+            case "update":
+                Snackbar.make(getView(), "okokok update", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                break;
+            default:
+                break;
+
+        }
+
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if(requestCode == REQUEST_DISCIPLINA && resultCode == RESULT_OK){
+
             disciplina = new Disciplina();
+            String tipo = data.getStringExtra("tipo");
             disciplina = (Disciplina) data.getSerializableExtra(ListaDisciplinasUsuario.EXTRA_RESULTADO);
-            disciplina.setSelecionou("S");
-            salvardisciplina(disciplina);
+
+            tiposAlteracao(tipo,disciplina);
 
         }
 
@@ -300,4 +411,9 @@ public class DiaFragmentSegunda extends Fragment {
 
 
     }
+
+
+
+
+
 }

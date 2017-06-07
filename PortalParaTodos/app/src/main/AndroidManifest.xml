@@ -37,7 +37,8 @@
             android:label="@string/app_name_bem_vindo"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.ListaDisciplina" />
-        <activity android:name=".aula.disciplina.ListaDisciplinasUsuario"/>
+        <activity android:name=".aula.disciplina.ListaDisciplinasUsuario"
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".activity.ActivityPage"
             android:theme="@style/AppTheme.NoActionBar"
