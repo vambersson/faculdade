@@ -5,6 +5,8 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -18,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import br.com.vambersson.portalparatodos.R;
-import br.com.vambersson.portalparatodos.aula.horario.HorarioAula;
 import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
@@ -29,12 +30,13 @@ import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 public class ListaDisciplinasUsuario extends ListActivity {
 
+    public static final String EXTRA_DISCIPLINA_TROCA = "troca";
     public static final String EXTRA_RESULTADO = "selecionada";
     public static final String EXTRA_USUARIO = "usuario";
 
-    private String disciplina_selecionada="";
-
     private Usuario usuario;
+    private String codigoDisciplinaTroca = "";
+    private  int total = 0;
 
     private ListView listView;
     private ArrayAdapter<String> adapter;
@@ -51,6 +53,7 @@ public class ListaDisciplinasUsuario extends ListActivity {
             usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
         }else{
             usuario = (Usuario) getIntent().getSerializableExtra(EXTRA_USUARIO);
+            codigoDisciplinaTroca = getIntent().getStringExtra(EXTRA_DISCIPLINA_TROCA);
         }
 
         adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_single_choice);
@@ -58,7 +61,7 @@ public class ListaDisciplinasUsuario extends ListActivity {
         listView = getListView();
         listView.setAdapter(adapter);
 
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         new ClasseListaDisciplinas().execute(usuario);
 
@@ -74,15 +77,38 @@ public class ListaDisciplinasUsuario extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
+        for(int i=0;i < listView.getCount();i++){
+            if(listView.isItemChecked(i)){
+                total ++;
+            }
+        }
+
         Intent it = new Intent();
-        it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(position));
-        setResult(RESULT_OK,it);
-        finish();
+        if(listView.isItemChecked(position)  == true && total <= 1){
+            it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(position));
+            setResult(RESULT_OK,it);
+            total = 0;
+        }else if(total > 1){
+            setResult(RESULT_CANCELED,it);
+            Snackbar.make(getListView(), "Selecionar apenas 1 disciplina", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            total = 0;
+        }
 
+        listView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
 
+                if(keyCode == KeyEvent.KEYCODE_BACK){
+
+                    finish();
+
+                }
+
+                return false;
+            }
+        });
 
     }
-
 
     class ClasseListaDisciplinas extends AsyncTask<Usuario, Void,String> {
 
@@ -115,7 +141,7 @@ public class ListaDisciplinasUsuario extends ListActivity {
 
             if("[]".equals(result)){
 
-                Toast.makeText(ListaDisciplinasUsuario.this ,getResources().getString(R.string.message_alerta_disciplina_cadastrada), Toast.LENGTH_LONG).show();
+                //Toast.makeText(ListaDisciplinasUsuario.this ,getResources().getString(R.string.message_alerta_disciplina_cadastrada), Toast.LENGTH_LONG).show();
 
             }else if(!"".equals(result)){
                 Gson gson = new Gson();
@@ -130,22 +156,25 @@ public class ListaDisciplinasUsuario extends ListActivity {
                     for (int i = 0;i < temp.size();i++){
 
                         adapter.add(temp.get(i).getPeriodo() +" "+ temp.get(i).getNome());
+                        adapter.notifyDataSetChanged();
+
+                        if(codigoDisciplinaTroca != null){
+
+                            if(Integer.parseInt(codigoDisciplinaTroca) == temp.get(i).getCodigo()){
+                                listView.setItemChecked(i,true);
+                            }
+
+                        }
+
+
+
                     }
-                    adapter.notifyDataSetChanged();
 
                 }catch(Exception e){
                     Toast.makeText(ListaDisciplinasUsuario.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }
-
-
-
-
-
-
-
-
 
         }
 

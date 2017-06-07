@@ -32,8 +32,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import br.com.vambersson.portalparatodos.aula.adapter.DiasHorarioAdapter;
 import br.com.vambersson.portalparatodos.R;
+import br.com.vambersson.portalparatodos.aula.disciplina.ListaDisciplinasUsuario;
+import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
 import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
@@ -181,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_perfil) {
 
             if(usuario.getTipo().equals("A")){
-                startFragment("FragmentCadastroAluno");
+                startFragment("FragmentCadastroUsuario");
             }else if(usuario.getTipo().equals("P")){
                 startFragment("ActivityPage");
             }
@@ -204,6 +210,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         container_ViewPager.setAdapter(adapter);
 
     }
+
+
 
 
     class ClasseAtualizarFotoUsuario extends AsyncTask<Usuario, Void,String> {

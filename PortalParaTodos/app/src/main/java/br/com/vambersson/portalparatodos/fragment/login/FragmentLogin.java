@@ -309,7 +309,7 @@ public class FragmentLogin extends Fragment {
 
                         if(user.getTipo().equals("A")){
                             usuario =  user;
-                            startFragment("FragmentCadastroAluno"); // Fragment  =  usuario_cadastro_fragment
+                            startFragment("FragmentCadastroUsuario"); // Fragment  =  usuario_cadastro_fragment
                         }else if(user.getTipo().equals("P")){
                             usuario =  user;
                             startFragment("ActivityPage"); // Fragment  =  usuario_cadastro_professor_fragment
@@ -453,7 +453,7 @@ public class FragmentLogin extends Fragment {
 
                         if(user.getTipo().equals("A")){
                             usuario =  user;
-                            startFragment("FragmentCadastroAluno"); // Fragment  =  usuario_cadastro_fragment
+                            startFragment("FragmentCadastroUsuario"); // Fragment  =  usuario_cadastro_fragment
                         }else if(user.getTipo().equals("P")){
                             usuario =  user;
                             startFragment("ActivityPage"); // Fragment  =  usuario_cadastro_professor_fragment

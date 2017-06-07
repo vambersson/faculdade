@@ -11,7 +11,7 @@ import br.com.vambersson.portalparatodos.R;
 
 import br.com.vambersson.portalparatodos.activity.ActivityPage;
 import br.com.vambersson.portalparatodos.base.Usuario;
-import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCadastroAluno;
+import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCadastroUsuario;
 import br.com.vambersson.portalparatodos.fragment.login.FragmentLogin;
 import br.com.vambersson.portalparatodos.fragment.splash.SplashScreen;
 
@@ -60,9 +60,9 @@ public class GerenciadorFragment extends AppCompatActivity {
                SplashScreen fragment = new SplashScreen();
                ft.replace(R.id.activity_content_fragment, fragment);
 
-           }else if(CodigoFragment.equals("FragmentCadastroAluno") ){
+           }else if(CodigoFragment.equals("FragmentCadastroUsuario") ){
 
-               FragmentCadastroAluno fragment = new FragmentCadastroAluno();
+               FragmentCadastroUsuario fragment = new FragmentCadastroUsuario();
                ft.replace(R.id.activity_content_fragment, fragment);
 
            }else if(CodigoFragment.equals("ActivityPage") ){

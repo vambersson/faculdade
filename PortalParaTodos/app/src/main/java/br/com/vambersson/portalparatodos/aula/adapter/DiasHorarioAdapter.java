@@ -11,7 +11,6 @@ import br.com.vambersson.portalparatodos.aula.dias.DiaFragmentSabado;
 import br.com.vambersson.portalparatodos.aula.dias.DiaFragmentSegunda;
 import br.com.vambersson.portalparatodos.aula.dias.DiaFragmentSexta;
 import br.com.vambersson.portalparatodos.aula.dias.DiaFragmentTerca;
-import br.com.vambersson.portalparatodos.aula.horario.HorarioAula;
 
 /**
  * Created by Vambersson on 04/06/2017.

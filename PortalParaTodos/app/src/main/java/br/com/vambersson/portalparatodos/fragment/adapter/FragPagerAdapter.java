@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCadastroAluno;
+import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCadastroUsuario;
 import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCursoLista;
 import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentDisciplinaLista;
 
@@ -26,7 +26,7 @@ public class FragPagerAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                return FragmentCadastroAluno.getInstancia();
+                return FragmentCadastroUsuario.getInstancia();
             case 1:
                 return FragmentCursoLista.getInstancia();
             case 2:

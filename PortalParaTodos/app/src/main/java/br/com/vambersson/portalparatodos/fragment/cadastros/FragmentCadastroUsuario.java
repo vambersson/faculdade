@@ -51,7 +51,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by Vambersson on 19/05/2017.
  */
 
-public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
+public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
 
     private static final int REQUEST_FOTO = 100;
     private static final int REQUEST_DICIPLINA = 101;
@@ -88,11 +88,11 @@ public class FragmentCadastroAluno extends android.support.v4.app.Fragment {
     private Button perfil_btn_Idlista_disciplina;
 
 
-    private static FragmentCadastroAluno instancia;
+    private static FragmentCadastroUsuario instancia;
 
-    public static FragmentCadastroAluno  getInstancia(){
+    public static FragmentCadastroUsuario  getInstancia(){
        if(instancia == null){
-           instancia = new FragmentCadastroAluno();
+           instancia = new FragmentCadastroUsuario();
        }
        return instancia;
     }
