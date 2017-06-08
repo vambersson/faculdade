@@ -87,7 +87,7 @@ public class ListaDisciplinasUsuario extends ListActivity {
 
         if(totaldisciplinaMarcada > 1){
             it.putExtra("tipo","update0");
-            Snackbar.make(getListView(),"Selecionar apenas 1 disciplina" , Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            Snackbar.make(getListView(),"Selecionar apenas uma disciplina!" , Snackbar.LENGTH_LONG).setAction("Action", null).show();
             totaldisciplinaMarcada = 0;
         }else if(totaldisciplinaMarcada == 0){
             //              DELETE DISCIPLINA ou não fez nada
@@ -104,7 +104,7 @@ public class ListaDisciplinasUsuario extends ListActivity {
 
                 }else if(codigoDisciplinaTroca == null){
                     it.putExtra("tipo","update0");
-                    Snackbar.make(getListView(), "Não selecionou nada..", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(getListView(), "Não selecionou nada...", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
                 }
 
@@ -121,19 +121,19 @@ public class ListaDisciplinasUsuario extends ListActivity {
                     it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(i));
                     it.putExtra("tipo","insert");
                     totaldisciplinaMarcada = 0;
-                    Snackbar.make(getListView(), "insert", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(getListView(), "Insert", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }else  if(listView.isItemChecked(i) == true && codigoDisciplinaTroca != null && !listaDisciplinas.get(i).getCodigo().toString().equals(codigoDisciplinaTroca) ){
                     //              UPDATE DISCIPLINA
 
                     it.putExtra(EXTRA_RESULTADO,listaDisciplinas.get(i));
                     it.putExtra("tipo","update");
                     totaldisciplinaMarcada = 0;
-                    Snackbar.make(getListView(), "update", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(getListView(), "Update", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }else  if(listView.isItemChecked(i) == true && codigoDisciplinaTroca != null && listaDisciplinas.get(i).getCodigo().toString().equals(codigoDisciplinaTroca) ){
                     //             NÃO FEZ ALTERAÇÃO DISCIPLINA
                     it.putExtra("tipo","update0");
                     totaldisciplinaMarcada = 0;
-                    Snackbar.make(getListView(), "Não fez alterações", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(getListView(), "Não fez alterações!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
 
             }

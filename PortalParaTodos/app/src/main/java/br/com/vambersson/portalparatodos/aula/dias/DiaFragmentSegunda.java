@@ -55,6 +55,7 @@ public class DiaFragmentSegunda extends Fragment {
     private List<Disciplina> listaDisciplina;
 
     private Thread thread;
+    private String tiposAlteracaoAula = "";
 
     private  int ordem_selecao = 0;
 
@@ -168,6 +169,7 @@ public class DiaFragmentSegunda extends Fragment {
 
     private void salvardisciplina(Disciplina dis){
 
+        dis.setSelecionou("S");
         dis.setOrdem(ordem_selecao);
         dis.setNumerodia(NUMERO_DIA);
         usuario.getCurso().setCodigo(dis.getCurso().getCodigo());
@@ -186,10 +188,11 @@ public class DiaFragmentSegunda extends Fragment {
             public void run() {
 
                 while(true){
+
                     new ClasseListaDisciplinasDasAulas().execute(usuario);
 
                     try {
-                        sleep(50000);
+                        sleep(40000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -238,8 +241,14 @@ public class DiaFragmentSegunda extends Fragment {
             super.onPostExecute(result);
 
             if(result.equals("1")){
+
+                if(tiposAlteracaoAula.equals("update")){
+                    Snackbar.make(getView(), "Disciplina Atualizada com sucesso!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                }else  if(tiposAlteracaoAula.equals("insert")){
+                    Snackbar.make(getView(), "Disciplina salva com sucesso!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
+                }
                 carregarDisciplinas();
-                Snackbar.make(getView(), "Disciplina salva com sucesso!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             }
 
         }
@@ -379,9 +388,20 @@ public class DiaFragmentSegunda extends Fragment {
             super.onPostExecute(result);
 
             if(result.equals("1")){
-                carregarDisciplinas();
-                resultadoOrdemSelecao(getResources().getString(R.string.horario_selecione_disciplina),ordem_selecao);
-                Snackbar.make(getView(), "Disciplina removida com sucesso!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
+                if(tiposAlteracaoAula.equals("update")){
+
+                    salvardisciplina(disciplina);
+
+                }else  if(tiposAlteracaoAula.equals("delete")){
+
+                    carregarDisciplinas();
+                    resultadoOrdemSelecao(getResources().getString(R.string.horario_selecione_disciplina),ordem_selecao);
+                    Snackbar.make(getView(), "Disciplina removida com sucesso!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
+                    tiposAlteracaoAula = "";
+                }
+
             }
 
         }
@@ -392,14 +412,13 @@ public class DiaFragmentSegunda extends Fragment {
         switch (tipo){
 
             case "insert":
-                dis.setSelecionou("S");
                 salvardisciplina(dis);
                 break;
             case "delete":
                 removerAula();
                 break;
             case "update":
-                Snackbar.make(getView(), "okokok update", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                removerAula();
                 break;
             default:
                 break;
@@ -415,10 +434,10 @@ public class DiaFragmentSegunda extends Fragment {
         if(requestCode == REQUEST_DISCIPLINA && resultCode == RESULT_OK){
 
             disciplina = new Disciplina();
-            String tipo = data.getStringExtra("tipo");
+            tiposAlteracaoAula = data.getStringExtra("tipo");
             disciplina = (Disciplina) data.getSerializableExtra(ListaDisciplinasUsuario.EXTRA_RESULTADO);
 
-            tiposAlteracao(tipo,disciplina);
+            tiposAlteracao(tiposAlteracaoAula,disciplina);
 
         }
 

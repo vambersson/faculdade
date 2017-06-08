@@ -74,7 +74,7 @@
         android:layout_toRightOf="@+id/linearLayout1"
         android:layout_below="@+id/linearLayout_title">
 
-        <TextView
+        <Button
             android:id="@+id/btn_aula1"
             android:text="@string/horario_selecione_disciplina"
             android:textAppearance="?android:attr/textAppearanceSmall"

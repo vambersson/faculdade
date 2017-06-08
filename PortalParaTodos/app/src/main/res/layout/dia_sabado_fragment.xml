@@ -69,11 +69,11 @@
         android:layout_height="match_parent"
         android:columnCount="1"
         android:rowCount="4"
-        android:layout_toEndOf="@+id/linearLayout1"
-        android:layout_toRightOf="@+id/linearLayout1"
-        android:layout_below="@+id/linearLayout_title">
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
 
-        <TextView
+        <Button
             android:id="@+id/btn_aula1"
             android:text="@string/horario_selecione_disciplina"
             android:textAppearance="?android:attr/textAppearanceSmall"
