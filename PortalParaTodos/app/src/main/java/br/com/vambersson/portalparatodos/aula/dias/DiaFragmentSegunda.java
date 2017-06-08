@@ -40,7 +40,7 @@ import static java.lang.Thread.sleep;
 
 public class DiaFragmentSegunda extends Fragment {
 
-    private static final int REQUEST_DISCIPLINA = 101;
+    private static final int REQUEST_DISCIPLINA = 102;
     private final int NUMERO_DIA = 2;
 
     private Button btn_aula1;
@@ -142,7 +142,6 @@ public class DiaFragmentSegunda extends Fragment {
         btn_aula3.setText(R.string.horario_selecione_disciplina);
         btn_aula4.setText(R.string.horario_selecione_disciplina);
     }
-
 
     private void resultadoOrdemSelecao(String nome,int numero){
 
