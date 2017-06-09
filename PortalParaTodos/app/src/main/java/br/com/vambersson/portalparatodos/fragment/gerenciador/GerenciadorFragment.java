@@ -27,8 +27,12 @@ public class GerenciadorFragment extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        usuario = (Usuario) getIntent().getSerializableExtra("usuario");
+       Usuario usuarioAlterar = (Usuario) getIntent().getSerializableExtra("usuarioAlterar");
+        if(usuarioAlterar != null){
+            usuario = usuarioAlterar;
+        }else{
+            usuario = (Usuario) getIntent().getSerializableExtra("usuario");
+        }
 
 
         String CodigoFragment = getIntent().getStringExtra("CodigoFragment");
@@ -76,6 +80,18 @@ public class GerenciadorFragment extends AppCompatActivity {
 
                FragmentLogin fragment = new FragmentLogin();
 
+               ft.replace(R.id.activity_content_fragment, fragment);
+
+           }else if(CodigoFragment.equals("ActivityPageAlterar") ){
+
+               Intent it = new Intent(this,ActivityPage.class);
+               it.putExtra("usuario",usuario);
+               startActivity(it);
+               finish();
+
+           }else if(CodigoFragment.equals("FragmentCadastroUsuarioAlterar") ){
+
+               FragmentCadastroUsuario fragment = new FragmentCadastroUsuario();
                ft.replace(R.id.activity_content_fragment, fragment);
 
            }

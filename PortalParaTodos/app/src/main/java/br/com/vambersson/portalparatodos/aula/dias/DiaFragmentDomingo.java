@@ -1,11 +1,16 @@
 package br.com.vambersson.portalparatodos.aula.dias;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +31,7 @@ import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.aula.disciplina.ListaDisciplinasUsuario;
 import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.base.Usuario;
+import br.com.vambersson.portalparatodos.main.MainActivity;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 import static android.app.Activity.RESULT_OK;
@@ -307,6 +313,24 @@ public class DiaFragmentDomingo extends Fragment {
                     Disciplina[] lista =  gson.fromJson(result, Disciplina[].class);
 
                     List<Disciplina> temp = new ArrayList<Disciplina>(Arrays.asList(lista) );
+
+                    if(usuario.getTipo().equals("A") && !listaDisciplina.equals(null)){
+
+                        if(temp.size() != listaDisciplina.size()){
+                            notificacaoAgendaAula();
+                        }else if(temp.size() == listaDisciplina.size()){
+                            for(int i=0;i < temp.size();i++ ){
+                                if(temp.get(i).getOrdem() == listaDisciplina.get(i).getOrdem() && temp.get(i).getCodigo() != listaDisciplina.get(i).getOrdem() ){
+                                    notificacaoAgendaAula();
+                                }else
+                                if(temp.get(i).getOrdem() != listaDisciplina.get(i).getOrdem() && temp.get(i).getCodigo() != listaDisciplina.get(i).getOrdem() ){
+                                    notificacaoAgendaAula();
+                                }
+
+                            }
+                        }
+                    }
+
                     listaDisciplina = temp;
                     btn_Texto_padeao();
                     for(int i = 0; i < temp.size(); i++){
@@ -443,8 +467,29 @@ public class DiaFragmentDomingo extends Fragment {
 
     }
 
+    private void notificacaoAgendaAula(){
 
+//        só notifica com o app aberto
 
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity())
+                .setSmallIcon(android.R.drawable.ic_dialog_email)
+                .setContentTitle("Portal Acadêmico")
+                .setContentText("Teve auteração na sua agenda de aula de ");
+
+        Intent resultIntent = new Intent();
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
+        stackBuilder.addNextIntent(resultIntent);
+
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mNotificationManager.notify(300, mBuilder.build());
+
+    }
 
 
 

@@ -1,17 +1,21 @@
 package br.com.vambersson.portalparatodos.main;
 
+
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,7 +26,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,14 +35,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import br.com.vambersson.portalparatodos.aula.adapter.DiasHorarioAdapter;
 import br.com.vambersson.portalparatodos.R;
-import br.com.vambersson.portalparatodos.aula.disciplina.ListaDisciplinasUsuario;
-import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
 import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
@@ -84,10 +82,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                                .setSmallIcon(android.R.drawable.ic_dialog_email)
+                                .setContentTitle("Portal Acadêmico")
+                                .setContentText("Teve auteração na sua agenda de aula!");
+
+                Intent resultIntent = new Intent();
+
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(MainActivity.this);
+                stackBuilder.addNextIntent(resultIntent);
+
+                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                mBuilder.setContentIntent(resultPendingIntent);
+
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                mNotificationManager.notify(30, mBuilder.build());
+
             }
         });
 
@@ -187,9 +203,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_perfil) {
 
             if(usuario.getTipo().equals("A")){
-                startFragment("FragmentCadastroUsuario");
+                startFragment("FragmentCadastroUsuarioAlterar");
             }else if(usuario.getTipo().equals("P")){
-                startFragment("ActivityPage");
+                startFragment("ActivityPageAlterar");
             }
 
         } else if (id == R.id.nav_share) {
