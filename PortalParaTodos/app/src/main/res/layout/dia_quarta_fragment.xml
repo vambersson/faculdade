@@ -11,6 +11,7 @@
 
         <TextView
             android:id="@+id/tv_dia"
+            android:text="@string/dia_tv_quarta"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_width="match_parent"
