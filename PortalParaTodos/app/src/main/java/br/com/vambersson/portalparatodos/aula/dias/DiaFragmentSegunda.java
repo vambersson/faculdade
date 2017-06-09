@@ -323,7 +323,7 @@ public class DiaFragmentSegunda extends Fragment {
                     }
 
                 }catch(Exception e){
-                    Toast.makeText(getActivity(), R.string.message_alerta_webservice, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), R.string.message_alerta_webservice, Toast.LENGTH_SHORT).show();
                 }
 
             }

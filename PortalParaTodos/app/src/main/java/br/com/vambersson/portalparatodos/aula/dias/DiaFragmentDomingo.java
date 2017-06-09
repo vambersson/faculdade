@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,7 @@ public class DiaFragmentDomingo extends Fragment {
         btn_aula2 = (Button) view.findViewById(R.id.btn_aula2);
         btn_aula3 = (Button) view.findViewById(R.id.btn_aula3);
         btn_aula4 = (Button) view.findViewById(R.id.btn_aula4);
+
 
         tv_dia = (TextView) view.findViewById(R.id.tv_dia);
 
@@ -344,18 +346,10 @@ public class DiaFragmentDomingo extends Fragment {
                     }
 
                 }catch(Exception e){
-                    Toast.makeText(getActivity(), R.string.message_alerta_webservice, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), R.string.message_alerta_webservice, Toast.LENGTH_SHORT).show();
                 }
 
             }
-
-
-
-
-
-
-
-
 
         }
 
