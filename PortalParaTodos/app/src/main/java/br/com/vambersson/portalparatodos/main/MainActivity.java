@@ -35,6 +35,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import br.com.vambersson.portalparatodos.aula.adapter.DiasHorarioAdapter;
 import br.com.vambersson.portalparatodos.R;
@@ -86,23 +88,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
 
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
-                                .setSmallIcon(android.R.drawable.ic_dialog_email)
-                                .setContentTitle("Portal Acadêmico")
-                                .setContentText("Teve auteração na sua agenda de aula!");
-
-                Intent resultIntent = new Intent();
-
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(MainActivity.this);
-                stackBuilder.addNextIntent(resultIntent);
-
-                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                mBuilder.setContentIntent(resultPendingIntent);
-
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                mNotificationManager.notify(30, mBuilder.build());
+//                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+//                                .setSmallIcon(android.R.drawable.ic_dialog_email)
+//                                .setContentTitle("Portal Acadêmico")
+//                                .setContentText("Teve auteração na sua agenda de aula!");
+//
+//                Intent resultIntent = new Intent();
+//
+//                TaskStackBuilder stackBuilder = TaskStackBuilder.create(MainActivity.this);
+//                stackBuilder.addNextIntent(resultIntent);
+//
+//                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                mBuilder.setContentIntent(resultPendingIntent);
+//
+//                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//                mNotificationManager.notify(30, mBuilder.build());
 
             }
         });
@@ -124,9 +126,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(usuario != null){
             header_img_foto.setImageBitmap(byteToBitmap(usuario.getFoto()));
+            header_tv_nome.setText(usuario.getNome());
         }
 
-        header_tv_nome.setText(usuario.getNome());
+
 
         if(usuario.getTipo().equals("A")){
             header_tv_curso_fuculdade.setText(usuario.getCurso().getNome());
@@ -224,6 +227,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         container_ViewPager = (ViewPager) findViewById(R.id.container_ViewPager_main);
         adapter = new DiasHorarioAdapter(getSupportFragmentManager());
         container_ViewPager.setAdapter(adapter);
+
+        SimpleDateFormat sdf_ = new SimpleDateFormat("EEEE");
+        Date date = new Date();
+        String dayName = sdf_.format(date);
+
+        container_ViewPager.setCurrentItem(2);
+
+
+
+        //tabs_layout.getTabAt(1).select();
+
+        switch (dayName){
+            case "domingo":
+                container_ViewPager.setCurrentItem(0);
+                break;
+            case "segunda-feira":
+                container_ViewPager.setCurrentItem(1);
+                break;
+            case "terça-feira":
+                container_ViewPager.setCurrentItem(2);
+                break;
+            case "quarta-feira":
+                container_ViewPager.setCurrentItem(3);
+                break;
+            case "quinta-feira":
+                container_ViewPager.setCurrentItem(4);
+                break;
+            case "sexta-feira":
+                container_ViewPager.setCurrentItem(5);
+                break;
+            case "sabado":
+                container_ViewPager.setCurrentItem(6);
+                break;
+            default:
+                break;
+        }
+
+        switch (dayName){
+            case "Sunday":
+                container_ViewPager.setCurrentItem(0);
+                break;
+            case "Monday":
+                container_ViewPager.setCurrentItem(1);
+                break;
+            case "Tuesday":
+                container_ViewPager.setCurrentItem(2);
+                break;
+            case "Wednesday":
+                container_ViewPager.setCurrentItem(3);
+                break;
+            case "Thursday":
+                container_ViewPager.setCurrentItem(4);
+                break;
+            case "Friday":
+                container_ViewPager.setCurrentItem(5);
+                break;
+            case "Saturday":
+                container_ViewPager.setCurrentItem(6);
+                break;
+            default:
+                break;
+        }
 
     }
 

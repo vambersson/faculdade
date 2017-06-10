@@ -19,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.util.List;
 
 import br.com.vambersson.portalparatodos.R;
+import br.com.vambersson.portalparatodos.activity.ActivityPage;
 import br.com.vambersson.portalparatodos.base.Curso;
 import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentCursoLista;
 import br.com.vambersson.portalparatodos.fragment.cadastros.FragmentDisciplinaLista;
@@ -73,6 +74,9 @@ public class CursoAdapter extends BaseAdapter {
         tv_nome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Rola a tela para a lista de disciplina
+                ActivityPage.container_ViewPager.setCurrentItem(2,true);
 
                 FragmentDisciplinaLista.consulta_disciplina = true;
                 FragmentDisciplinaLista.faculdade_selecionada = curso.getFaculdade().getCodigo();

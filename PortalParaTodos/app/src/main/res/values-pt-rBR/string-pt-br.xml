@@ -3,6 +3,20 @@
 
 
 
+    <!-- Tela Dias da semana                                     -->
+
+    <string name="horario_selecione_disciplina">Selecione sua disciplina</string>
+
+    <string name="dia_tv_domingo">Domingo</string>
+    <string name="dia_tv_segunda">Segunda</string>
+    <string name="dia_tv_terca">Terça</string>
+    <string name="dia_tv_quarta">Quarta</string>
+    <string name="dia_tv_quinta">Quinta</string>
+    <string name="dia_tv_sexta">Sexta</string>
+    <string name="dia_tv_sabado">Sábado</string>
+
+
+
 
 
 </resources>
