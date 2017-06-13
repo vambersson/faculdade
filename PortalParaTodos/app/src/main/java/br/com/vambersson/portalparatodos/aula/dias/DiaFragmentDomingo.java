@@ -1,12 +1,20 @@
 package br.com.vambersson.portalparatodos.aula.dias;
 
+import android.app.Activity;
+
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -140,7 +148,7 @@ public class DiaFragmentDomingo extends Fragment {
     }
 
 
-    private void btn_Texto_padeao(){
+    private void btn_Texto_padrao(){
 
         btn_aula1.setText(R.string.horario_selecione_disciplina);
         btn_aula2.setText(R.string.horario_selecione_disciplina);
@@ -181,7 +189,6 @@ public class DiaFragmentDomingo extends Fragment {
         usuario.setFoto(null);
 
         new ClasseSavarDisciplinaSelecionada().execute(usuario);
-        Snackbar.make(getView(), "Salvando...", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
     }
 
@@ -247,9 +254,9 @@ public class DiaFragmentDomingo extends Fragment {
             if(result.equals("1")){
 
                 if(tiposAlteracaoAula.equals("update")){
-                    Snackbar.make(getView(), "Disciplina Atualizada com sucesso!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                    Snackbar.make(getView(), getResources().getString(R.string.message_alerta_disciplina_Updating_Successfully), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 }else  if(tiposAlteracaoAula.equals("insert")){
-                    Snackbar.make(getView(), "Disciplina salva com sucesso!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                    Snackbar.make(getView(),getResources().getString(R.string.message_alerta_disciplina_Saving_successfully), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
                 }
                 carregarDisciplinas();
@@ -263,17 +270,59 @@ public class DiaFragmentDomingo extends Fragment {
 
         Intent it = new Intent(getActivity(), ListaDisciplinasUsuario.class);
 
-        for(int i=0;i< listaDisciplina.size();i++){
 
-            if(ordem_selecao == listaDisciplina.get(i).getOrdem()){
-                it.putExtra(ListaDisciplinasUsuario.EXTRA_DISCIPLINA_TROCA,listaDisciplina.get(i).getCodigo().toString());
+        if( (!btn_aula1.getText().toString().equals(getResources().getString(R.string.horario_selecione_disciplina)))  ){
+
+            for(int i=0;i< listaDisciplina.size();i++){
+
+                if(ordem_selecao == listaDisciplina.get(i).getOrdem()){
+                    it.putExtra(ListaDisciplinasUsuario.EXTRA_DISCIPLINA_TROCA,listaDisciplina.get(i).getCodigo().toString());
+
+                }
+
+            }
+
+        }
+        if( (!btn_aula2.getText().toString().equals(getResources().getString(R.string.horario_selecione_disciplina)))  ){
+
+            for(int i=0;i< listaDisciplina.size();i++){
+
+                if(ordem_selecao == listaDisciplina.get(i).getOrdem()){
+                    it.putExtra(ListaDisciplinasUsuario.EXTRA_DISCIPLINA_TROCA,listaDisciplina.get(i).getCodigo().toString());
+
+                }
+
+            }
+
+        }
+        if( (!btn_aula3.getText().toString().equals(getResources().getString(R.string.horario_selecione_disciplina)))  ){
+
+            for(int i=0;i< listaDisciplina.size();i++){
+
+                if(ordem_selecao == listaDisciplina.get(i).getOrdem()){
+                    it.putExtra(ListaDisciplinasUsuario.EXTRA_DISCIPLINA_TROCA,listaDisciplina.get(i).getCodigo().toString());
+
+                }
+
+            }
+
+        }
+        if( (!btn_aula4.getText().toString().equals(getResources().getString(R.string.horario_selecione_disciplina)))  ){
+
+            for(int i=0;i< listaDisciplina.size();i++){
+
+                if(ordem_selecao == listaDisciplina.get(i).getOrdem()){
+                    it.putExtra(ListaDisciplinasUsuario.EXTRA_DISCIPLINA_TROCA,listaDisciplina.get(i).getCodigo().toString());
+
+                }
+
             }
 
         }
 
-
         it.putExtra(ListaDisciplinasUsuario.EXTRA_USUARIO ,usuario);
         startActivityForResult(it,REQUEST_DISCIPLINA);
+
 
     }
 
@@ -307,7 +356,7 @@ public class DiaFragmentDomingo extends Fragment {
 
 
             if("[]".equals(result)){
-                btn_Texto_padeao();
+                btn_Texto_padrao();
             }else if(!"".equals(result)){
                 Gson gson = new Gson();
                 try{
@@ -334,7 +383,7 @@ public class DiaFragmentDomingo extends Fragment {
                     }
 
                     listaDisciplina = temp;
-                    btn_Texto_padeao();
+                    btn_Texto_padrao();
                     for(int i = 0; i < temp.size(); i++){
 
                         resultadoOrdemSelecao(temp.get(i).getNome(),temp.get(i).getOrdem());
@@ -346,7 +395,7 @@ public class DiaFragmentDomingo extends Fragment {
                     }
 
                 }catch(Exception e){
-                    //Toast.makeText(getActivity(), R.string.message_alerta_webservice, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -364,6 +413,7 @@ public class DiaFragmentDomingo extends Fragment {
         }
 
         new ClasseRemoverdaAula().execute(usuario);
+
     }
 
     class ClasseRemoverdaAula extends AsyncTask<Usuario, Void,String> {
@@ -410,9 +460,9 @@ public class DiaFragmentDomingo extends Fragment {
                 }else  if(tiposAlteracaoAula.equals("delete")){
 
                     carregarDisciplinas();
-                    resultadoOrdemSelecao(getResources().getString(R.string.horario_selecione_disciplina),ordem_selecao);
-                    Snackbar.make(getView(), "Disciplina removida com sucesso!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
+                    resultadoOrdemSelecao(getResources().getString(R.string.horario_selecione_disciplina),ordem_selecao);
+                    Snackbar.make(getView(),getResources().getString(R.string.message_alerta_disciplina_Removing_Successfully), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                     tiposAlteracaoAula = "";
                 }
 
@@ -427,18 +477,20 @@ public class DiaFragmentDomingo extends Fragment {
 
             case "insert":
                 salvardisciplina(dis);
+                Snackbar.make(getView(), getResources().getString(R.string.message_alerta_disciplina_Saving), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 break;
             case "delete":
                 removerAula();
+                Snackbar.make(getView(), getResources().getString(R.string.message_alerta_disciplina_Removing), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 break;
             case "update":
                 removerAula();
+                Snackbar.make(getView(), getResources().getString(R.string.message_alerta_disciplina_Updating), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 break;
             default:
                 break;
 
         }
-
 
     }
 
@@ -455,10 +507,6 @@ public class DiaFragmentDomingo extends Fragment {
 
         }
 
-
-
-
-
     }
 
     private void notificacaoAgendaAula(){
@@ -466,9 +514,9 @@ public class DiaFragmentDomingo extends Fragment {
 //        só notifica com o app aberto
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity())
-                .setSmallIcon(android.R.drawable.ic_dialog_email)
+                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                 .setContentTitle("Portal Acadêmico")
-                .setContentText("Teve auteração na sua agenda de aula de ");
+                .setContentText("Teve auteração na sua agenda de aula de.");
 
         Intent resultIntent = new Intent();
 
@@ -484,6 +532,8 @@ public class DiaFragmentDomingo extends Fragment {
         mNotificationManager.notify(300, mBuilder.build());
 
     }
+
+
 
 
 

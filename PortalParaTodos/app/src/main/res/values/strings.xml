@@ -120,6 +120,25 @@
     <string name="message_alerta_curso_exclui">Course excluded</string>
     <string name="message_valida_disciplina">Invalid Discipline</string>
     <string name="message_alerta_disciplina_exclui">Discipline excluded</string>
+
+    <string name="message_alerta_disciplina_inserir">Insert</string>
+    <string name="message_alerta_disciplina_atualizar">Update</string>
+    <string name="message_alerta_disciplina_remover">Delete</string>
+    <string name="message_alerta_disciplina_seleciona_uma">Select only one discipline</string>
+    <string name="message_alerta_disciplina_nao_auteracao">Did not make changes</string>
+
+    <string name="message_alerta_disciplina_Saving">Saving...</string>
+    <string name="message_alerta_disciplina_Removing">Removing...</string>
+    <string name="message_alerta_disciplina_Updating">Updating...</string>
+
+    <string name="message_alerta_disciplina_Saving_successfully">Discipline saved successfully</string>
+    <string name="message_alerta_disciplina_Removing_Successfully">Discipline removing Successfully</string>
+    <string name="message_alerta_disciplina_Updating_Successfully">Discipline updated Successfully</string>
+
+
+
+
+
     <string name="message_alerta_disciplina_cadastrada">Course has no discipline</string>
     <string name="message_valida_password">Invalid Password</string>
     <string name="title_activity_maps">Map</string>

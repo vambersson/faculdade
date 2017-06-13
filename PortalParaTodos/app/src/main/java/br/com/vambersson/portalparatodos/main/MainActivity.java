@@ -3,20 +3,24 @@ package br.com.vambersson.portalparatodos.main;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,8 +31,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.gson.Gson;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,6 +48,7 @@ import java.util.Date;
 
 import br.com.vambersson.portalparatodos.aula.adapter.DiasHorarioAdapter;
 import br.com.vambersson.portalparatodos.R;
+import br.com.vambersson.portalparatodos.aula.notificacao.ServicoNotificacaoWebApi;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
 import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
@@ -64,6 +73,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ViewPager container_ViewPager;
     private DiasHorarioAdapter adapter;
 
+    private BroadcastReceiver broadcastReceiver;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final String TAG = "MainActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +92,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         usuarioDao = new UsuarioDao(this);
         gson = new Gson();
 
+
+
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
 
@@ -88,23 +106,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
 
-//                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
-//                                .setSmallIcon(android.R.drawable.ic_dialog_email)
-//                                .setContentTitle("Portal Acadêmico")
-//                                .setContentText("Teve auteração na sua agenda de aula!");
-//
-//                Intent resultIntent = new Intent();
-//
-//                TaskStackBuilder stackBuilder = TaskStackBuilder.create(MainActivity.this);
-//                stackBuilder.addNextIntent(resultIntent);
-//
-//                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                mBuilder.setContentIntent(resultPendingIntent);
-//
-//                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//                mNotificationManager.notify(30, mBuilder.build());
+                broadcastReceiver = new BroadcastReceiver() {@Override
+                public void onReceive(Context context, Intent intent) {
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                    boolean enviado = sharedPreferences.getBoolean("enviado", false);
+                    if (enviado) {
+                        Toast.makeText(MainActivity.this, "O token foi gerado e enviado ao servidor.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Um erro aconteceu ao gerar o token.", Toast.LENGTH_SHORT).show();
+                    }
+                }};
+
+                if (verificarPlayServices()) {
+                    Intent intent = new Intent(MainActivity.this, ServicoNotificacaoWebApi.class);
+                    startService(intent);
+                }
+
 
             }
         });
@@ -140,6 +157,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         dias_semana();
 
+    }
+
+    private boolean verificarPlayServices() {
+
+        int codigo = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+
+            if (codigo!= ConnectionResult.SUCCESS) {
+
+                if (GooglePlayServicesUtil.isUserRecoverableError(codigo)) {
+                    GooglePlayServicesUtil.getErrorDialog(codigo, this,PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                } else {
+                    Toast.makeText(this, "Este dispositivo não permite usar o recurso.", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                return false;
+        }
+        return true;
     }
 
     @Override
@@ -257,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case "sexta-feira":
                 container_ViewPager.setCurrentItem(5);
                 break;
-            case "sabado":
+            case "sábado":
                 container_ViewPager.setCurrentItem(6);
                 break;
             default:
