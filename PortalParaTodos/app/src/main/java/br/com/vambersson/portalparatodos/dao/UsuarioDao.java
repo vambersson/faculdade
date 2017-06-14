@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.vambersson.portalparatodos.base.Disciplina;
@@ -46,35 +47,56 @@ public class UsuarioDao {
 
     }
 
-
-    public void inserirDisciplina(Disciplina dis){
+    public void inserirDisciplinas(Disciplina dis){
 
         SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put("iddisciplina",dis.getCodigo());
         cv.put("nome",dis.getNome());
+        cv.put("curso",dis.getCurso().getCodigo());
+        cv.put("selecionou",dis.getSelecionou());
+        cv.put("dia",dis.getNumerodia());
+        cv.put("ordem",dis.getOrdem());
 
         db.insert("disciplina",null,cv);
 
     }
-    public Disciplina getDisciplina(){
+
+
+    public void deletarDisciplinas(int dia){
+        SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
+        db.delete("disciplina"," dia = "+dia+" ",null);
+    }
+
+    public void deletarDisciplinas(Disciplina dis){
+        SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
+        db.delete("disciplina","iddisciplina = "+dis.getCodigo()+" and dia = "+dis.getNumerodia()+" and ordem = "+dis.getOrdem()+" ",null);
+    }
+
+    public List<Disciplina>  getDisciplinas(int dia){
 
         SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
+        List<Disciplina> lista = new ArrayList<Disciplina>();
         Disciplina dis = null;
 
-        String[] colunas = new String[]{"iddisciplina","nome"};
-        Cursor cursor = db.query("disciplina",colunas,null,null,null,null,null);
+        String[] colunas = new String[]{"iddisciplina","nome","curso","selecionou","dia","ordem"};
+        Cursor cursor = db.query("disciplina",colunas,"dia = "+dia+" ",null,null,null,null );
 
-        if(cursor.moveToNext()){
+       while(cursor.moveToNext()){
             dis = new Disciplina();
 
             dis.setCodigo(cursor.getInt(0));
             dis.setNome(cursor.getString(1));
+            dis.getCurso().setCodigo(cursor.getInt(2));
+            dis.setSelecionou(cursor.getString(3));
+            dis.setNumerodia(cursor.getInt(4));
+            dis.setOrdem(cursor.getInt(5));
 
+            lista.add(dis);
         }
 
-        return dis;
+        return lista;
     }
 
 
@@ -90,6 +112,7 @@ public class UsuarioDao {
 
         db.update("usuario",cv,"matricula = ?",new String[]{ String.valueOf(usuario.getMatricula() )});
     }
+
     public void atualizarFoto(Usuario usuario){
 
         SQLiteDatabase db = usuarioSQLite.getWritableDatabase();

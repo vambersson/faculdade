@@ -35,8 +35,12 @@ public class UsuarioSQLite extends SQLiteOpenHelper{
                  " senha text not null );");
 
         db.execSQL(" create table disciplina (\n" +
-                " iddisciplina integer primary key not null, \n" +
-                " nome text not null);  ");
+                " iddisciplina integer not null,\n" +
+                " nome text not null,\n" +
+                " curso integer null,\n"+
+                " selecionou text not null,\n"+
+                " dia integer not null, \n" +
+                " ordem integer not null);  ");
 
 
     }

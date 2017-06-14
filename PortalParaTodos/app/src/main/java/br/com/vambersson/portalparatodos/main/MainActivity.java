@@ -142,17 +142,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         header_tv_curso_fuculdade = (TextView) headerView.findViewById(R.id.header_tv_curso_fuculdade);
 
         if(usuario != null){
+
             header_img_foto.setImageBitmap(byteToBitmap(usuario.getFoto()));
             header_tv_nome.setText(usuario.getNome());
+
+            if(usuario.getTipo().equals("A")){
+                header_tv_curso_fuculdade.setText(usuario.getCurso().getNome());
+            }else if(usuario.getTipo().equals("P")){
+                header_tv_curso_fuculdade.setText(usuario.getFaculdade().getNome());
+            }
+
+
         }
 
 
 
-        if(usuario.getTipo().equals("A")){
-            header_tv_curso_fuculdade.setText(usuario.getCurso().getNome());
-        }else if(usuario.getTipo().equals("P")){
-            header_tv_curso_fuculdade.setText(usuario.getFaculdade().getNome());
-        }
+
 
 
         dias_semana();

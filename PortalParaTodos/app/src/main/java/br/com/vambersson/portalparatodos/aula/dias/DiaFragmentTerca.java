@@ -36,6 +36,7 @@ import br.com.vambersson.portalparatodos.R;
 import br.com.vambersson.portalparatodos.aula.disciplina.ListaDisciplinasUsuario;
 import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.base.Usuario;
+import br.com.vambersson.portalparatodos.dao.UsuarioDao;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 import static android.app.Activity.RESULT_OK;
@@ -62,6 +63,7 @@ public class DiaFragmentTerca extends Fragment {
     private List<Disciplina> listaDisciplina;
 
     private Thread thread;
+    private boolean threadAtiva = false;
     private String tiposAlteracaoAula = "";
 
     private  int ordem_selecao = 0;
@@ -135,7 +137,7 @@ public class DiaFragmentTerca extends Fragment {
             usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
         }else{
             usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
-            carregarDisciplinas();
+            carregarDisciplinasLocal();
         }
 
         return view;
@@ -185,6 +187,70 @@ public class DiaFragmentTerca extends Fragment {
 
     }
 
+    private void salvarDisciplinasLocal(List<Disciplina> lista){
+
+        UsuarioDao dao = new UsuarioDao(getActivity());
+
+        btn_Texto_padrao();
+
+        for(int i=0;i < lista.size();i++){
+
+            dao.inserirDisciplinas(lista.get(i));
+
+            resultadoOrdemSelecao(lista.get(i).getNome(),lista.get(i).getOrdem());
+
+        }
+
+        listaDisciplina = lista;
+
+    }
+
+    private void salvarDisciplinaLocal(Disciplina dis){
+
+        UsuarioDao dao = new UsuarioDao(getActivity());
+
+        btn_Texto_padrao();
+
+        dao.inserirDisciplinas(dis);
+
+        carregarDisciplinasLocal();
+
+    }
+
+    private void removeDisciplinasLocal(){
+        UsuarioDao dao = new UsuarioDao(getActivity());
+        dao.deletarDisciplinas(NUMERO_DIA);
+    }
+
+    private void removeDisciplinaLocal(Disciplina dis){
+        UsuarioDao dao = new UsuarioDao(getActivity());
+        dao.deletarDisciplinas(dis);
+    }
+
+    private void carregarDisciplinasLocal(){
+        UsuarioDao dao = new UsuarioDao(getActivity());
+
+        List<Disciplina> lista =  dao.getDisciplinas(NUMERO_DIA);
+
+        if(lista != null){
+
+            for(int i=0;i < lista.size();i++){
+
+                resultadoOrdemSelecao(lista.get(i).getNome(), lista.get(i).getOrdem() );
+
+            }
+
+            listaDisciplina = lista;
+
+        }
+
+        if(threadAtiva == false){
+            carregarDisciplinas();
+            thread.start();
+        }
+
+    }
+
     private void carregarDisciplinas(){
 
         thread = new Thread(new Runnable() {
@@ -194,7 +260,7 @@ public class DiaFragmentTerca extends Fragment {
                 while(true){
 
                     new ClasseListaDisciplinasDasAulas().execute(usuario);
-
+                    threadAtiva = true;
                     try {
                         sleep(40000);
                     } catch (InterruptedException e) {
@@ -204,8 +270,6 @@ public class DiaFragmentTerca extends Fragment {
 
             }
         });
-
-        thread.start();
 
     }
 
@@ -250,9 +314,9 @@ public class DiaFragmentTerca extends Fragment {
                     Snackbar.make(getView(), getResources().getString(R.string.message_alerta_disciplina_Updating_Successfully), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 }else  if(tiposAlteracaoAula.equals("insert")){
                     Snackbar.make(getView(),getResources().getString(R.string.message_alerta_disciplina_Saving_successfully), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-
                 }
-                carregarDisciplinas();
+                salvarDisciplinaLocal(usuario.getDisciplina());
+
             }
 
         }
@@ -349,7 +413,20 @@ public class DiaFragmentTerca extends Fragment {
 
 
             if("[]".equals(result)){
-                btn_Texto_padrao();
+
+                if(listaDisciplina.size() != 0){
+
+                    removeDisciplinasLocal();
+
+                    btn_Texto_padrao();
+
+                    //notifica o aluno da auteração
+                    if(usuario.getTipo().equals("A")){
+                        notificacaoAgendaAula();
+                    }
+
+                }
+
             }else if(!"".equals(result)){
                 Gson gson = new Gson();
                 try{
@@ -358,28 +435,48 @@ public class DiaFragmentTerca extends Fragment {
 
                     List<Disciplina> temp = new ArrayList<Disciplina>(Arrays.asList(lista) );
 
-                    if(usuario.getTipo().equals("A") && !listaDisciplina.equals(null)){
+                    if(listaDisciplina.size() != 0){
 
                         if(temp.size() != listaDisciplina.size()){
-                            notificacaoAgendaAula();
+
+                            removeDisciplinasLocal();
+
+                            salvarDisciplinasLocal(temp);
+
+                            //notifica o aluno da auteração
+                            if(usuario.getTipo().equals("A")){
+                                notificacaoAgendaAula();
+                            }
                         }else if(temp.size() == listaDisciplina.size()){
+
                             for(int i=0;i < temp.size();i++ ){
-                                if(temp.get(i).getOrdem() == listaDisciplina.get(i).getOrdem() && temp.get(i).getCodigo() != listaDisciplina.get(i).getOrdem() ){
-                                    notificacaoAgendaAula();
-                                }else
-                                if(temp.get(i).getOrdem() != listaDisciplina.get(i).getOrdem() && temp.get(i).getCodigo() != listaDisciplina.get(i).getOrdem() ){
-                                    notificacaoAgendaAula();
+
+                                if(temp.get(i).getOrdem() == listaDisciplina.get(i).getOrdem() && temp.get(i).getCodigo() != listaDisciplina.get(i).getCodigo() ){
+
+                                    removeDisciplinasLocal();
+
+                                    salvarDisciplinasLocal(temp);
+
+                                    //notifica o aluno da auteração
+                                    if(usuario.getTipo().equals("A")){
+                                        notificacaoAgendaAula();
+                                    }
+
                                 }
 
                             }
+
                         }
-                    }
 
-                    listaDisciplina = temp;
-                    btn_Texto_padrao();
-                    for(int i = 0; i < temp.size(); i++){
+                    }else if(listaDisciplina.size() == 0){
 
-                        resultadoOrdemSelecao(temp.get(i).getNome(),temp.get(i).getOrdem());
+                        salvarDisciplinasLocal(temp);
+
+                        //notifica o aluno da auteração
+                        if(usuario.getTipo().equals("A")){
+                            notificacaoAgendaAula();
+                        }
+
                     }
 
 //                    INTERROPE A THREAD O USUÁRIO FOR PROFESSOR
@@ -388,7 +485,7 @@ public class DiaFragmentTerca extends Fragment {
                     }
 
                 }catch(Exception e){
-                   // Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -448,11 +545,15 @@ public class DiaFragmentTerca extends Fragment {
 
                 if(tiposAlteracaoAula.equals("update")){
 
+                    removeDisciplinaLocal(usuario.getDisciplina());
+
                     salvardisciplina(disciplina);
 
                 }else  if(tiposAlteracaoAula.equals("delete")){
 
-                    carregarDisciplinas();
+                    removeDisciplinaLocal(usuario.getDisciplina());
+
+                    carregarDisciplinasLocal();
 
                     resultadoOrdemSelecao(getResources().getString(R.string.horario_selecione_disciplina),ordem_selecao);
                     Snackbar.make(getView(),getResources().getString(R.string.message_alerta_disciplina_Removing_Successfully), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
@@ -536,6 +637,7 @@ public class DiaFragmentTerca extends Fragment {
         }catch (Exception e){
 
         }
+
 
     }
 
