@@ -1,6 +1,6 @@
 package br.com.vambersson.portalparatodos.aula.dias;
 
-import android.app.Activity;
+
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -10,6 +10,10 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +35,7 @@ import com.google.gson.Gson;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,6 +87,7 @@ public class DiaFragmentDomingo extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("StateUsuario",usuario);
+        outState.putSerializable("StateListaDisciplina", (Serializable) listaDisciplina);
     }
 
     @Nullable
@@ -139,6 +145,7 @@ public class DiaFragmentDomingo extends Fragment {
 
         if(savedInstanceState != null){
             usuario = (Usuario) savedInstanceState.getSerializable("StateUsuario");
+            listaDisciplina = (ArrayList<Disciplina>) savedInstanceState.getSerializable("StateListaDisciplina");
         }else{
             usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
             carregarDisciplinas();
@@ -515,6 +522,7 @@ public class DiaFragmentDomingo extends Fragment {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity())
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.icportal) )
                 .setContentTitle("Portal Acadêmico")
                 .setContentText("Teve auteração na sua agenda de aula de.");
 
@@ -527,9 +535,22 @@ public class DiaFragmentDomingo extends Fragment {
 
         mBuilder.setContentIntent(resultPendingIntent);
 
+        Notification notification = mBuilder.build();
+        notification.vibrate = new long[]{150,300,150,300};
+
         NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        mNotificationManager.notify(300, mBuilder.build());
+        mNotificationManager.notify(300, notification);
+
+        try{
+            Uri som = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone toque = RingtoneManager.getRingtone(getActivity(),som);
+            toque.play();
+
+        }catch (Exception e){
+
+        }
+
 
     }
 

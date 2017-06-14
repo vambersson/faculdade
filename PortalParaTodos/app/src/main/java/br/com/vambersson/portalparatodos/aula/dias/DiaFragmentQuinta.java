@@ -1,9 +1,14 @@
 package br.com.vambersson.portalparatodos.aula.dias;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -504,6 +509,7 @@ public class DiaFragmentQuinta extends Fragment {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity())
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.icportal) )
                 .setContentTitle("Portal Acadêmico")
                 .setContentText("Teve auteração na sua agenda de aula de.");
 
@@ -516,9 +522,21 @@ public class DiaFragmentQuinta extends Fragment {
 
         mBuilder.setContentIntent(resultPendingIntent);
 
+        Notification notification = mBuilder.build();
+        notification.vibrate = new long[]{150,300,150,300};
+
         NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        mNotificationManager.notify(300, mBuilder.build());
+        mNotificationManager.notify(300, notification);
+
+        try{
+            Uri som = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone toque = RingtoneManager.getRingtone(getActivity(),som);
+            toque.play();
+
+        }catch (Exception e){
+
+        }
 
     }
 
