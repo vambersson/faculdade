@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -42,6 +43,7 @@ public class FragmentDisciplinaLista extends Fragment {
 
     private ListView listView;
     private FloatingActionButton btn_add_disciplina;
+    public static ProgressBar progressBar_cicle;
 
     private DisciplinaAdapter adapter;
 
@@ -66,11 +68,14 @@ public class FragmentDisciplinaLista extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.disciplina_lista_fragment,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+     View view = inflater.inflate(R.layout.disciplina_lista_fragment,container,false);
 
         listView = (ListView) view.findViewById(R.id.lista_disciplina);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        progressBar_cicle = (ProgressBar) view.findViewById(R.id.progressBar_cicle);
+
         btn_add_disciplina = (FloatingActionButton) view.findViewById(R.id.btn_add_disciplina);
         btn_add_disciplina.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +121,7 @@ public class FragmentDisciplinaLista extends Fragment {
 
     }
 
+
     private void verificaCursoSelecionado(){
 
         thread = new Thread(new Runnable() {
@@ -127,7 +133,6 @@ public class FragmentDisciplinaLista extends Fragment {
                     if(consulta_disciplina == true){
                         new ClasseListaDisciplinas().execute();
                         consulta_disciplina = false;
-
                     }
 
                     try {
@@ -144,9 +149,7 @@ public class FragmentDisciplinaLista extends Fragment {
         thread.start();
     }
 
-
     class ClasseListaDisciplinas extends AsyncTask<Disciplina, Void,String> {
-
 
         @Override
         protected String doInBackground(Disciplina... params) {
@@ -173,6 +176,7 @@ public class FragmentDisciplinaLista extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            progressBar_cicle.setVisibility(View.GONE);
 
             try{
 

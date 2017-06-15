@@ -82,6 +82,8 @@ public class CursoAdapter extends BaseAdapter {
                 FragmentDisciplinaLista.faculdade_selecionada = curso.getFaculdade().getCodigo();
                 FragmentDisciplinaLista.curso_selecionado = curso.getCodigo();
 
+                FragmentDisciplinaLista.progressBar_cicle.setVisibility(View.VISIBLE);
+
             }
         });
 
