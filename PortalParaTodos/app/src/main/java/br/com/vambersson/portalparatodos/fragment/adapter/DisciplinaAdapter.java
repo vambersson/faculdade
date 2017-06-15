@@ -41,6 +41,10 @@ public class DisciplinaAdapter extends BaseAdapter {
 
     }
 
+    public void clear(){
+        lista.clear();
+    }
+
     public void setLista(List<Disciplina> lista) {
         this.lista = lista;
     }

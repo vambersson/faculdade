@@ -62,6 +62,7 @@ public class FragmentDisciplinaLista extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        listaDisciplinas = new ArrayList<Disciplina>();
         verificaCursoSelecionado();
 
     }
@@ -177,12 +178,14 @@ public class FragmentDisciplinaLista extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             progressBar_cicle.setVisibility(View.GONE);
+            ArrayList<Disciplina> temp = new ArrayList<Disciplina>();
 
             try{
 
                 if("[]".equals(result)){
 
                     Toast.makeText(getActivity(),R.string.message_alerta_disciplina_cadastrada, Toast.LENGTH_LONG).show();
+                    carregarLista(temp);
 
                 }else if(!"".equals(result)){
 
@@ -198,7 +201,7 @@ public class FragmentDisciplinaLista extends Fragment {
                         }
 
                     }catch(Exception e){
-                        Toast.makeText(getActivity(), "Erro: "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.message_alerta_webservice), Toast.LENGTH_LONG).show();
                     }
 
                 }
