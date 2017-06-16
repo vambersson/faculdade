@@ -68,6 +68,10 @@ public class UsuarioDao {
         SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
         db.delete("disciplina"," dia = "+dia+" ",null);
     }
+    public void deletarDisciplinas(){
+        SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
+        db.delete("disciplina",null,null);
+    }
 
     public void deletarDisciplinas(Disciplina dis){
         SQLiteDatabase db = usuarioSQLite.getWritableDatabase();

@@ -78,8 +78,6 @@ public class FragmentLogin extends Fragment {
         View view = inflater.inflate(R.layout.login_fragment,container,false);
 
 
-
-
         spinner = (Spinner) view.findViewById(R.id.login_spinner_faculdade);
         login_Id_EdtTxt_Matricula = (EditText) view.findViewById(R.id.login_Id_EdtTxt_Matricula);
         login_Id_EdtTxt_Senha = (EditText) view.findViewById(R.id.login_Id_EdtTxt_Senha);

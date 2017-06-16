@@ -216,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }else if(id == R.id.action_sign_out){
             removerUsuarioLocal();
+            removeDisciplinasLocal();
             startFragment(null);
             finish();
             return true;
@@ -249,10 +250,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }else if(usuario.getTipo().equals("P")){
                 startFragment("ActivityPageAlterar");
             }
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
 
@@ -423,6 +420,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void removerUsuarioLocal(){
         usuarioDao.deletar();
+    }
+
+    private void removeDisciplinasLocal(){
+        UsuarioDao dao = new UsuarioDao(this);
+
+            dao.deletarDisciplinas();
+
     }
 
     private void inserirUsuarioLocal(){

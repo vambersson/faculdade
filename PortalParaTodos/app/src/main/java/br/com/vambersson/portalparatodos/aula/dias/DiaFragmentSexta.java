@@ -37,6 +37,7 @@ import br.com.vambersson.portalparatodos.aula.disciplina.ListaDisciplinasUsuario
 import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
+import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 import static android.app.Activity.RESULT_OK;
@@ -219,8 +220,10 @@ public class DiaFragmentSexta extends Fragment {
     }
 
     private void removeDisciplinasLocal(){
+
         UsuarioDao dao = new UsuarioDao(getActivity());
         dao.deletarDisciplinas(NUMERO_DIA);
+
     }
 
     private void removeDisciplinaLocal(Disciplina dis){
@@ -417,13 +420,16 @@ public class DiaFragmentSexta extends Fragment {
 
                 if(listaDisciplina.size() != 0){
 
-                    removeDisciplinasLocal();
+                    UsuarioDao dao = new UsuarioDao(getActivity());
+                    if(!dao.getDisciplinas(NUMERO_DIA).equals(null)){
+                        removeDisciplinasLocal();
 
-                    btn_Texto_padrao();
+                        btn_Texto_padrao();
 
-                    //notifica o aluno da auteração
-                    if(usuario.getTipo().equals("A")){
-                        notificacaoAgendaAula();
+                        //notifica o aluno da auteração
+                        if(usuario.getTipo().equals("A")){
+                            notificacaoAgendaAula();
+                        }
                     }
 
                 }
@@ -612,14 +618,14 @@ public class DiaFragmentSexta extends Fragment {
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.icportal) )
                 .setContentTitle("Portal Acadêmico")
-                .setContentText("Teve auteração na sua agenda de aula de.");
+                .setContentText("Teve auteração na sua agenda de aula de " + getResources().getString(R.string.dia_tv_sexta));
 
-        Intent resultIntent = new Intent();
+        Intent resultIntent = new Intent(getActivity(), GerenciadorFragment.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
         stackBuilder.addNextIntent(resultIntent);
 
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(306, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.setContentIntent(resultPendingIntent);
 
@@ -628,7 +634,7 @@ public class DiaFragmentSexta extends Fragment {
 
         NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        mNotificationManager.notify(300, notification);
+        mNotificationManager.notify(306, notification);
 
         try{
             Uri som = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

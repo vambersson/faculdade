@@ -46,6 +46,7 @@ import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static java.lang.Thread.sleep;
 
 /**
  * Created by Vambersson on 19/05/2017.
@@ -186,26 +187,12 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
             }
         });
 
-        perfil_Edt_IdNome.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-//                if (event.getAction() == KeyEvent. ){
-//                    Toast.makeText(getActivity(), "okok", Toast.LENGTH_SHORT).show();
-//
-//                }
-
-                return false;
-
-            }
-        });
 
         perfil_Edt_IdNome.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId ==  EditorInfo.IME_ACTION_NEXT){
                     perfil_tv_IdNome.setText(perfil_Edt_IdNome.getText().toString().trim());
-                    perfil_tv_IdNome.setVisibility(View.VISIBLE);
 
                 }
                 return false;
@@ -224,8 +211,14 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
             Alterar();
         }
 
+        if(usuario.getTipo().equals("P")){
+            perfil_tv_IdNome.setText(getResources().getString(R.string.cad_tv_profesor_nome));
+            perfil_tv_IdCurso.setVisibility(View.INVISIBLE);
+        }
+
         return view;
     }
+
 
     private void Alterar(){
 
@@ -269,6 +262,16 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
         if(validarSave() == true){
             dadosSave();
             new ClasseSave().execute(usuario);
+
+            if(usuario.getTipo().equals("A")){
+                perfil_tv_IdNome.setText(usuario.getNome());
+                perfil_tv_IdCurso.setText(spinner.getSelectedItem().toString());
+            }
+            if(usuario.getTipo().equals("P")){
+                perfil_tv_IdNome.setText(usuario.getNome());
+            }
+
+
         }
 
     }
