@@ -144,13 +144,13 @@ public class DiaFragmentQuinta extends Fragment {
         return view;
     }
 
-
     private void btn_Texto_padrao(){
 
         btn_aula1.setText(R.string.horario_selecione_disciplina);
         btn_aula2.setText(R.string.horario_selecione_disciplina);
         btn_aula3.setText(R.string.horario_selecione_disciplina);
         btn_aula4.setText(R.string.horario_selecione_disciplina);
+
     }
 
     private void resultadoOrdemSelecao(String nome,int numero){

@@ -94,9 +94,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
 
@@ -156,10 +153,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-
-
-
-
         dias_semana();
 
     }
@@ -216,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }else if(id == R.id.action_sign_out){
             removerUsuarioLocal();
+            removeCursoLocal();
             removeDisciplinasLocal();
             startFragment(null);
             finish();
@@ -328,9 +322,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-
-
     class ClasseAtualizarFotoUsuario extends AsyncTask<Usuario, Void,String> {
 
         @Override
@@ -389,14 +380,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-
-
-
-
-
-
-
     private Bitmap byteToBitmap(byte[] outImage){
 
         try{
@@ -423,16 +406,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void removeDisciplinasLocal(){
-        UsuarioDao dao = new UsuarioDao(this);
 
-            dao.deletarDisciplinas();
+        UsuarioDao dao = new UsuarioDao(this);
+        dao.deletarDisciplinas();
 
     }
 
-    private void inserirUsuarioLocal(){
+    private void removeCursoLocal(){
 
-        usuarioDao.inserir(usuario,"S");
-
+        UsuarioDao dao = new UsuarioDao(this);
+        dao.deletarCurso();
     }
 
     private void atualizarFoto(){

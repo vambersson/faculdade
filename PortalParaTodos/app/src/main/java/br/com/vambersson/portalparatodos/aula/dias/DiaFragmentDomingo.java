@@ -157,7 +157,6 @@ public class DiaFragmentDomingo extends Fragment {
         return view;
     }
 
-
     private void btn_Texto_padrao(){
 
         btn_aula1.setText(R.string.horario_selecione_disciplina);

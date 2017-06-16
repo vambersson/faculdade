@@ -87,6 +87,7 @@ public class SplashScreen extends Fragment {
         if(usuario == null){
             startFragment("FragmentLogin");
         }else {
+            usuario.setCurso(dao.getCurso());
             startActivityMain();
         }
 

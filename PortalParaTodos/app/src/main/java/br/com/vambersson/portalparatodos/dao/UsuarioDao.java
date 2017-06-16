@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.vambersson.portalparatodos.base.Curso;
 import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.sqlite.UsuarioSQLite;
@@ -47,6 +48,42 @@ public class UsuarioDao {
 
     }
 
+    public void inserirCurso(Curso curso){
+
+        SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put("idcurso",curso.getCodigo());
+        cv.put("nome",curso.getNome());
+
+        db.insert("curso",null,cv);
+
+    }
+
+    public Curso getCurso(){
+
+        SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
+        Curso curso = null;
+
+        String[] colunas = new String[]{"idcurso","nome"};
+        Cursor cursor = db.query("curso",colunas,null,null,null,null,null);
+
+        if(cursor.moveToNext()){
+            curso = new Curso();
+
+            curso.setCodigo(cursor.getInt(0));
+            curso.setNome(cursor.getString(1));
+
+        }
+
+        return curso;
+    }
+
+    public void deletarCurso(){
+        SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
+        db.delete("curso",null,null);
+    }
+
     public void inserirDisciplinas(Disciplina dis){
 
         SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
@@ -68,6 +105,7 @@ public class UsuarioDao {
         SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
         db.delete("disciplina"," dia = "+dia+" ",null);
     }
+
     public void deletarDisciplinas(){
         SQLiteDatabase db = usuarioSQLite.getWritableDatabase();
         db.delete("disciplina",null,null);

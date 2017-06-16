@@ -48,7 +48,6 @@ public class FragmentLogin extends Fragment {
     private ProgressBar progressBar;
     private int contador = 0;
 
-
     private Button login_btn_primeiroAcesso;
     private Button login_btn_login;
     private Button login_btn_esqueceu_senha;
@@ -57,8 +56,6 @@ public class FragmentLogin extends Fragment {
     private Spinner spinner;
     private EditText login_Id_EdtTxt_Matricula;
     private EditText login_Id_EdtTxt_Senha;
-
-
 
     public FragmentLogin(){
         listaFaculdade = new ArrayList<Faculdade>();
@@ -70,7 +67,6 @@ public class FragmentLogin extends Fragment {
         super.onCreate(savedInstanceState);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
@@ -127,6 +123,7 @@ public class FragmentLogin extends Fragment {
             return false;
         }
     };
+
     class ClasseListaFaculdades extends AsyncTask<Faculdade, Void,String> {
 
         @Override
@@ -196,7 +193,6 @@ public class FragmentLogin extends Fragment {
 
     }
 
-
     private void logar(){
         if(validaLogar() == true){
             dadosLogar();
@@ -229,6 +225,7 @@ public class FragmentLogin extends Fragment {
     }
 
     class ClasseLogar extends AsyncTask<Usuario, Void,String> {
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -321,8 +318,11 @@ public class FragmentLogin extends Fragment {
 
                     }else if(user.getSenha().equals(usuario.getSenha())){
                         usuario = user;
-                        removerUsuarioLocal();
                         inserirUsuarioLocal();
+                        if(usuario.getTipo().equals("A")){
+                            inserirCursoLocal();
+                        }
+
                         startActivityMain(); // Activity = Principal
 
                     }
@@ -337,9 +337,6 @@ public class FragmentLogin extends Fragment {
         }
 
     }
-
-
-
 
     private void primeiroAcesso(){
 
@@ -494,33 +491,17 @@ public class FragmentLogin extends Fragment {
        getActivity().finish();
     }
 
-    private void removerUsuarioLocal(){
-        UsuarioDao dao = new UsuarioDao(getActivity());
-        dao.deletar();
-    }
-
     private void inserirUsuarioLocal(){
         UsuarioDao dao = new UsuarioDao(getActivity());
         dao.inserir(usuario,"S");
 
     }
 
+    private void inserirCursoLocal(){
+        UsuarioDao dao = new UsuarioDao(getActivity());
+        dao.inserirCurso(usuario.getCurso());
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 

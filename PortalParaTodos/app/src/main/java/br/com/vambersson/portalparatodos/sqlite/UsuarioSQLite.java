@@ -34,6 +34,10 @@ public class UsuarioSQLite extends SQLiteOpenHelper{
                  " login integer not null,\n" +
                  " senha text not null );");
 
+        db.execSQL(" create table curso(\n" +
+                " idcurso integer not null,\n" +
+                " nome text not null); ");
+
         db.execSQL(" create table disciplina (\n" +
                 " iddisciplina integer not null,\n" +
                 " nome text not null,\n" +
@@ -49,6 +53,7 @@ public class UsuarioSQLite extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("drop table if exists usuario");
+        db.execSQL("drop table if exists curso");
         db.execSQL("drop table if exists disciplina");
 
         onCreate(db);

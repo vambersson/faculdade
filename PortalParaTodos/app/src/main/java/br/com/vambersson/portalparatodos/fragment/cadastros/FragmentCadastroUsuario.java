@@ -256,7 +256,6 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
         }
     };
 
-
     private void save(){
 
         if(validarSave() == true){
@@ -306,11 +305,16 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
         usuario.setEmail(perfil_Edt_IdEmail.getText().toString().trim());
         usuario.setSenha(perfil_Edt_IdSenha.getText().toString().trim());
         usuario.getCurso().setCodigo(listaCursos.get(spinner.getSelectedItemPosition()).getCodigo());
+        usuario.getCurso().setNome(spinner.getSelectedItem().toString());
         usuario.setDisciplinaSelecionadas(disciplinas_selecionadas);
     }
 
-
     class ClasseSave extends AsyncTask<Usuario, Void,String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
 
         @Override
         protected String doInBackground(Usuario... params) {
@@ -342,15 +346,25 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
 
-            removerUsuarioLocal();
-            inserirUsuarioLocal();
-            startActivityMain(); // Activity = Principal
+            if(result.equals("1")){
+
+                Toast.makeText(getActivity(),"Cadastro efetuado com sucesso", Toast.LENGTH_SHORT).show();
+
+                inserirUsuarioLocal();
+                inserirCursoLocal();
+
+                startActivityMain(); // Activity = Principal
+
+            }
+
+
 
 
         }
+
     }
 
     private void bitmapToByte(Bitmap bitmap){
@@ -368,9 +382,9 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
         getActivity().finishAffinity();
     }
 
-    private void removerUsuarioLocal(){
+    private void inserirCursoLocal(){
         UsuarioDao dao = new UsuarioDao(getActivity());
-        dao.deletar();
+        dao.inserirCurso(usuario.getCurso());
     }
 
     private void inserirUsuarioLocal(){
@@ -400,9 +414,6 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
 
 
     }
-
-
-
 
     class ClasseListaCursos extends AsyncTask<Usuario, Void,String> {
 
@@ -472,9 +483,6 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
         }
 
     }
-
-
-
 
     private void chamarCamera(){
 
