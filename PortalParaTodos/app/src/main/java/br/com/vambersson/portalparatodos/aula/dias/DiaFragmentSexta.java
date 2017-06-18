@@ -38,6 +38,7 @@ import br.com.vambersson.portalparatodos.base.Disciplina;
 import br.com.vambersson.portalparatodos.base.Usuario;
 import br.com.vambersson.portalparatodos.dao.UsuarioDao;
 import br.com.vambersson.portalparatodos.fragment.gerenciador.GerenciadorFragment;
+import br.com.vambersson.portalparatodos.main.MainActivity;
 import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 import static android.app.Activity.RESULT_OK;
@@ -619,7 +620,7 @@ public class DiaFragmentSexta extends Fragment {
                 .setContentTitle("Portal Acadêmico")
                 .setContentText("Teve auteração na sua agenda de aula de " + getResources().getString(R.string.dia_tv_sexta));
 
-        Intent resultIntent = new Intent(getActivity(), GerenciadorFragment.class);
+        Intent resultIntent = new Intent(getActivity(), MainActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
         stackBuilder.addNextIntent(resultIntent);

@@ -205,16 +205,18 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
             perfil_tv_IdNone_faculdade.setText(usuario.getFaculdade().getNome());
             save_alterar = true;
 
+            if(usuario.getTipo().equals("P")){
+                perfil_tv_IdNome.setText(getResources().getString(R.string.cad_tv_profesor_nome));
+                perfil_tv_IdCurso.setVisibility(View.GONE);
+            }
+
         }else if(getActivity().getIntent().getSerializableExtra("usuarioAlterar") != null ){
             usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuarioAlterar");
             save_alterar = false;
             Alterar();
         }
 
-        if(usuario.getTipo().equals("P")){
-            perfil_tv_IdNome.setText(getResources().getString(R.string.cad_tv_profesor_nome));
-            perfil_tv_IdCurso.setVisibility(View.INVISIBLE);
-        }
+
 
         return view;
     }
@@ -227,7 +229,17 @@ public class FragmentCadastroUsuario extends android.support.v4.app.Fragment {
             ImgV_Idusuario.setImageBitmap(byteToBitmap(usuario.getFoto()));
             perfil_tv_IdNone_faculdade.setText(usuario.getFaculdade().getNome());
             perfil_tv_IdNome.setText(usuario.getNome());
+
+            if(usuario.getTipo().equals("A")){
+                perfil_tv_IdCurso.setText(usuario.getCurso().getNome());
+
+            }else if(usuario.getTipo().equals("P")){
+                perfil_tv_IdCurso.setVisibility(View.GONE);
+            }
+
             perfil_Edt_IdNome.setText(usuario.getNome());
+
+            perfil_Edt_IdEmail.setText(usuario.getEmail());
 
         }
 

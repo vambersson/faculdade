@@ -22,7 +22,7 @@ import br.com.vambersson.portalparatodos.erro.ConexaoException;
 public class NetworkUtil {
 
       //private static String urlBase = "http://177.105.72.150:8888/PortalAcademico/servicos/";
-      private static String urlBase = "http://192.168.43.123:8080/PortalAcademico/servicos/";
+      private static String urlBase = "http://192.168.1.101:8080/PortalAcademico/servicos/";
 
 
 

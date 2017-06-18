@@ -85,9 +85,10 @@ public class GerenciadorFragment extends AppCompatActivity {
            }else if(CodigoFragment.equals("ActivityPageAlterar") ){
 
                Intent it = new Intent(this,ActivityPage.class);
-               it.putExtra("usuario",usuario);
+               it.putExtra("usuarioAlterar",usuario);
                startActivity(it);
                finish();
+
 
            }else if(CodigoFragment.equals("FragmentCadastroUsuarioAlterar") ){
 

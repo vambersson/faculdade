@@ -623,7 +623,7 @@ public class DiaFragmentSegunda extends Fragment {
                 .setContentTitle("Portal Acadêmico")
                 .setContentText("Teve auteração na sua agenda de aula de "+ getResources().getString(R.string.dia_tv_segunda));
 
-        Intent resultIntent = new Intent(getActivity(), GerenciadorFragment.class);
+        Intent resultIntent = new Intent(getActivity(), MainActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
         stackBuilder.addNextIntent(resultIntent);

@@ -57,6 +57,8 @@ import br.com.vambersson.portalparatodos.util.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String EXTRA_USER_ALTERAR = "usuarioAlterar";
+
     private static final int REQUEST_FOTO = 100;
     private  byte fotoBytes[];
 
@@ -224,8 +226,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-
-
 
         int id = item.getItemId();
 

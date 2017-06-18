@@ -96,7 +96,15 @@ public class FragmentCursoLista extends Fragment {
 
 
         }else{
-            usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
+
+            if(getActivity().getIntent().getSerializableExtra("usuario") != null){
+                usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
+
+            }else if(getActivity().getIntent().getSerializableExtra("usuarioAlterar") != null ){
+                usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuarioAlterar");
+            }
+
+            //usuario = (Usuario) getActivity().getIntent().getSerializableExtra("usuario");
             consulta_curso = true;
         }
 
@@ -186,6 +194,8 @@ public class FragmentCursoLista extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            try{
+
                 if(!result.equals("[]")){
 
                     Gson gson = new Gson();
@@ -196,6 +206,13 @@ public class FragmentCursoLista extends Fragment {
                     carregarLista(listaCursos);
 
                 }
+
+            }catch (Exception e){
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.message_alerta_webservice), Toast.LENGTH_LONG).show();
+
+            }
+
+
 
 
         }
