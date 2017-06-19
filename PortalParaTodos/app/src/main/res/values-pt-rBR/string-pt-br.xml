@@ -1,22 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_name">Portal</string>
+    <string name="app_name_bem_vindo">Bem-vindo</string>
 
+
+    <!-- Tela login                                               -->
+    <string name="login_sp_faculdade">Selecione sua faculdade</string>
+    <string name="login_btn_senha_esqueceu">Recuperar senha</string>
+    <string name="login_tv_matricula">Registrar</string>
+    <string name="login_tv_pass">Senha</string>
+    <string name="login_btn_login">Login</string>
+    <string name="login_btn_primeiro">Primeiro Acesso</string>
+
+
+    <!-- Tela cadastro aluno                                               -->
+    <string name="cad_tv_aluno_nome_faculdade">Faculdade</string>
+    <string name="cad_tv_aluno_nome_aluno">Aluno</string>
+    <string name="cad_tv_aluno_nome_curso">Curso</string>
+    <string name="cad_tv_aluno_primeiro_nome">Primeiro Nome</string>
+    <string name="cad_tv_aluno_Email">E-Mail</string>
+    <string name="cad_tv_aluno_seleciona_Curso">Curso</string>
+    <string name="cad_tv_aluno_seleciona_Discipina">Disciplina</string>
+    <string name="cad_tv_aluno_senha">Senha</string>
+    <string name="cad_tv_aluno_senha_confirma">Repetir Senha</string>
+
+    <string name="cad_spinner_seleciona_Cursos">Selecione seu curso</string>
+
+    <string name="cad_btn_aluno_Discipinas">Selecione sua(s) disciplina(s)</string>
+    <string name="cad_btn_aluno_save">Salvar</string>
+    <string name="cad_btn_aluno_Cancel">Cancelar</string>
+
+
+    <!-- Tela cadastro Professor                                     -->
+    <string name="cad_tv_profesor_nome_faculdade">Faculdade</string>
+    <string name="cad_tv_profesor_nome">Professor</string>
+    <string name="cad_tv_professor_primeiro_nome">Primeiro Nome</string>
+
+    <string name="cad_tv_professor_nome_cursos">Curso</string>
+    <string name="cad_tv_professor_seleciona_Discipina">Disciplina</string>
+
+    <string name="cad_tv_professor_Email">E-Mail</string>
+    <string name="cad_tv_professor_senha">Senha</string>
+    <string name="cad_tv_professor_senha_confirma">Repetir Senha</string>
+
+    <string name="cad_btn_professor_Discipinas">Seleciona sua(s) disciplina(s)</string>
+    <string name="cad_btn_professor_save">Salvar</string>
+    <string name="cad_btn_professor_Cancel">Cancelar</string>
+
+    <string name="cad_tv_professor_nome_curso">Nome do curso</string>
+
+
+    <string-array name="tabs_cad_professor">
+        <item>Professor</item>
+        <item>Curso</item>
+        <item>Disciplina</item>
+    </string-array>
 
     <!-- Tela Dias da semana                                     -->
 
     <string name="horario_selecione_disciplina">Selecione sua disciplina</string>
 
     <string name="dia_tv_domingo">Domingo</string>
-    <string name="dia_tv_segunda">Segunda</string>
-    <string name="dia_tv_terca">Terça</string>
-    <string name="dia_tv_quarta">Quarta</string>
-    <string name="dia_tv_quinta">Quinta</string>
-    <string name="dia_tv_sexta">Sexta</string>
+    <string name="dia_tv_segunda">Segunda-feira</string>
+    <string name="dia_tv_terca">Terça-feira</string>
+    <string name="dia_tv_quarta">Quarta-feira</string>
+    <string name="dia_tv_quinta">Quinta-feira</string>
+    <string name="dia_tv_sexta">Sexta-feira</string>
     <string name="dia_tv_sabado">Sábado</string>
 
 
+    <!-- Tela cadastro disciplina                                     -->
+
+    <string name="disciplina_periodo">Periodo</string>
+    <string name="disciplina_nome_disciplina">Nome da disciplina</string>
+
+    <string name="cad_btn_disciplina_save">Salvar</string>
+    <string name="cad_btn_disciplina_Cancel">Cancelar</string>
+
+    <string-array name="periodos_disciplinas">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>19</item>
+        <item>20</item>
+    </string-array>
+
+
+    <!-- Tela Main                                     -->
+
+    <string name="action_settings">Configurações</string>
+    <string name="action_sign_out">Sair</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <!-- menssagens -->
+    <string name="message_valida_faculdade">Faculdade inválida</string>
+    <string name="message_seleciona_disciplina">Curso não selecionado</string>
+    <string name="message_valida_matricula">Sem registros</string>
+    <string name="message_valida_nome">Nome inválido</string>
+    <string name="message_valida_email">Email inválido</string>
+    <string name="message_valida_curso">Curso inválido</string>
+    <string name="message_valida_senha">Senha não informada</string>
+    <string name="message_alerta_webservice">O Webservice não está ativo</string>
+    <string name="message_alerta_curso_exclui">Curso excluído</string>
+    <string name="message_valida_disciplina">Disciplina inválida</string>
+    <string name="message_alerta_disciplina_exclui">Disciplina excluída</string>
+
+    <string name="message_alerta_disciplina_inserir">Insert</string>
+    <string name="message_alerta_disciplina_atualizar">Update</string>
+    <string name="message_alerta_disciplina_remover">Delete</string>
+    <string name="message_alerta_disciplina_seleciona_uma">Selecione apenas uma disciplina</string>
+    <string name="message_alerta_disciplina_nao_auteracao">Você não realizou nenhuma mudança</string>
+
+    <string name="message_alerta_disciplina_Saving">Salvando...</string>
+    <string name="message_alerta_disciplina_Removing">Removendo...</string>
+    <string name="message_alerta_disciplina_Updating">Atualizando...</string>
+
+    <string name="message_alerta_disciplina_Saving_successfully">Disciplina salva com sucesso</string>
+    <string name="message_alerta_disciplina_Removing_Successfully">Disciplina removida com sucesso</string>
+    <string name="message_alerta_disciplina_Updating_Successfully">Disciplina atualizada com sucesso</string>
 
 
 
+
+
+    <string name="message_alerta_disciplina_cadastrada">Esté curso não possui está disciplina</string>
+    <string name="message_valida_password">Senha inválida</string>
+    <string name="title_activity_maps">Mapa</string>
 </resources>
